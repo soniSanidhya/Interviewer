@@ -2,12 +2,12 @@ import { Schema, model } from "mongoose";
 
 const candidateSchema = new Schema(
   {
-    candidateId: {
+    userName: {
       type: String,
       required: true,
       unique: true, // Acts as Primary Key (PK)
     },
-    name: {
+    fullName: {
       type: String,
       required: true,
     },
