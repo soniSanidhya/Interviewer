@@ -1,37 +1,60 @@
 import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
 const interviewSchema = new Schema(
   {
-    interviewId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     interviewerId: {
-      type: Schema.Types.ObjectId, // Foreign Key (FK) → Interviewer
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Interviewer",
       required: true,
     },
     candidateId: {
-      type: Schema.Types.ObjectId, // Foreign Key (FK) → Candidate
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Candidate",
       required: true,
     },
-    evaluationFormId: {
-      type: Schema.Types.ObjectId, // Foreign Key (FK) → Evaluation Form
-      ref: "EvaluationForm",
-    },
-    scheduledTime: {
+    scheduledAt: {
       type: Date,
+      required: true,
+    },
+    durationMinutes: {
+      type: Number,
+      required: true,
+      default: 60,
+    },
+    timeZone: {
+      type: String,
+      required: true,
+      default: "Asia/Kolkata",
+    },
+    meetingLink: {
+      type: String,
+      required: true,
+    },
+    jwtToken: {
+      type: String,
       required: true,
     },
     status: {
       type: String,
-      enum: ["Pending", "Completed", "Rejected", "Hired"],
-      default: "Pending",
+      enum: ["scheduled", "ongoing", "completed", "canceled"],
+      default: "scheduled",
+    },
+    interviewType: {
+      type: String,
+      enum: ["technical", "behavioral", "system design", "coding"],
+      required: true,
+    },
+    evaluationFormId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EvaluationForm",
+    },
+    feedback: {
+      type: String,
+      default: "",
     },
   },
-  { timestamps: true } // Automatically adds createdAt & updatedAt
+  { timestamps: true }
 );
 
 export const Interview = model("Interview", interviewSchema);

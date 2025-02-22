@@ -1,68 +1,43 @@
 import { Schema, model } from "mongoose";
 
-const interviewSchema = new mongoose.Schema(
+const interviewerSchema = new Schema(
   {
-    interviewerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Interviewer",
-      required: true,
-    },
-    candidateId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Candidate",
-      required: true,
-    },
-    scheduledAt: {
-      type: Date,
-      required: true,
-    },
-    durationMinutes: {
-      type: Number,
-      required: true,
-      default: 60,
-    },
-    timeZone: {
-      type: String,
-      required: true,
-      default: "Asia/Kolkata",
-    },
-    meetingLink: { //available only at the time of interview
+    userName: {
       type: String,
       required: true,
     },
-    jwtToken: {
+    fullName: {
       type: String,
       required: true,
     },
-    status: {
+    email: {
       type: String,
-      enum: ["scheduled", "ongoing", "completed", "canceled"],
-      default: "scheduled",
+      required: true,
+      unique: true,
     },
-    interviewType: {
+    company: {
       type: String,
-      enum: ["technical", "behavioral", "system design", "coding"],
+    },
+    position: {
+      type: String,
+    },
+    passwordHash: {
+      type: String,
       required: true,
     },
-    evaluationFormId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "EvaluationForm",
-    },
-    feedback: {
+    accessToken: {
       type: String,
-      default: "",
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
+    refreshToken: {
+      type: String,
     },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
+    role: {
+      type: String,
+      enum: ["Admin", "Interviewer"],
+      required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true } // Automatically adds createdAt & updatedAt
 );
-
 
 export const Interviewer = model("Interviewer", interviewerSchema);

@@ -6,6 +6,7 @@ import multer from "multer";
 import interviewerRoute from "./routes/interviewer.route.js";
 import candidateRoute from "./routes/candidate.route.js";
 import evalFormRoute from "./routes/evalForm.route.js";
+import interviewRoute from "./routes/interview.route.js";
 
 const app = express();
 // Middleware
@@ -27,6 +28,7 @@ app.use("/api", healthRoute);
 app.use("/api", interviewerRoute);
 app.use("/api", candidateRoute);
 app.use("/api", evalFormRoute);
+app.use("/api", interviewRoute);
 export { app };
 
 // app.js (Express App Configuration)
