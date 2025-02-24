@@ -40,4 +40,8 @@ const interviewerSchema = new Schema(
   { timestamps: true } // Automatically adds createdAt & updatedAt
 );
 
+// interviewerSchema.method.isValidPassword = async function (password) {
+//   return await bcrypt.compare(password, this.password);
+// };
+
 export const Interviewer = model("Interviewer", interviewerSchema);

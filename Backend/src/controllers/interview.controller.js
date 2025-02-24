@@ -71,3 +71,9 @@ export const scheduleInterview = async (req, res) => {
     interview: createdInterview,
   });
 };
+
+export const accessInterview = async (req, res) => {
+  const { token } = req.params;
+  const { candidateId, candidatePassword, InterviewerId, InterviewerPassword } =
+    req.body;
+};

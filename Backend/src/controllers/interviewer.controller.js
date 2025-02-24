@@ -1,4 +1,5 @@
 import { comparePassword, hashPassword } from "../config/bcrypt.config.js";
+import { generateAccessAndRefreshToken } from "../config/jwt.config.js";
 import { Interviewer } from "../models/interviewer.model.js";
 
 export const interviewerSignup = async (req, res) => {
@@ -68,5 +69,31 @@ export const interviewerLogin = async (req, res) => {
     return res.status(400).json({ message: "Invalid password" });
   }
 
-  return res.status(200).json({ message: "Login successful" });
+  const planeUserId = user._id.toString();
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    planeUserId
+  );
+
+  user.accessToken = accessToken;
+  user.refreshToken = refreshToken;
+
+  await user.save({ validateBeforeSave: false });
+
+  const loggedInaInterviewer = await Interviewer.findById(user._id).select(
+    "-passwordHash -refreshToken -accessToken"
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json({
+      message: "Login successful",
+      user: { loggedInaInterviewer, accessToken, refreshToken },
+    });
 };
