@@ -33,3 +33,11 @@ export const candidateSignup = async (req, res) => {
     .status(201)
     .json({ message: "User created successfully", user: createdUser });
 };
+
+export const AccessInterviewForCandidate = async (req, res) => {
+  //take token from param, containing schedule time, interview id
+  //verify time with secret
+  //take email passw from user
+  //verify
+  //give entry with candidate attached as user data like user data and room id
+};
