@@ -13,7 +13,8 @@ import InterviewPortalLogin from "./components/InterviewPortalLogin.jsx";
 import { store } from "./app/store.js";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<InterviewPortalLogin />} />)
+  createRoutesFromElements(<>
+    <Route path="/:token" element={<InterviewPortalLogin />} /></>)
 );
 
 createRoot(document.getElementById("root")).render(

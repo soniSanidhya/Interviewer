@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { candidateSignup } from "../controllers/candidate.controller.js";
+import { candidateLogin, candidateSignup } from "../controllers/candidate.controller.js";
 
 const app = Router();
 
 app.post("/candidate-signup", candidateSignup);
 
-app.get("/candidate-login");
+app.get("/candidate-login", candidateLogin);
 
 export default app;
