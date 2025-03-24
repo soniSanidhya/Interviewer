@@ -5,6 +5,6 @@ const app = Router();
 
 app.post("/candidate-signup", candidateSignup);
 
-app.get("/candidate-login", candidateLogin);
+app.post("/candidate-login", candidateLogin);
 
 export default app;

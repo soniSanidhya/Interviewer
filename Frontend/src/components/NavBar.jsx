@@ -1,5 +1,6 @@
 import React from 'react'
 import { Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
@@ -22,10 +23,15 @@ export default function Navbar() {
             </div> */}
           </div>
           <div className="flex items-center space-x-4 ">
-            <button className="text-gray-300 hover:text-white cursor-pointer">Sign in</button>
-            <button className="bg-[#3d3d3d] text-white px-4 py-2 rounded-lg hover:bg-[#00E8C6] cursor-pointer">
-              Get started
-            </button>
+            <div className="dropdown dropdown-hover">
+              <div tabIndex={0} role="button" className="btn m-1 bg-[#3d3d3d] text-white px-4 py-2 rounded-lg hover:bg-[#00E8C6] cursor-pointer">
+                Get Started as
+              </div>
+              <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li><Link to="/candidate-signup">Candidate</Link></li>
+                <li><Link to="/interviewer-signup">Interviewer</Link></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
