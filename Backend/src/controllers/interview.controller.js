@@ -68,7 +68,7 @@ export const scheduleInterview = async (req, res) => {
   });
 };
 
-import { Interview } from "../../../../models/interview.model.js";  // Import your Interview model
+
 
 export const AccessInterview = async (req, res) => {
   // ✅ Extract interviewId from route params

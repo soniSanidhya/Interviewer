@@ -11,6 +11,7 @@ import { LandingPage } from "./components/LandingPage.jsx";
 import CandidateLogin from "./components/CandidateLogin.jsx";
 import Profile from "./components/Profile.jsx";
 import InterviewerLogin from "./components/InterviewerLogin";
+import InterviewDashBoard from "./components/InterviewDashBoard";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/" element={<LandingPage/>}/>
             <Route path="/candidate-signup" element={<CandidateLogin/>}/>
             <Route path="/interviewer-signup" element={<InterviewerLogin/>}/>
+            <Route path="/interview-dashboard" element={<InterviewDashBoard/>}/>
         </Routes>
       </BrowserRouter>
     </Provider>

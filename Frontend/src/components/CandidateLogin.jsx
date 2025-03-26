@@ -33,7 +33,7 @@ const CandidateLogin = () => {
             const res = await axios.post(BASE_URL + "/candidate-login", { userName, password }, { withCredentials: true });
             console.log(res.data);
             dispatch(addUser(res?.data))
-            return navigate("/")
+            return navigate("/interview-dashboard")
         } catch (err) {
             setError(err?.response?.data)
         }

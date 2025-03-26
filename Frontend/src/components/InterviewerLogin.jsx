@@ -37,7 +37,7 @@ const InterviewerLogin = () => {
             const res = await axios.post(BASE_URL + "/interviewer-login", { userName, password }, { withCredentials: true });
             console.log(res.data);
             dispatch(addUser(res?.data))
-            return navigate("/")
+            return navigate("/interview-dashboard")
         } catch (err) {
             setError(err?.response?.data)
         }
