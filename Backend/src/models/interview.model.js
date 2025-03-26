@@ -27,14 +27,6 @@ const interviewSchema = new Schema(
       required: true,
       default: "Asia/Kolkata",
     },
-    meetingLink: {
-      type: String,
-      required: true,
-    },
-    jwtToken: {
-      type: String,
-      required: true,
-    },
     status: {
       type: String,
       enum: ["scheduled", "ongoing", "completed", "canceled"],

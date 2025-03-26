@@ -46,18 +46,12 @@ export const scheduleInterview = async (req, res) => {
 
   const durationMinutes = duration;
 
-  const jwtToken = "dummy-jwt-token";
-
-  const meetingLink = `https://meet.google.com/${interviewerUserName}`;
-
   const newInterview = {
     interviewerId,
     candidateId,
     scheduledAt,
     durationMinutes,
     timeZone,
-    meetingLink,
-    jwtToken,
     interviewType,
     evaluationFormId,
   };
@@ -74,11 +68,57 @@ export const scheduleInterview = async (req, res) => {
   });
 };
 
-export const AccessInterviewForCandidate = async (req, res) => {
-  
+import { Interview } from "../../../../models/interview.model.js";  // Import your Interview model
+
+export const AccessInterview = async (req, res) => {
+  // ✅ Extract interviewId from route params
+  const { interviewId } = req.params;
+
+  try {
+    // ✅ Validate interview existence
+    const isValidInterview = await Interview.findById(interviewId);
+    if (!isValidInterview) {
+      return res.status(404).json({ message: "Interview not found" });
+    }
+
+    // ✅ Check for authenticated user
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized: No user found" });
+    }
+
+    // ✅ Check if the user has access to the interview
+    if (req.user.type === "interviewer") {
+      if (isValidInterview.interviewerId.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ message: "Forbidden: No access to this interview" });
+      }
+
+      return res.status(200).json({
+        message: "Valid interviewer",
+        type: "interviewer",
+        interviewId: isValidInterview._id,
+      });
+    }
+
+    if (req.user.type === "candidate") {
+      if (isValidInterview.candidateId.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ message: "Forbidden: No access to this interview" });
+      }
+
+      return res.status(200).json({
+        message: "Valid candidate",
+        type: "candidate",
+        interviewId: isValidInterview._id,
+      });
+    }
+
+    return res.status(400).json({ message: "Invalid user type" });
+  } catch (error) {
+    console.error("Error accessing interview:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-export const accessInterviewForInterviewer = async (req, res) => {};
+
 
 const isInterviewValid = async (id) => {
   const interviewId = id;
