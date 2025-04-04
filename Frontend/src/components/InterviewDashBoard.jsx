@@ -7,7 +7,6 @@ import InterviewerDashBoard from './InterviewerDashBoard';
 function InterviewDashBoard() {
 
   const isCandidate = useSelector(state => state.user?.user?.loggedInCandidate) || null;
-
   const isInterviewer = useSelector(state => state.user?.user?.loggedInaInterviewer) || null
 
   useEffect(() => {
@@ -19,8 +18,9 @@ function InterviewDashBoard() {
   return (
     <div>
       Interview dashboard
-      {isCandidate && <InterviewerDashBoard/>}
-      {isInterviewer && <CandidateDashBoard/>}
+      {isInterviewer && <InterviewerDashBoard/>}
+      { isCandidate && <CandidateDashBoard/>}
+      {/* <InterviewerDashBoard/> */}
     </div>
   )
 }

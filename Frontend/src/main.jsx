@@ -12,6 +12,9 @@ import CandidateLogin from "./components/CandidateLogin.jsx";
 import Profile from "./components/Profile.jsx";
 import InterviewerLogin from "./components/InterviewerLogin";
 import InterviewDashBoard from "./components/InterviewDashBoard";
+import Lobby from "./components/Lobby";
+import RoomInterviewer from "./components/RoomInterviewer";
+import RoomCandidate from "./components/RoomCandidate";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -22,6 +25,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/candidate-signup" element={<CandidateLogin/>}/>
             <Route path="/interviewer-signup" element={<InterviewerLogin/>}/>
             <Route path="/interview-dashboard" element={<InterviewDashBoard/>}/>
+            <Route path="/lobby/:interviewID" element={<Lobby />} />
+            <Route path="/room/:roomId" element={<RoomCandidate/>} />
         </Routes>
       </BrowserRouter>
     </Provider>
