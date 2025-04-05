@@ -89,30 +89,6 @@ function CandidateRoom() {
         return result;
     }
 
-    useEffect(() => {
-        const getEvaluationForm = async () => {
-            try {
-                const response = await fetch(`http://localhost:5000/api/getEvalForm/${roomId}`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                });
-
-                if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-                const data = await response.json();
-                const evalForm = data.evalForm.evalForm;
-
-                const structuredEval = generateEvaluationState(evalForm);
-                setEvaluation(structuredEval);
-
-            } catch (error) {
-                console.error("Failed to fetch evaluation form:", error);
-            }
-        };
-
-        getEvaluationForm();
-    }, [roomId]);
-
 
     //new work end
 

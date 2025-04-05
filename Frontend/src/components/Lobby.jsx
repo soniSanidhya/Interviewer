@@ -1,15 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import axios from 'axios';
 function Lobby() {
   const { interviewID } = useParams();
   const [interview, setInterview] = useState(null);
-  const isCandidate = useSelector(state => state.user?.user?.loggedInCandidate) || null;
-  const isInterviewer = useSelector(state => state.user?.user?.loggedInaInterviewer) || null
+    const [isCandidate,setIsCandidate] = useState(false)
+    const [isInterviewer,setIsInterviewer] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
+    axios.post('http://localhost:5000/api/getCurrentUser', {}, {
+          withCredentials: true
+        })
+        .then(response => {
+          console.log("Current user data:", response.data)
+          if(response.data.user.type == "candidate"){
+            setIsCandidate(true)
+          }
+          if(response.data.user.type == "interviewer"){
+            setIsInterviewer(true)
+          }
+        })
+        .catch(error => console.error("Error fetching current user:", error));
+        
+
     if (interviewID) {
     fetch('http://localhost:5000/api/getInterview', {
       method: 'POST',
@@ -40,16 +55,21 @@ const handleJoinCall = () => {
         .then((res) => res.json())
         .then((data) => {
             alert(`Access Result: ${data.message}`);
+            if(data.message == "Invalid or expired interview"){
+              navigate('/interview-dashboard', { replace: true });
+            }else{
+              if(isCandidate){
+                navigate(`/room/c/${interviewID}`, { replace: true });
+              }
+      
+              if(isInterviewer){
+                navigate(`/room/i/${interviewID}`, { replace: true });
+              }
+            }
         })
         .catch((err) => console.error('Failed to access interview:', err));
 
-        if(isCandidate){
-          navigate(`/room/c/${interviewID}`, { replace: true });
-        }
-
-        if(isInterviewer){
-          navigate(`/room/i/${interviewID}`, { replace: true });
-        }
+        
         
 };
 

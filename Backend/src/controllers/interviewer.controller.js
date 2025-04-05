@@ -97,3 +97,11 @@ export const interviewerLogin = async (req, res) => {
       user: { loggedInaInterviewer, accessToken, refreshToken },
     });
 };
+
+export const getCurrentUser = async (req, res) => {
+  console.log("helllo ji",req.user);
+  
+  return res
+    .status(200)
+    .json({user: req.user, message: "User fetched successfully"});
+};

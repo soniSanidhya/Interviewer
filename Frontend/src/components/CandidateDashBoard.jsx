@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FaCalendarAlt, FaClock, FaVideo, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
 
-function CandidateDashBoard() {
+function CandidateDashBoard({ candidateID }) {
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate()
-  const candidateID = useSelector(state => state.user?.user?.loggedInCandidate?._id);
+  const navigate = useNavigate();
 
   const joinInterview = (interviewID) => {
-    // window.open(meetingLink, '_blank', 'noopener,noreferrer');
     navigate(`/lobby/${interviewID}`);
   };
 
@@ -19,11 +17,14 @@ function CandidateDashBoard() {
     const fetchInterviews = async () => {
       if (candidateID) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/view-interview-for-candidate/${candidateID}`, { withCredentials: true });
-          setInterviews(response.data.interviews);
+          const response = await axios.get(
+            `http://localhost:5000/api/view-interview-for-candidate/${candidateID}`,
+            { withCredentials: true }
+          );
+          setInterviews(response.data.interviews || []);
           setLoading(false);
         } catch (err) {
-          setError('Failed to fetch interviews');
+          setError('Failed to fetch interviews. Please try again later.');
           setLoading(false);
         }
       }
@@ -32,34 +33,90 @@ function CandidateDashBoard() {
     fetchInterviews();
   }, [candidateID]);
 
-  if (loading) return <div className="flex justify-center items-center h-screen text-xl">Loading...</div>;
-  if (error) return <div className="flex justify-center items-center h-screen text-red-500 text-xl">{error}</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md">
+        <strong className="font-bold">Error! </strong>
+        <span className="block sm:inline">{error}</span>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">Candidate Dashboard</h1>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">Your Interviews</h1>
+        
         {interviews.length === 0 ? (
-          <p className="text-gray-600">No interviews scheduled.</p>
+          <div className="bg-white p-8 rounded-lg shadow text-center">
+            <p className="text-gray-600">No interviews scheduled yet.</p>
+          </div>
         ) : (
-          <div className="space-y-4">
-            {interviews.map((interview) => (
-              <div key={interview._id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-white">
-                <p className="text-lg font-semibold">{interview.interviewType}</p>
-                <p className="text-gray-600">Scheduled At: {new Date(interview.scheduledAt).toLocaleString()}</p>
-                <p className="text-gray-600">Duration: {interview.durationMinutes} minutes</p>
-                <p className="text-blue-500">
-                  Meeting Link: <a href={interview.meetingLink} target="_blank" rel="noopener noreferrer" className="underline">{interview.meetingLink}</a>
-                </p>
-                <p className={`font-bold ${interview.status === 'Completed' ? 'text-green-600' : 'text-orange-500'}`}>Status: {interview.status}</p>
-                <button
-                  onClick={() => joinInterview(interview._id)}
-                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {interviews.map((interview) => {
+              const interviewDate = new Date(interview.scheduledAt);
+              const isCompleted = interview.status === 'Completed';
+              const isUpcoming = !isCompleted && interviewDate > new Date();
+
+              return (
+                <div 
+                  key={interview._id} 
+                  className={`bg-white rounded-lg shadow-md overflow-hidden border ${
+                    isCompleted ? 'border-green-200' : 'border-blue-200'
+                  }`}
                 >
-                  Join
-                </button>
-              </div>
-            ))}
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {interview.interviewType}
+                      </h3>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        isCompleted ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {isCompleted ? (
+                          <>
+                            <FaCheckCircle className="inline mr-1" /> Completed
+                          </>
+                        ) : (
+                          <>
+                            <FaHourglassHalf className="inline mr-1" /> Pending
+                          </>
+                        )}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2 text-sm text-gray-600 mb-4">
+                      <div className="flex items-center">
+                        <FaCalendarAlt className="mr-2 text-gray-400" />
+                        <span>{interviewDate.toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <FaClock className="mr-2 text-gray-400" />
+                        <span>{interviewDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                      </div>
+                      <div>
+                        <span>Duration: {interview.durationMinutes} mins</span>
+                      </div>
+                    </div>
+                    
+                    {!isCompleted && (
+                      <button
+                        onClick={() => joinInterview(interview._id)}
+                        className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                      >
+                        <FaVideo className="mr-2" /> Join Interview
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
