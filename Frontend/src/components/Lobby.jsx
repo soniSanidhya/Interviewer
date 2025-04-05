@@ -43,7 +43,14 @@ const handleJoinCall = () => {
         })
         .catch((err) => console.error('Failed to access interview:', err));
 
-        navigate(`/room/i/${interviewID}`, { replace: true });
+        if(isCandidate){
+          navigate(`/room/c/${interviewID}`, { replace: true });
+        }
+
+        if(isInterviewer){
+          navigate(`/room/i/${interviewID}`, { replace: true });
+        }
+        
 };
 
 return (

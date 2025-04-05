@@ -43,6 +43,12 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log("Joined room");
   });
+
+  socket.on("sendMessage", ({ roomId, message }) => {
+    console.log("sendMessage called");
+
+    socket.broadcast.to(roomId).emit("messageRecieved", message);
+  });
 });
 
 app.use(
