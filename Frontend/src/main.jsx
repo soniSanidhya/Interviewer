@@ -15,9 +15,10 @@ import InterviewDashBoard from "./components/InterviewDashBoard";
 import Lobby from "./components/Lobby";
 import RoomInterviewer from "./components/RoomInterviewer";
 import RoomCandidate from "./components/RoomCandidate";
+import RoomPage from "./components/InterviewComponents/RoomPage";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
@@ -27,8 +28,9 @@ createRoot(document.getElementById("root")).render(
             <Route path="/interview-dashboard" element={<InterviewDashBoard/>}/>
             <Route path="/lobby/:interviewID" element={<Lobby />} />
             <Route path="/room/:roomId" element={<RoomCandidate/>} />
+            <Route path="/room/i/:roomId" element={<RoomPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>
-  </StrictMode>
+
 );

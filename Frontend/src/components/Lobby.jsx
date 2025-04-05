@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Lobby() {
   const { interviewID } = useParams();
   const [interview, setInterview] = useState(null);
   const isCandidate = useSelector(state => state.user?.user?.loggedInCandidate) || null;
   const isInterviewer = useSelector(state => state.user?.user?.loggedInaInterviewer) || null
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (interviewID) {
@@ -41,6 +42,8 @@ const handleJoinCall = () => {
             alert(`Access Result: ${data.message}`);
         })
         .catch((err) => console.error('Failed to access interview:', err));
+
+        navigate(`/room/i/${interviewID}`, { replace: true });
 };
 
 return (
@@ -61,7 +64,7 @@ return (
                 <Info label="Status" value={interview.status} />
             </div>
 
-            {interview.meetingLink && (
+            {/* {interview.meetingLink && (
                 <a
                     href={interview.meetingLink}
                     target="_blank"
@@ -70,18 +73,13 @@ return (
                 >
                     Join Meeting
                 </a>
-            )}
+            )} */}
+
+            <button onClick={handleJoinCall} className="mt-6 inline-block bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition">Join Interview</button>
 
             {!interview.meetingLink && (
                 <p className="mt-6 text-red-500 font-medium">Meeting link not available yet.</p>
             )}
-
-            <button
-                onClick={handleJoinCall}
-                className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition"
-            >
-                Access Interview
-            </button>
         </div>
     </div>
 );

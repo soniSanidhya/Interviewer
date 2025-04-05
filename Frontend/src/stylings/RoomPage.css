@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    /* background-color: #282c34; */
+}
+
+.room-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin:2px;
+    background-color: #282c34;
+    color: white;
+    height: 5%;
+}
+
+.editor-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+}
+
+.editor-settings {
+    padding: 10px;
+    background-color: #282c34;
+    color: white;
+}
+
+.resizable-editor {
+    height: 90%;
+    overflow: auto;
+}
+
+.resizer {
+    width: 5px;
+    cursor: ew-resize;
+    background-color: #333;
+    height: 100%;
+}

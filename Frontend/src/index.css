@@ -2,7 +2,14 @@
 @import "tw-animate-css";
 @plugin "daisyui";
 
-@custom-variant dark (&:is(.dark *));
+#ZegoRoomLeaveButton {
+  display: none !important;        /* Completely hides the button */
+  pointer-events: none !important; /* Prevents any interaction */
+  opacity: 0 !important;           /* Makes it fully transparent if shown */
+  visibility: hidden !important;   /* Makes it invisible */
+}
+
+/* @custom-variant dark (&:is(.dark *)); */
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #1a202c;
