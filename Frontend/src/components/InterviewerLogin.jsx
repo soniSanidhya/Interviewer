@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { addUser } from '../features/userSlice';
 import { useDispatch } from 'react-redux';
@@ -6,89 +6,151 @@ import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
 
 const InterviewerLogin = () => {
-    const [fullName, setFullName] = useState("Donald Trump");
-    const [userName, setUserName] = useState("donald123");
-    const [email, setEmail] = useState("donald@trump.com");
-    const [password, setPassword] = useState("DonaldTrump@123");
-    const [company, setCompany] = useState("Trump Organization");
-    const [position, setPosition] = useState("CEO");
-    const [role, setRole] = useState("Founder");
+    const [formData, setFormData] = useState({
+        fullName: "Donald Trump",
+        userName: "akshat",
+        email: "donald@trump.com",
+        password: "akshat123",
+        company: "Trump Organization",
+        position: "CEO",
+        role: "Founder"
+    });
+
+    const [formErrors, setFormErrors] = useState({});
     const [error, setError] = useState("");
     const [isLoginForm, setIsLoginForm] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [alreadyLogin, setAlreadyLogin] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSignUp = async () => {
+    useEffect(() => {
+        if (alreadyLogin) {
+            navigate('/interview-dashboard', { replace: true });
+        }
+
+        axios.post(`${BASE_URL}/getCurrentUser`, {}, {
+            withCredentials: true
+        })
+            .then(response => {
+                if (response.data.user?.type === "interviewer") {
+                    setAlreadyLogin(true);
+                    navigate('/interview-dashboard', { replace: true });
+                }
+            })
+            .catch(() => { });
+    }, []);
+
+    const validate = () => {
+        const errors = {};
+        const { fullName, userName, email, password, company, position, role } = formData;
+
+        if (!userName.trim()) errors.userName = "Username is required";
+        if (!password.trim()) errors.password = "Password is required";
+
+        if (!isLoginForm) {
+            if (!fullName.trim()) errors.fullName = "Full name is required";
+            if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errors.email = "Valid email is required";
+            if (password.length < 6) errors.password = "Password must be at least 6 characters";
+            if (!company.trim()) errors.company = "Company name is required";
+            if (!position.trim()) errors.position = "Position is required";
+            if (!role.trim()) errors.role = "Role is required";
+        }
+
+        return errors;
+    };
+
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setFormErrors(prev => ({ ...prev, [e.target.name]: "" }));
+    };
+
+    const handleSubmit = async () => {
+        const errors = validate();
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
         try {
-            console.log(BASE_URL + "/interviewer-signup");
-            const res = await axios.post(BASE_URL + "/interviewer-signup", { userName, fullName, email, password, company, position, role }, { withCredentials: true });
-            console.log("BYE");
-            console.log(res.data);
-            dispatch(addUser(res?.data))
-            return navigate("/")
+            setIsSubmitting(true);
+            const endpoint = isLoginForm ? "/interviewer-login" : "/interviewer-signup";
+            const payload = isLoginForm
+                ? { userName: formData.userName, password: formData.password }
+                : formData;
+
+            const res = await axios.post(`${BASE_URL}${endpoint}`, payload, { withCredentials: true });
+            dispatch(addUser(res.data));
+            navigate("/interview-dashboard");
         } catch (err) {
-            setError(err?.response?.data)
+            setError(err?.response?.data || "Something went wrong");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    const handleLogin = async () => {
-        try {
-            const res = await axios.post(BASE_URL + "/interviewer-login", { userName, password }, { withCredentials: true });
-            console.log(res.data);
-            dispatch(addUser(res?.data))
-            return navigate("/interview-dashboard")
-        } catch (err) {
-            setError(err?.response?.data)
-        }
-    };
+    const renderInput = (name, placeholder, type = "text") => (
+        <div className="w-full relative">
+            <label className="input input-bordered flex items-center gap-2 w-full">
+                <input
+                    type={type}
+                    name={name}
+                    placeholder={placeholder}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    className="grow"
+                />
+            </label>
+            {formErrors[name] && (
+                <p className="text-red-400 text-sm mt-1 px-1">{formErrors[name]}</p>
+            )}
+        </div>
+    );
 
     return (
         <div className="flex items-center justify-center px-4 md:px-0 my-16">
             <div className="card bg-neutral text-neutral-content w-full max-w-md p-6 shadow-xl">
                 <div className="card-body items-center text-center gap-6">
-                    <h2 className="card-title text-lg md:text-2xl">{!isLoginForm ? "Sign Up" : "Login"}</h2>
-                    {!isLoginForm && (<><label className="input input-bordered flex items-center gap-2 w-full">
-                        <input type="text" className="grow" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-                    </label>
-                        <label className="input input-bordered flex items-center gap-2 w-full">
-                            <input type="text" className="grow" placeholder="User Name" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                        </label>
-                        <label className="input input-bordered flex items-center gap-2 w-full">
-                            <input type="text" className="grow" placeholder="User Name" value={company} onChange={(e) => setCompany(e.target.value)} />
-                        </label>
-                        <label className="input input-bordered flex items-center gap-2 w-full">
-                            <input type="text" className="grow" placeholder="User Name" value={position} onChange={(e) => setPosition(e.target.value)} />
-                        </label>
-                        <label className="input input-bordered flex items-center gap-2 w-full">
-                            <input type="text" className="grow" placeholder="User Name" value={role} onChange={(e) => setRole(e.target.value)} />
-                        </label>
-                    </>)}
-                    <label className="input input-bordered flex items-center gap-2 w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
-                            <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-                            <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-                        </svg>
-                        <input type="text" className="grow" placeholder="userName" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                    </label>
-                    <label className="form-control w-full max-w-xs">
-                        <div className="input input-bordered flex items-center gap-2 w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
-                                <path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" />
-                            </svg>
-                            <input type="password" placeholder="Password" className="grow" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        </div>
-                        <div className="label flex justify-end">
-                            <span className="label-text-alt hover:cursor-pointer" onClick={() =>
-                                setIsLoginForm(!isLoginForm)}>
-                                {!isLoginForm ? "Existing User? Login Here" : "New User? Signup Here"}
-                            </span>
-                        </div>
-                    </label>
-                    <p className="text-red-500">{typeof error === "string" ? error : JSON.stringify(error)}</p>
-                    <div className="card-actions justify-end w-full gap-3">
-                        <button className="btn btn-primary w-full" onClick={!isLoginForm ? handleSignUp : handleLogin}>{!isLoginForm ? "Sign Up" : "Login"}</button>
-                    </div>
+                    <h2 className="card-title text-lg md:text-2xl">{isLoginForm ? "Login" : "Sign Up"}</h2>
+
+                    {!isLoginForm && (
+                        <>
+                            {renderInput("fullName", "Full Name")}
+                            {renderInput("email", "Email")}
+                            {renderInput("company", "Company")}
+                            {renderInput("position", "Position")}
+                            {renderInput("role", "Role")}
+                        </>
+                    )}
+
+                    {renderInput("userName", "User Name")}
+                    {renderInput("password", "Password", "password")}
+
+                    {error && (
+                        <p className="text-red-500 text-sm text-center">{typeof error === "string" ? error : JSON.stringify(error)}</p>
+                    )}
+
+                    <span
+                        className="label-text-alt hover:cursor-pointer underline"
+                        onClick={() => {
+                            setIsLoginForm(!isLoginForm);
+                            setError("");
+                            setFormErrors({});
+                        }}
+                    >
+                        {isLoginForm ? "New User? Signup Here" : "Existing User? Login Here"}
+                    </span>
+
+                    <button
+                        className="btn btn-primary w-full"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting
+                            ? (isLoginForm ? "Logging in..." : "Signing up...")
+                            : (isLoginForm ? "Login" : "Sign Up")}
+                    </button>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import InterviewPortalLogin from "./components/InterviewPortalLogin.jsx";
+
 import { store } from "./app/store.js";
 import Body from "./components/Body.jsx";
 import { LandingPage } from "./components/LandingPage.jsx";
