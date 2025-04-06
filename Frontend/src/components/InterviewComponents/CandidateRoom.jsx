@@ -184,7 +184,8 @@ function CandidateRoom() {
     };
 
     return (
-        <div className="bg-night flex flex-col h-screen bg-gray-900 p-2">
+        <SessionSecurityWrapper>
+            <div className="bg-night flex flex-col h-screen bg-gray-900 p-2">
             {/* Header */}
             <header className="bg-gray-900 rounded-lg shadow px-4 py-3 mb-4">
                 <div className="flex flex-wrap justify-between items-center gap-y-2">
@@ -384,6 +385,7 @@ function CandidateRoom() {
                 </div>
             </div>
         </div>
+        </SessionSecurityWrapper>
     );
 }
 
