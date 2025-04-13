@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 export default function SessionSecurityWrapper({ children }) {
+
   const [terminated, setTerminated] = useState(false);
   const [warningModal, setWarningModal] = useState({ show: false, title: '', message: '', severity: 'warning' });
   const [remainingWarnings, setRemainingWarnings] = useState(3);

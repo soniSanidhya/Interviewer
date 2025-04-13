@@ -17,6 +17,7 @@ import RoomInterviewer from "./components/RoomInterviewer";
 import RoomCandidate from "./components/RoomCandidate";
 import RoomPage from "./components/InterviewComponents/RoomPage";
 import CandidateRoom from "./components/InterviewComponents/CandidateRoom";
+import ScheduleInterview from "./components/ScheduleInterview";
 
 createRoot(document.getElementById("root")).render(
 
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/room/:roomId" element={<RoomCandidate/>} />
             <Route path="/room/i/:roomId" element={<RoomPage />} />
             <Route path="/room/c/:roomId" element={<CandidateRoom />} />
+            <Route path="/schedule-interview" element={<ScheduleInterview />} />
         </Routes>
       </BrowserRouter>
     </Provider>
