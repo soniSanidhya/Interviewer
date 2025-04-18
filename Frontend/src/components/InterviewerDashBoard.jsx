@@ -82,6 +82,13 @@ function InterviewerDashBoard({ interviewerId }) {
             <h1 className="text-3xl font-bold text-gray-800">Interview Dashboard</h1>
           </div>
           <button
+            onClick={()=>{navigate("/evalForm")}}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <FiPlus className="mr-2" />
+            Manage EvaluationForms
+          </button>
+          <button
             onClick={scheduleNewInterview}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >

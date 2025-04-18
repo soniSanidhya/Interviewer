@@ -18,6 +18,7 @@ import RoomCandidate from "./components/RoomCandidate";
 import RoomPage from "./components/InterviewComponents/RoomPage";
 import CandidateRoom from "./components/InterviewComponents/CandidateRoom";
 import ScheduleInterview from "./components/ScheduleInterview";
+import EvalFormDashBoard from "./components/EvalFormDashBoard";
 
 createRoot(document.getElementById("root")).render(
 
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/room/i/:roomId" element={<RoomPage />} />
             <Route path="/room/c/:roomId" element={<CandidateRoom />} />
             <Route path="/schedule-interview" element={<ScheduleInterview />} />
+            <Route path="/evalForm" element={<EvalFormDashBoard />} />
         </Routes>
       </BrowserRouter>
     </Provider>

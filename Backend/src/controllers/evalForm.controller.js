@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { EvaluationForm } from "../models/evaluationForm.model.js";
 import { Interview } from "../models/interview.model.js";
+import { Interviewer } from "../models/interviewer.model.js";
 
 export const createEvalForm = async (req, res) => {
   try {
     const { interviewerName, evalForm } = req.body;
-
+    console.log(interviewerName);
+    
     if (!interviewerName || !evalForm) {
       return res.status(400).json({ message: "Missing required fields" });
     }
