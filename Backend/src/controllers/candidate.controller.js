@@ -71,9 +71,9 @@ export const candidateLogin = async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
-    sameSite: 'None',
-    path: '/',
+    secure: true, // Set this to true if your site is HTTPS
+    sameSite: 'None', // This is required for cross-site cookies
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
   };
   
 
