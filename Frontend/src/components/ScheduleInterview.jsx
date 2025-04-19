@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
 
 function ScheduleInterview() {
     const [interviewerName, setInterviewerName] = useState('');
@@ -7,7 +8,7 @@ function ScheduleInterview() {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        axios.post('http://localhost:5000/api/getCurrentUser', {}, { withCredentials: true })
+        axios.post(`${BASE_URL}/getCurrentUser`, {}, { withCredentials: true })
             .then(response => {
                 if (response.data.user.type === 'interviewer') {
                     setInterviewerName(response.data.user.userName);
@@ -37,7 +38,7 @@ function ScheduleInterview() {
         setSuccessMessage('');
         setErrorMessage('');
         try {
-            const response = await fetch('http://localhost:5000/api/schedule-interview', {
+            const response = await fetch(`${BASE_URL}/schedule-interview`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

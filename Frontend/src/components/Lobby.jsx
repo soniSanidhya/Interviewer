@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
 function Lobby() {
   const { interviewID } = useParams();
   const [interview, setInterview] = useState(null);
@@ -10,7 +11,7 @@ function Lobby() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios.post('http://localhost:5000/api/getCurrentUser', {}, {
+    axios.post(`${BASE_URL}/getCurrentUser`, {}, {
           withCredentials: true
         })
         .then(response => {
@@ -26,7 +27,7 @@ function Lobby() {
         
 
     if (interviewID) {
-    fetch('http://localhost:5000/api/getInterview', {
+    fetch( `${BASE_URL}/getInterview`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ interviewID }),
@@ -47,7 +48,7 @@ function Lobby() {
   }
 
 const handleJoinCall = () => {
-    fetch(`http://localhost:5000/api/access-interview/${interviewID}`, {
+    fetch(`${BASE_URL}/access-interview/${interviewID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

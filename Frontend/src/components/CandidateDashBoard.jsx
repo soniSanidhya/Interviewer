@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt, FaClock, FaVideo, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
+import { BASE_URL } from '@/utils/constants';
 
 function CandidateDashBoard({ candidateID }) {
   const [interviews, setInterviews] = useState([]);
@@ -18,7 +19,7 @@ function CandidateDashBoard({ candidateID }) {
       if (candidateID) {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/view-interview-for-candidate/${candidateID}`,
+            `${BASE_URL}/view-interview-for-candidate/${candidateID}`,
             { withCredentials: true }
           );
           setInterviews(response.data.interviews || []);

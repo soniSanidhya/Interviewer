@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiCheck, FiPlus, FiSend, FiUser, FiCode, FiDatabase, FiTool, FiMessageSquare, FiUsers, FiRefreshCw, FiHeart, FiBook, FiClock } from 'react-icons/fi';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '@/utils/constants';
 
 const initialForm = {
     interviewerName: "",
@@ -72,7 +73,7 @@ function CreateEvaluationForm() {
         // console.log("candidate is ", isCandidate);
         // console.log("interviewer is ", isInterviewer);
 
-        axios.post('http://localhost:5000/api/getCurrentUser', {}, {
+        axios.post(`${BASE_URL}/getCurrentUser`, {}, {
             withCredentials: true
         })
             .then(response => {
@@ -150,7 +151,7 @@ function CreateEvaluationForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submitting form data:", formData);
-        axios.post("http://localhost:5000/api/create-evalForm", formData, { withCredentials: true })
+        axios.post(`${BASE_URL}/create-evalForm`, formData, { withCredentials: true })
             .then((resp) => {
                 console.log(resp.data); // This is the parsed JSON response
                 navigate("/evalForm")

@@ -5,6 +5,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BoldIcon } from 'lucide-react';
+import { BASE_URL } from '@/utils/constants';
 
 // Dark mode card styling
 const cardStyles = {
@@ -93,7 +94,7 @@ const [error, setError] = useState(null);
 
 const fetchCurrentUser = useCallback(async () => {
 try {
- const response = await axios.post('http://localhost:5000/api/getCurrentUser',{}, {
+ const response = await axios.post(`${BASE_URL}/getCurrentUser`,{}, {
    withCredentials: true
  });
  
@@ -111,7 +112,7 @@ if (!interviewerId) return;
 
 try {
  const response = await axios.post(
-   `http://localhost:5000/api/getAllEvaluationFormByInterviewerId/${interviewerId}`,{} ,
+   `${BASE_URL}/getAllEvaluationFormByInterviewerId/${interviewerId}`,{} ,
    { withCredentials: true }
  );
  setEvalForms(response.data.evalForms || []);

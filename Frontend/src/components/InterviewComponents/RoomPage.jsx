@@ -9,6 +9,7 @@ import { Rnd } from 'react-rnd';
 import '../../stylings/RoomPage.css';
 import Rating from 'react-rating';
 import { FaStar, FaRegStar } from 'react-icons/fa';
+import { BASE_URL } from '@/utils/constants';
 
 function RoomPage() {
     const { roomId } = useParams();
@@ -91,7 +92,7 @@ function RoomPage() {
     useEffect(() => {
         const getEvaluationForm = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/getEvalForm/${roomId}`, {
+                const response = await fetch(`${BASE_URL}/getEvalForm/${roomId}`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },

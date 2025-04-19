@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import CandidateDashBoard from './CandidateDashBoard';
 import InterviewerDashBoard from './InterviewerDashBoard';
 import axios from 'axios';
+import { BASE_URL } from '@/utils/constants';
 
 function InterviewDashBoard() {
 
@@ -19,7 +20,7 @@ function InterviewDashBoard() {
     // console.log("candidate is ", isCandidate);
     // console.log("interviewer is ", isInterviewer);
 
-    axios.post('http://localhost:5000/api/getCurrentUser', {}, {
+    axios.post(`${BASE_URL}/getCurrentUser`, {}, {
       withCredentials: true
     })
     .then(response => {

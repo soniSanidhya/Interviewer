@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiLink, FiUser, FiCheckCircle, FiAlertCircle, FiVideo, FiPlus } from 'react-icons/fi';
 import { FaChalkboardTeacher } from 'react-icons/fa';
+import { BASE_URL } from '@/utils/constants';
 
 function InterviewerDashBoard({ interviewerId }) {
   const [interviews, setInterviews] = useState([]);
@@ -17,7 +18,7 @@ function InterviewerDashBoard({ interviewerId }) {
       if (interviewerId) {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/view-interviews-for-interviewer/${interviewerId}`,
+            `${BASE_URL}/view-interviews-for-interviewer/${interviewerId}`,
             { withCredentials: true }
           );
           setInterviews(response.data.interviews);
