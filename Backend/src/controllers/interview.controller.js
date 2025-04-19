@@ -193,6 +193,8 @@ const isInterviewValid = async (id) => {
     return true;
   } else if (currentTime < scheduledAt) {
     //log 
+    // console.log("hello");
+    
     console.log(
       `Interview has not started yet. It will start in ${Math.floor(
         (scheduledAt - currentTime) / (60 * 1000)
