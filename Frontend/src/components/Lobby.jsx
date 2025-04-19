@@ -11,7 +11,7 @@ function Lobby() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios.post(`${BASE_URL}/getCurrentUser`, {}, {
+    axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
           withCredentials: true
         })
         .then(response => {

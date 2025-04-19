@@ -94,7 +94,7 @@ const [error, setError] = useState(null);
 
 const fetchCurrentUser = useCallback(async () => {
 try {
- const response = await axios.post(`${BASE_URL}/getCurrentUser`,{}, {
+ const response = await axios.post(`${BASE_URL}/getCurrentUser/`,{}, {
    withCredentials: true
  });
  

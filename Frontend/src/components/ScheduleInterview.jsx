@@ -8,7 +8,7 @@ function ScheduleInterview() {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        axios.post(`${BASE_URL}/getCurrentUser`, {}, { withCredentials: true })
+        axios.post(`${BASE_URL}/getCurrentUser/`, {}, { withCredentials: true })
             .then(response => {
                 if (response.data.user.type === 'interviewer') {
                     setInterviewerName(response.data.user.userName);

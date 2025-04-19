@@ -30,7 +30,7 @@ const InterviewerLogin = () => {
             navigate('/interview-dashboard', { replace: true });
         }
 
-        axios.post(`${BASE_URL}/getCurrentUser`, {}, {
+        axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
             withCredentials: true
         })
             .then(response => {

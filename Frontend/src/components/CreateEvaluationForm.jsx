@@ -73,7 +73,7 @@ function CreateEvaluationForm() {
         // console.log("candidate is ", isCandidate);
         // console.log("interviewer is ", isInterviewer);
 
-        axios.post(`${BASE_URL}/getCurrentUser`, {}, {
+        axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
             withCredentials: true
         })
             .then(response => {
