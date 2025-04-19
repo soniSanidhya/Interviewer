@@ -93,7 +93,7 @@ function CandidateRoom() {
     //new work end
 
     //socket work start
-    const socket = useMemo(() => io(import.meta.env.VITE_BACKEND_URL), []);
+    const socket = useMemo(() => io("https://socketnodejs-a2g8c8f7g7avaudc.southindia-01.azurewebsites.net"), []);
 
     useEffect(() => {
         socket.emit('join-room', roomId);
