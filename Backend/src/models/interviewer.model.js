@@ -33,7 +33,6 @@ const interviewerSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["Admin", "Interviewer"],
       required: true,
     },
   },
