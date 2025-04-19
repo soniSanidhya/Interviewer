@@ -13,7 +13,7 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" })); // Limit JSON payload size
 app.use(express.urlencoded({ extended: true, limit: "10mb" })); // Support form data
-console.log("Client URl : ", process.env.CLIENT_URL);
+// console.log("Client URl : ", process.env.CLIENT_URL);
 app.use(
   cors({
     origin: [

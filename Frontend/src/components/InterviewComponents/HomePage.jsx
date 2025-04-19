@@ -4,10 +4,10 @@ function HomePage() {
 
     useEffect(() => {
 
-        console.log(typeof import.meta.env.VITE_BACKEND_URL)
-        console.log(typeof import.meta.env.VITE_SERVER_SECRET)
+        // console.log(typeof import.meta.env.VITE_BACKEND_URL)
+        // console.log(typeof import.meta.env.VITE_SERVER_SECRET)
         const x = Number(import.meta.env.VITE_APP_ID)
-        console.log(x)
+        // console.log(x)
     }, [])
 
     const [roomCode, setRoomCode] = useState("")

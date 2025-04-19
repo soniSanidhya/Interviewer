@@ -18,7 +18,7 @@ With **Socket.IO**, clients can do a wide range of real-time tasks by establishi
    - Clients can listen for events emitted by the server.
    ```javascript
    socket.on('message', (data) => {
-     console.log('Message from server:', data);
+     // console.log('Message from server:', data);
    });
    ```
 
@@ -49,7 +49,7 @@ With **Socket.IO**, clients can do a wide range of real-time tasks by establishi
    - Clients can confirm receipt of events using acknowledgments.
    ```javascript
    socket.emit('eventWithAck', 'some data', (response) => {
-     console.log('Server acknowledged:', response);
+     // console.log('Server acknowledged:', response);
    });
    ```
 
@@ -100,7 +100,7 @@ The **Socket.IO server** is like the brain of real-time communication — it man
    - The server listens for new client connections.
    ```javascript
    io.on('connection', (socket) => {
-     console.log('New client connected:', socket.id);
+     // console.log('New client connected:', socket.id);
    });
    ```
 
@@ -123,7 +123,7 @@ The **Socket.IO server** is like the brain of real-time communication — it man
    - The server can handle custom events from clients.
    ```javascript
    socket.on('chatMessage', (msg) => {
-     console.log('Message from client:', msg);
+     // console.log('Message from client:', msg);
    });
    ```
 
@@ -131,7 +131,7 @@ The **Socket.IO server** is like the brain of real-time communication — it man
    - It detects when clients disconnect.
    ```javascript
    socket.on('disconnect', () => {
-     console.log('Client disconnected:', socket.id);
+     // console.log('Client disconnected:', socket.id);
    });
    ```
 
@@ -155,7 +155,7 @@ The **Socket.IO server** is like the brain of real-time communication — it man
    ```javascript
    const interviewNamespace = io.of('/interview');
    interviewNamespace.on('connection', (socket) => {
-     console.log('Connected to /interview namespace');
+     // console.log('Connected to /interview namespace');
    });
    ```
 
@@ -169,7 +169,7 @@ The **Socket.IO server** is like the brain of real-time communication — it man
    - The server can confirm event receipt.
    ```javascript
    socket.on('clientEvent', (data, callback) => {
-     console.log('Received data:', data);
+     // console.log('Received data:', data);
      callback('Server received your data.');
    });
    ```

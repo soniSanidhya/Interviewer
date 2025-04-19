@@ -17,21 +17,21 @@ function InterviewDashBoard() {
   const [interviewerId,setInterviewerId] = useState(false)
 
   useEffect(() => {
-    // console.log("candidate is ", isCandidate);
-    // console.log("interviewer is ", isInterviewer);
+    // // console.log("candidate is ", isCandidate);
+    // // console.log("interviewer is ", isInterviewer);
 
     axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
       withCredentials: true
     })
     .then(response => {
-      console.log("Current user data:", response.data)
+      // console.log("Current user data:", response.data)
       if(response.data.user.type == "candidate"){
         setIsCandidate(true)
         setCandidateId(response.data.user._id)
       }
       if(response.data.user.type == "interviewer"){
         setIsInterviewer(true)
-        console.log("heyy ",response.data.user._id);
+        // console.log("heyy ",response.data.user._id);
         
         setInterviewerId(response.data.user._id)
       }

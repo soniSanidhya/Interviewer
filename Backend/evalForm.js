@@ -121,4 +121,4 @@ export default class EvaluationFormClass {
 // customEvaluationForm.softSkillsAssessment.communication.clarity = true;
 // customEvaluationForm.softSkillsAssessment.communication.activeListening = true;
 
-// console.log(templateEvaluationForm.isValidForm(customEvaluationForm));
+// // console.log(templateEvaluationForm.isValidForm(customEvaluationForm));

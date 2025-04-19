@@ -84,7 +84,7 @@ function RoomPage() {
                 }
             }
         }
-        console.log("result ", result);
+        // console.log("result ", result);
 
         return result;
     }
@@ -123,7 +123,7 @@ function RoomPage() {
         socket.emit('join-room', roomId);
 
         socket.on("connect", () => {
-            console.log("connected", socket.id);
+            // console.log("connected", socket.id);
             setId(socket.id);
         });
 
@@ -162,7 +162,7 @@ function RoomPage() {
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             socket.emit("sendMessage", { roomId, message });
-            console.log("emitted ", message);
+            // console.log("emitted ", message);
             
             setMessages(prev => [...prev, message]);
             setNewMessage("");
@@ -181,7 +181,7 @@ function RoomPage() {
     //evaluation start
     const handleSubmitEvaluation = () => {
         alert("Evaluation submitted!");
-        console.log("Evaluation:", evaluation);
+        // console.log("Evaluation:", evaluation);
     };
     //evaluation end
 
@@ -445,7 +445,7 @@ function RoomPage() {
                         <div className="p-4 border-t bg-white">
                             <button
                                 onClick={() => {
-                                    console.log("📋 Final Evaluated Data:", evaluation);
+                                    // console.log("📋 Final Evaluated Data:", evaluation);
                                     handleSubmitEvaluation();
                                 }}
                                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-md text-sm font-medium w-full transition-all duration-200 shadow-md hover:shadow-lg"

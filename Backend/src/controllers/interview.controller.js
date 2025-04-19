@@ -42,7 +42,7 @@ export const scheduleInterview = async (req, res) => {
   const interviewerId = interviewer._id;
   const candidateId = candidate._id;
   const scheduledAt = `${date}T${time}:00.000Z`;
-  console.log("Date is ", date);
+  // console.log("Date is ", date);
 
   const durationMinutes = duration;
 
@@ -71,43 +71,43 @@ export const scheduleInterview = async (req, res) => {
 export const AccessInterview = async (req, res) => {
   // ✅ Extract interviewId from route params
   const { interviewId } = req.params;
-  console.log("AccessInterview called with interviewId:", interviewId);
+  // console.log("AccessInterview called with interviewId:", interviewId);
 
   try {
     // ✅ Validate interview existence
-    console.log("Validating interview existence...");
+    // console.log("Validating interview existence...");
     const isValidInterview = await isInterviewValid(interviewId);
     if (!isValidInterview) {
-      console.log("Invalid or expired interview");
+      // console.log("Invalid or expired interview");
       return res.status(400).json({ message: "Invalid or expired interview" });
     }
 
     // ✅ Check if req.user is available
-    console.log("Checking if user is authenticated...");
+    // console.log("Checking if user is authenticated...");
     if (!req.user) {
-      console.log("Unauthorized access: No user found in request");
+      // console.log("Unauthorized access: No user found in request");
       return res.status(401).json({ message: "Unauthorized: No user found" });
     }
-    console.log("Authenticated user:", req.user);
+    // console.log("Authenticated user:", req.user);
 
     // ✅ Check if the user has access to the interview
     if (req.user.type === "interviewer") {
-      console.log("User is an interviewer. Validating access...");
-      console.log("isValidInterview",isValidInterview);
-      console.log("userID",req.user._id.toString());
+      // console.log("User is an interviewer. Validating access...");
+      // console.log("isValidInterview",isValidInterview);
+      // console.log("userID",req.user._id.toString());
       
       const aValidInterview = await Interview.findById(interviewId);
       if (!aValidInterview) {
-        console.log("Interview not found");
+        // console.log("Interview not found");
         return res.status(404).json({ message: "Interview not found" });
       }
 
       if (aValidInterview.interviewerId.toString() !== req.user._id.toString()) {
-        console.log("Access denied: Interviewer does not match");
+        // console.log("Access denied: Interviewer does not match");
         return res.status(403).json({ message: "Forbidden: No access to this interview" });
       }
 
-      console.log("Access granted: Valid interviewer");
+      // console.log("Access granted: Valid interviewer");
       return res.status(200).json({
         message: "Valid interviewer",
         type: "interviewer",
@@ -116,22 +116,22 @@ export const AccessInterview = async (req, res) => {
     }
 
     if (req.user.type === "candidate") {
-      console.log("User is an candidate. Validating access...");
-      console.log("isValidInterview",isValidInterview);
-      console.log("userID",req.user._id.toString());
+      // console.log("User is an candidate. Validating access...");
+      // console.log("isValidInterview",isValidInterview);
+      // console.log("userID",req.user._id.toString());
       
       const aValidInterview = await Interview.findById(interviewId);
       if (!aValidInterview) {
-        console.log("Interview not found");
+        // console.log("Interview not found");
         return res.status(404).json({ message: "Interview not found" });
       }
 
       if (aValidInterview.candidateId.toString() !== req.user._id.toString()) {
-        console.log("Access denied: candidate does not match");
+        // console.log("Access denied: candidate does not match");
         return res.status(403).json({ message: "Forbidden: No access to this interview" });
       }
 
-      console.log("Access granted: Valid candidate");
+      // console.log("Access granted: Valid candidate");
       return res.status(200).json({
         message: "Valid candidate",
         type: "candidate",
@@ -139,7 +139,7 @@ export const AccessInterview = async (req, res) => {
       });
     }
 
-    console.log("Invalid user type:", req.user.type);
+    // console.log("Invalid user type:", req.user.type);
     return res.status(400).json({ message: "Invalid user type" });
   } catch (error) {
     console.error("Error accessing interview:", error);
@@ -157,7 +157,7 @@ const isInterviewValid = async (id) => {
     console.error("Interview not found");
     return false;
   }else{
-    console.log("Interview found");
+    // console.log("Interview found");
   }
 
   // Extract relevant details
@@ -172,34 +172,34 @@ const isInterviewValid = async (id) => {
   const remainingTime = endTime - currentTime;
 
   // Log the details
-  console.log("Start time is:", scheduledAt);
-  console.log("Total duration is:", durationMs);
-  console.log("End time is:", endTime);
-  console.log("Current time (adjusted) is:", currentTime);
-  console.log("Remaining time is:", remainingTime, "ms");
+  // console.log("Start time is:", scheduledAt);
+  // console.log("Total duration is:", durationMs);
+  // console.log("End time is:", endTime);
+  // console.log("Current time (adjusted) is:", currentTime);
+  // console.log("Remaining time is:", remainingTime, "ms");
 
   // Check if the current time is within the interview time slot
   const isWithinInterviewTime =
     currentTime > scheduledAt && currentTime < endTime;
-  console.log("Is within interview time:", isWithinInterviewTime);
+  // console.log("Is within interview time:", isWithinInterviewTime);
 
   // Additional check to display a user-friendly message
   if (isWithinInterviewTime) {
-    console.log(
+    // console.log(
       `Interview is ongoing. Time remaining: ${Math.floor(
         remainingTime / (60 * 1000)
       )} minutes.`
     );
     return true;
   } else if (currentTime < scheduledAt) {
-    console.log(
+    // console.log(
       `Interview has not started yet. It will start in ${Math.floor(
         (scheduledAt - currentTime) / (60 * 1000)
       )} minutes.`
     );
     return false;
   } else {
-    console.log("Interview has already ended.");
+    // console.log("Interview has already ended.");
     return false;
   }
 };
@@ -234,7 +234,7 @@ export const getInterview = async (req,res)=>{
   if (!id) {
     return res.status(400).json({ message: "Candidate ID not provided" });
   }
-  console.log(id);
+  // console.log(id);
   
   try {
     const interviews = await Interview.find({

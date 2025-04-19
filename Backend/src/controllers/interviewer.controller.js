@@ -6,7 +6,7 @@ export const interviewerSignup = async (req, res) => {
   const { userName, fullName, email, company, position, password, role } =
     req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
 
   if (
     !userName ||
@@ -101,7 +101,7 @@ export const interviewerLogin = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  console.log("helllo ji",req.user);
+  // console.log("helllo ji",req.user);
   
   return res
     .status(200)

@@ -12,7 +12,7 @@ function InterviewerDashBoard({ interviewerId }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("id ", interviewerId);
+    // console.log("id ", interviewerId);
 
     const fetchInterviews = async () => {
       if (interviewerId) {

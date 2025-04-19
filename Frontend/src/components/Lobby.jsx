@@ -15,7 +15,7 @@ function Lobby() {
           withCredentials: true
         })
         .then(response => {
-          console.log("Current user data:", response.data)
+          // console.log("Current user data:", response.data)
           if(response.data.user.type == "candidate"){
             setIsCandidate(true)
           }

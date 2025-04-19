@@ -84,7 +84,7 @@ function CandidateRoom() {
                 }
             }
         }
-        console.log("result ", result);
+        // console.log("result ", result);
 
         return result;
     }
@@ -99,7 +99,7 @@ function CandidateRoom() {
         socket.emit('join-room', roomId);
 
         socket.on("connect", () => {
-            console.log("connected", socket.id);
+            // console.log("connected", socket.id);
             setId(socket.id);
         });
 
@@ -139,7 +139,7 @@ function CandidateRoom() {
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             socket.emit("sendMessage", { roomId, message });
-            console.log("emitted ", message);
+            // console.log("emitted ", message);
 
             setMessages(prev => [...prev, message]);
             setNewMessage("");
@@ -158,7 +158,7 @@ function CandidateRoom() {
     //evaluation start
     const handleSubmitEvaluation = () => {
         alert("Evaluation submitted!");
-        console.log("Evaluation:", evaluation);
+        // console.log("Evaluation:", evaluation);
     };
     //evaluation end
 
@@ -168,7 +168,7 @@ function CandidateRoom() {
         monaco.languages.registerCompletionItemProvider('javascript', {
             provideCompletionItems: () => ({
                 suggestions: [
-                    { label: 'console.log', kind: monaco.languages.CompletionItemKind.Snippet, insertText: 'console.log(${1:object});', insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, documentation: 'Log output to console' },
+                    { label: '// console.log', kind: monaco.languages.CompletionItemKind.Snippet, insertText: '// console.log(${1:object});', insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, documentation: 'Log output to console' },
                     { label: 'function', kind: monaco.languages.CompletionItemKind.Snippet, insertText: 'function ${1:functionName}(${2:params}) {\n\t${3:// body}\n}', insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, documentation: 'Function declaration' },
                     { label: 'if', kind: monaco.languages.CompletionItemKind.Snippet, insertText: 'if (${1:condition}) {\n\t${2:// body}\n}', insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, documentation: 'If statement' },
                     { label: 'for loop', kind: monaco.languages.CompletionItemKind.Snippet, insertText: 'for (let ${1:i} = 0; ${1:i} < ${2:array}.length; ${1:i}++) {\n\t${3:// body}\n}', insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, documentation: 'For loop' },

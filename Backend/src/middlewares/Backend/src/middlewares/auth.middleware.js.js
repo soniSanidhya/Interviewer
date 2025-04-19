@@ -13,7 +13,7 @@ export const verifyJWT = async (req, res, next) => {
   let decodedToken;
   try {
     decodedToken = await verifyToken(accessToken);
-    console.log("Token successfully decoded:", decodedToken);
+    // console.log("Token successfully decoded:", decodedToken);
   } catch (error) {
     console.error("Error decoding token:", error.message);
     return res.status(401).json({ message: "Invalid or expired token" });
@@ -26,16 +26,16 @@ export const verifyJWT = async (req, res, next) => {
     );
 
     if (user) {
-      console.log("Interviewer found:", user._id);
+      // console.log("Interviewer found:", user._id);
       user = { ...user.toObject(), type: "interviewer" }; // Explicitly add type
     } else {
-      console.log("No interviewer found, checking for candidate...");
+      // console.log("No interviewer found, checking for candidate...");
       user = await Candidate.findById(decodedToken.payload).select(
         "-passwordHash -accessToken -refreshToken"
       );
 
       if (user) {
-        console.log("Candidate found:", user._id);
+        // console.log("Candidate found:", user._id);
         user = { ...user.toObject(), type: "candidate" }; // Explicitly add type
       }
     }
@@ -49,7 +49,7 @@ export const verifyJWT = async (req, res, next) => {
     return res.status(401).json({ message: "No user found" });
   }
 
-  console.log("User successfully authenticated:", user._id, "Type:", user.type);
+  // console.log("User successfully authenticated:", user._id, "Type:", user.type);
   req.user = user;
   next();
 };

@@ -2,7 +2,7 @@ import { Interview } from "./src/models/interview.model.js";
 const data = { cname: "akshat", iname: "rishi" };
 
 // setInterval(()=>{
-//   console.log(Date.now());
+//   // console.log(Date.now());
 // },2000)
 
 export const fn = async () => {
@@ -28,22 +28,22 @@ export const fn = async () => {
   const remainingTime = endTime - currentTime;
 
   // Log the details
-  console.log("Start time is:", scheduledAt);
-  console.log("Total duration is:", durationMs);
-  console.log("End time is:", endTime);
-  console.log("Current time (adjusted) is:", currentTime);
-  console.log("Remaining time is:", remainingTime, "ms");
+  // // console.log("Start time is:", scheduledAt);
+  // // console.log("Total duration is:", durationMs);
+  // // console.log("End time is:", endTime);
+  // // console.log("Current time (adjusted) is:", currentTime);
+  // // console.log("Remaining time is:", remainingTime, "ms");
 
   // Check if the current time is within the interview time slot
   const isWithinInterviewTime = currentTime > scheduledAt && currentTime < endTime;
-  console.log("Is within interview time:", isWithinInterviewTime);
+  // // console.log("Is within interview time:", isWithinInterviewTime);
 
   // Additional check to display a user-friendly message
   if (isWithinInterviewTime) {
-    console.log(`Interview is ongoing. Time remaining: ${Math.floor(remainingTime / (60 * 1000))} minutes.`);
+    // console.log(`Interview is ongoing. Time remaining: ${Math.floor(remainingTime / (60 * 1000))} minutes.`);
   } else if (currentTime < scheduledAt) {
-    console.log(`Interview has not started yet. It will start in ${Math.floor((scheduledAt - currentTime) / (60 * 1000))} minutes.`);
+    // console.log(`Interview has not started yet. It will start in ${Math.floor((scheduledAt - currentTime) / (60 * 1000))} minutes.`);
   } else {
-    console.log("Interview has already ended.");
+    // console.log("Interview has already ended.");
   }
 };

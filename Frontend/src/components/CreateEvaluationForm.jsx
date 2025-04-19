@@ -70,16 +70,16 @@ function CreateEvaluationForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // console.log("candidate is ", isCandidate);
-        // console.log("interviewer is ", isInterviewer);
+        // // console.log("candidate is ", isCandidate);
+        // // console.log("interviewer is ", isInterviewer);
 
         axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
             withCredentials: true
         })
             .then(response => {
-                console.log("Current user data:", response.data)
+                // console.log("Current user data:", response.data)
                 if (response.data.user.type == "interviewer") {
-                    console.log("heyy ", response.data.user.userName);
+                    // console.log("heyy ", response.data.user.userName);
                     setIntvName(response.data.user.userName)
                     setFormData({ ...formData, interviewerName: response.data.user.userName });
                 }
@@ -150,10 +150,10 @@ function CreateEvaluationForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitting form data:", formData);
+        // console.log("Submitting form data:", formData);
         axios.post(`${BASE_URL}/create-evalForm`, formData, { withCredentials: true })
             .then((resp) => {
-                console.log(resp.data); // This is the parsed JSON response
+                // console.log(resp.data); // This is the parsed JSON response
                 navigate("/evalForm")
             })
             .catch((error) => {

@@ -69,7 +69,7 @@ This method is used to **validate the token** and ensure its integrity.
 ```javascript
 try {
   const decoded = jwt.verify(token, secretKey);
-  console.log("Valid Token:", decoded);
+  // console.log("Valid Token:", decoded);
 } catch (err) {
   console.error("Error:", err.message); // TokenExpiredError, JsonWebTokenError, NotBeforeError
 }
@@ -88,7 +88,7 @@ This method **decodes the token without verifying its signature**. It is useful 
 #### Example:
 
 ```javascript
-console.log(jwt.decode(token, { complete: true }));
+// console.log(jwt.decode(token, { complete: true }));
 ```
 
 #### Output:
@@ -116,7 +116,7 @@ JWT does not have a direct `expire()` function. Instead, expiration is handled b
 const decoded = jwt.decode(token);
 const currentTime = Math.floor(Date.now() / 1000);
 if (decoded.exp && decoded.exp < currentTime) {
-  console.log("Token expired");
+  // console.log("Token expired");
 }
 ```
 

@@ -6,7 +6,7 @@ import { Interviewer } from "../models/interviewer.model.js";
 export const createEvalForm = async (req, res) => {
   try {
     const { interviewerName, evalForm } = req.body;
-    console.log(interviewerName);
+    // console.log(interviewerName);
 
     if (!interviewerName || !evalForm) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -44,7 +44,7 @@ export const createEvalForm = async (req, res) => {
 export const getEvalFormByInterviewId = async (req, res) => {
   try {
     const { interviewId } = req.params;
-    console.log(interviewId);
+    // console.log(interviewId);
 
     if (!interviewId) {
       return res.status(400).json({ message: "Missing interview ID" });
@@ -55,7 +55,7 @@ export const getEvalFormByInterviewId = async (req, res) => {
     if (!interview) {
       return res.status(400).json({ message: "Missing interview ID" });
     }
-    console.log(interview);
+    // console.log(interview);
 
     const evalForm = await EvaluationForm.findOne({
       evaluationFormId: interview.evaluationFormId,

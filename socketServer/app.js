@@ -14,14 +14,14 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("User connected");
-  console.log("id", socket.id);
+  // console.log("User connected");
+  // console.log("id", socket.id);
   socket.emit("welcome", `new Welcome to server, ${socket.id}`);
   socket.broadcast.emit("welcome", socket.id, " joined the server");
 
   socket.on("privateMessage", ({ otherId, message }) => {
-    console.log(otherId);
-    console.log(message);
+    // console.log(otherId);
+    // console.log(message);
     socket.to(otherId).emit("pvt", message);
   });
 
@@ -36,16 +36,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+    // console.log("User disconnected:", socket.id);
   });
 
   socket.on("join-room", (roomId) => {
     socket.join(roomId);
-    console.log("Joined room");
+    // console.log("Joined room");
   });
 
   socket.on("sendMessage", ({ roomId, message }) => {
-    console.log("sendMessage called");
+    // console.log("sendMessage called");
 
     socket.broadcast.to(roomId).emit("messageRecieved", message);
   });
@@ -63,5 +63,5 @@ app.get("/", (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log("server is running on port ", port);
+  // console.log("server is running on port ", port);
 });
