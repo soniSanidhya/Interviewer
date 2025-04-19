@@ -185,14 +185,15 @@ const isInterviewValid = async (id) => {
 
   // Additional check to display a user-friendly message
   if (isWithinInterviewTime) {
-    // console.log(
+    console.log(
       `Interview is ongoing. Time remaining: ${Math.floor(
         remainingTime / (60 * 1000)
       )} minutes.`
     );
     return true;
   } else if (currentTime < scheduledAt) {
-    // console.log(
+    //log 
+    console.log(
       `Interview has not started yet. It will start in ${Math.floor(
         (scheduledAt - currentTime) / (60 * 1000)
       )} minutes.`
