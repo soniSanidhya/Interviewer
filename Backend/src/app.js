@@ -16,7 +16,10 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" })); // Support form 
 console.log("Client URl : ", process.env.CLIENT_URL);
 app.use(
   cors({
-    origin: "https://interviewer-v1-fcsr.vercel.app", // Adjust for production
+    origin: [
+      "https://interviewer-v1-fcsr.vercel.app",
+      "https://www.codeinterview.tech"
+    ],
     credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "DELETE"], // Restrict methods
   })
