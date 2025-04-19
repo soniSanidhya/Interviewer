@@ -10,7 +10,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-2">
               <Zap className="h-6 w-6 text-[#00E8C6]" />
-              <span className="text-white font-semibold text-xl">InterCode</span>
+              <span className="text-white font-semibold text-xl">CodeInterview.Tech</span>
             </a>
             {/* <div className="hidden md:block ml-10">
               <div className="flex items-center space-x-6">

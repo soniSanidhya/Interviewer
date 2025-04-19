@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <a href="/" className="flex items-center space-x-2">
               <Zap className="h-6 w-6 text-[#00E8C6]" />
-              <span className="font-semibold text-xl">InterCode</span>
+              <span className="font-semibold text-xl">CodeInterview.Tech</span>
             </a>
           </div>
 
