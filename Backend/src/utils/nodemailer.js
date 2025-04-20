@@ -3,8 +3,8 @@ import { createTransport } from "nodemailer";
 const transporter = createTransport({
   service: "gmail",
   auth: {
-    user: "akshatvijay1302@gmail.com",
-    pass: "uzkg eyxz tdip bauf", // Use an app password, not your main one
+    user: process.env.EMAIL,
+    pass: process.env.NODEMAILER, // Use an app password, not your main one
   },
 });
 
