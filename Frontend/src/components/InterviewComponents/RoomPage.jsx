@@ -22,8 +22,6 @@ function RoomPage() {
     ]);
     const [newMessage, setNewMessage] = useState("");
     const [cheatLogs, setCheatLogs] = useState([
-        { type: 'Tab switch detected', time: new Date(), severity: 'medium' },
-        { type: 'Multiple faces detected', time: new Date(), severity: 'high' }
     ]);
     const [notes, setNotes] = useState("Candidate seems nervous but has good fundamentals.");
     const [evaluation, setEvaluation] = useState(null);
@@ -117,6 +115,7 @@ function RoomPage() {
     //new work end
 
     //socket work start
+    // const socket = useMemo(() => io("http://localhost:4000"), []);
     const socket = useMemo(() => io("https://socketnodejs-a2g8c8f7g7avaudc.southindia-01.azurewebsites.net"), []);
 
     useEffect(() => {
@@ -125,6 +124,14 @@ function RoomPage() {
         socket.on("connect", () => {
             // console.log("connected", socket.id);
             setId(socket.id);
+        });
+
+        socket.on("warning-detected", (warning) => {
+            // console.log("connected", socket.id);
+            console.log("warning ", warning);
+
+            const newlog = { type: warning, time: new Date(), severity: 'high' }
+            setCheatLogs(prev => [...prev, newlog]);
         });
 
         socket.on("editorContentUpdate", (newContent) => setContent(newContent));
@@ -163,7 +170,7 @@ function RoomPage() {
             };
             socket.emit("sendMessage", { roomId, message });
             // console.log("emitted ", message);
-            
+
             setMessages(prev => [...prev, message]);
             setNewMessage("");
         }
@@ -172,9 +179,21 @@ function RoomPage() {
 
 
     //code execution start
-    const handleRunCode = () => {
+    const handleRunCode = async () => {
+        const response = await fetch(`${BASE_URL}/exec-code`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code: content,
+                language: language.toLowerCase()
+            }),
+        });
+        const data = await response.json()
         const mockOutput = `Running ${language} code...\n\n> ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}\n\n"Hello World!"\n\nCode executed successfully at ${new Date().toLocaleTimeString()}`;
-        setOutput(mockOutput);
+        setOutput(data.output);
+        // console.log("op: ",data);
+
     };
     //code execution end
 
@@ -624,12 +643,15 @@ function RoomPage() {
                                         value={language}
                                     >
                                         <option value="javascript">JavaScript</option>
-                                        <option value="typescript">TypeScript</option>
                                         <option value="python">Python</option>
                                         <option value="java">Java</option>
                                         <option value="cpp">C++</option>
-                                        <option value="html">HTML</option>
-                                        <option value="css">CSS</option>
+                                        <option value="c">C</option>
+                                        <option value="ruby">Ruby</option>
+                                        <option value="go">Go</option>
+                                        <option value="php">PHP</option>
+                                        <option value="swift">Swift</option>
+                                        <option value="kotlin">Kotlin</option>
                                     </select>
                                     <button
                                         onClick={handleRunCode}
@@ -677,7 +699,6 @@ function RoomPage() {
 
                 {/* Right Column */}
                 <div className="w-180 flex flex-col gap-4">
-                    Video Call Panel
                     <div
                         className={`bg-night rounded-lg shadow overflow-hidden ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 rounded-none' : ''
                             }`}
@@ -746,7 +767,7 @@ function RoomPage() {
                                             >
                                                 <p >{msg.text}</p>
                                                 <p
-                                                    className={`text-xs ${msg.sender  != 'Interviewer' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                                                    className={`text-xs ${msg.sender != 'Interviewer' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
                                                         }`}
                                                 >
                                                     {msg.time} • {msg.sender}

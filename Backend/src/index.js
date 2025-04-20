@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import {app} from "./app.js";
 import connectDB from "./config/db.config.js";
 import { fn } from "../test.js";
+import mongoose from "mongoose";
 
 dotenv.config({ path: "./.env" });
 
@@ -22,10 +23,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-// index.js (Entry Point & Server Startup)
-// The index.js file is the main entry point of the application. It:
-
-// Loads environment variables using dotenv.config().
-// Connects to the database before starting the server.
-// Starts the Express server, ensuring it only runs if the database connection is successful.

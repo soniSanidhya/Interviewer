@@ -34,7 +34,7 @@ const interviewSchema = new Schema(
     },
     interviewType: {
       type: String,
-      enum: ["technical", "behavioral", "system design", "coding"],
+      // enum: ["technical", "behavioral", "system design", "coding"],
       required: true,
     },
     evaluationFormId: {

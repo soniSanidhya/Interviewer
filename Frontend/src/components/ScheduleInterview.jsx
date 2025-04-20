@@ -4,28 +4,46 @@ import { BASE_URL } from '@/utils/constants';
 
 function ScheduleInterview() {
     const [interviewerName, setInterviewerName] = useState('');
+    const [interviewerId, setInterviewerId] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [evalForms, setEvalForms] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.post(`${BASE_URL}/getCurrentUser/`, {}, { withCredentials: true })
             .then(response => {
                 if (response.data.user.type === 'interviewer') {
                     setInterviewerName(response.data.user.userName);
+                    setInterviewerId(response.data.user._id);
                 }
             })
             .catch(error => console.error("Error fetching current user:", error));
     }, []);
 
+    useEffect(() => {
+        if (interviewerId) {
+            axios.post(`${BASE_URL}/getAllEvaluationFormByInterviewerId/${interviewerId}`,{} ,{ withCredentials: true })
+                .then(response => {
+                    setEvalForms(response.data.evalForms || []);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching evaluation forms:', error);
+                    setLoading(false);
+                });
+        }
+    }, [interviewerId]);
+
     const [formData, setFormData] = useState({
         interviewerUserName: '',
-        candidateUserName: 'rishi',
+        candidateEmail: 'rishi@gmail.com',
         date: '2025-04-04',
         time: '11:21',
         duration: 10,
         timeZone: 'Asia/Kolkata',
         interviewType: 'technical',
-        evaluationFormId: '67b9620cc8a248c32d65e249',
+        evaluationFormId: '',
     });
 
     const handleChange = (e) => {
@@ -71,10 +89,9 @@ function ScheduleInterview() {
                     {/* Input Component */}
                     {[
                         { label: "Interviewer Username", name: "interviewerUserName", readOnly: true, value: formData.interviewerUserName },
-                        { label: "Candidate Username", name: "candidateUserName", value: formData.candidateUserName },
+                        { label: "Candidate Username", name: "candidateEmail", value: formData.candidateEmail },
                         { label: "Interview Type", name: "interviewType", value: formData.interviewType },
                         { label: "Time Zone", name: "timeZone", value: formData.timeZone },
-                        { label: "Evaluation Form ID", name: "evaluationFormId", value: formData.evaluationFormId },
                     ].map((field) => (
                         <div key={field.name}>
                             <label className="block text-sm font-medium text-gray-700">{field.label}</label>
@@ -88,6 +105,31 @@ function ScheduleInterview() {
                             />
                         </div>
                     ))}
+
+                    {/* Evaluation Form Dropdown */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Evaluation Form</label>
+                        {loading ? (
+                            <div className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700">
+                                Loading evaluation forms...
+                            </div>
+                        ) : (
+                            <select
+                                name="evaluationFormId"
+                                value={formData.evaluationFormId}
+                                onChange={handleChange}
+                                required
+                                className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value="">Select an evaluation form</option>
+                                {evalForms.map(form => (
+                                    <option key={form._id} value={form.evaluationFormId}>
+                                        {form.evaluationFormId}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
 
                     {/* Date and Time */}
                     <div className="grid grid-cols-2 gap-4">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiLink, FiUser, FiCheckCircle, FiAlertCircle, FiVideo, FiPlus } from 'react-icons/fi';
@@ -11,27 +11,34 @@ function InterviewerDashBoard({ interviewerId }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // console.log("id ", interviewerId);
+  const cacheRef = useRef(null);
 
-    const fetchInterviews = async () => {
-      if (interviewerId) {
+useEffect(() => {
+  const fetchInterviews = async () => {
+    if (interviewerId) {
+      if (cacheRef.current) {
+        setInterviews(cacheRef.current);
+        setLoading(false);
+      } else {
         try {
           const response = await axios.get(
             `${BASE_URL}/view-interviews-for-interviewer/${interviewerId}`,
             { withCredentials: true }
           );
           setInterviews(response.data.interviews);
+          cacheRef.current = response.data.interviews; // Cache it
           setLoading(false);
         } catch (err) {
           setError('Failed to fetch interviews');
           setLoading(false);
         }
       }
-    };
+    }
+  };
 
-    fetchInterviews();
-  }, [interviewerId]);
+  fetchInterviews();
+}, [interviewerId]);
+
 
   const joinInterview = (interviewID) => {
     navigate(`/lobby/${interviewID}`);
@@ -47,14 +54,7 @@ function InterviewerDashBoard({ interviewerId }) {
     </div>
   );
 
-  if (error) return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        <FiAlertCircle className="inline mr-2" />
-        {error}
-      </div>
-    </div>
-  );
+ 
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -146,8 +146,8 @@ function InterviewerDashBoard({ interviewerId }) {
                         </span>
                         {getStatusBadge(interview.status)}
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                        Interview with {interview.candidate?.name || 'Candidate'}
+                      <h3 className="text-lg font-semibold text-gray-800 mb-1 underline">
+                        Interview with {`(${interview?.candidateId?.email})` || 'Candidate'}
                       </h3>
                       <div className="flex flex-wrap items-center text-gray-600 text-sm gap-4">
                         <div className="flex items-center">

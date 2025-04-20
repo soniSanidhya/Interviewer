@@ -145,11 +145,7 @@ if (loading) return (
 </Box>
 );
 
-if (error) return (
-<Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
- <Typography color="error">{error}</Typography>
-</Box>
-);
+
 
 return (
 <Box sx={{ p: 3, backgroundColor: '', minHeight: '100vh' }}>

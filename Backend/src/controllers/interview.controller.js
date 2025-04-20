@@ -1,12 +1,15 @@
+import { hashPassword } from "../config/bcrypt.config.js";
 import { Candidate } from "../models/candidate.model.js";
 import { Interview } from "../models/interview.model.js";
 import { Interviewer } from "../models/interviewer.model.js";
 import mongoose from "mongoose";
+import uniqid from 'uniqid';
+import mailKaro from "../utils/nodemailer.js";
 
 export const scheduleInterview = async (req, res) => {
   const {
     interviewerUserName,
-    candidateUserName,
+    candidateEmail,
     date,
     time,
     duration,
@@ -17,7 +20,7 @@ export const scheduleInterview = async (req, res) => {
 
   if (
     !interviewerUserName ||
-    !candidateUserName ||
+    !candidateEmail ||
     !date ||
     !time ||
     !duration ||
@@ -26,13 +29,73 @@ export const scheduleInterview = async (req, res) => {
     !evaluationFormId
   ) {
     return res.status(400).json({ message: "Missing required fields" });
+  } else {
+    // console.log("not missing");
   }
+
+  //generate user credentials
+  //call candidate signup /candidate-signup with  const { userName, fullName, email, password } data
+  const tempUser = uniqid('tempUser-')
+  const tempFullName = uniqid('FullName-')
+  const tempPassword = uniqid('Pass-')
+
+  const tempUserData = {
+    userName: tempUser,
+    fullName: tempFullName,
+    email: candidateEmail,
+    password: tempPassword,
+  };
+
+  if (!tempUserData.userName || !tempUserData.fullName || !tempUserData.email || !tempUserData.password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const userExisted = await Candidate.findOne({ userName:tempUserData.userName });
+
+  if (userExisted) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  const passwordHash = await hashPassword(tempUserData.password);
+
+  const newUser = {
+    userName:tempUserData.userName,
+    fullName:tempUserData.fullName,
+    email:tempUserData.email,
+    passwordHash,
+  };
+
+  const createdUser = await Candidate.create(newUser);
+
+  if (!createdUser) {
+    return res.status(400).json({ message: "Error creating user" });
+  }
+
+  //send mail
+  // const sendMail = await mailKaro(newUser.email,"interview scheduled",`here is your credentials: username: ${createdUser.userName} and password: ${tempUserData.password} `)
+  const sendMail = await mailKaro(
+    newUser.email,
+    "Interview Scheduled",
+    "Here are your login credentials for the interview platform:",
+    {
+      username: createdUser.userName,
+      password: tempUserData.password,
+    }
+  );
+  
+  
+  if(sendMail=="Not send"){
+    return res.status(400).json({ message: `Error sending mail to ${newUser.email} `});
+  }
+  
 
   const interviewer = await Interviewer.findOne({
     userName: interviewerUserName,
   });
-  const candidate = await Candidate.findOne({ userName: candidateUserName });
 
+  const candidate = await Candidate.findOne({ userName: createdUser.userName });
+  // console.log(candidate+"  "+interviewer);
+  
   if (!interviewer || !candidate) {
     return res
       .status(400)
@@ -95,16 +158,20 @@ export const AccessInterview = async (req, res) => {
       // console.log("User is an interviewer. Validating access...");
       // console.log("isValidInterview",isValidInterview);
       // console.log("userID",req.user._id.toString());
-      
+
       const aValidInterview = await Interview.findById(interviewId);
       if (!aValidInterview) {
         // console.log("Interview not found");
         return res.status(404).json({ message: "Interview not found" });
       }
 
-      if (aValidInterview.interviewerId.toString() !== req.user._id.toString()) {
+      if (
+        aValidInterview.interviewerId.toString() !== req.user._id.toString()
+      ) {
         // console.log("Access denied: Interviewer does not match");
-        return res.status(403).json({ message: "Forbidden: No access to this interview" });
+        return res
+          .status(403)
+          .json({ message: "Forbidden: No access to this interview" });
       }
 
       // console.log("Access granted: Valid interviewer");
@@ -119,7 +186,7 @@ export const AccessInterview = async (req, res) => {
       // console.log("User is an candidate. Validating access...");
       // console.log("isValidInterview",isValidInterview);
       // console.log("userID",req.user._id.toString());
-      
+
       const aValidInterview = await Interview.findById(interviewId);
       if (!aValidInterview) {
         // console.log("Interview not found");
@@ -128,7 +195,9 @@ export const AccessInterview = async (req, res) => {
 
       if (aValidInterview.candidateId.toString() !== req.user._id.toString()) {
         // console.log("Access denied: candidate does not match");
-        return res.status(403).json({ message: "Forbidden: No access to this interview" });
+        return res
+          .status(403)
+          .json({ message: "Forbidden: No access to this interview" });
       }
 
       // console.log("Access granted: Valid candidate");
@@ -156,7 +225,7 @@ const isInterviewValid = async (id) => {
   if (!interview) {
     console.error("Interview not found");
     return false;
-  }else{
+  } else {
     // console.log("Interview found");
   }
 
@@ -192,9 +261,9 @@ const isInterviewValid = async (id) => {
     );
     return true;
   } else if (currentTime < scheduledAt) {
-    //log 
+    //log
     // console.log("hello");
-    
+
     console.log(
       `Interview has not started yet. It will start in ${Math.floor(
         (scheduledAt - currentTime) / (60 * 1000)
@@ -207,54 +276,58 @@ const isInterviewValid = async (id) => {
   }
 };
 
-export const getInterviews = async (req,res)=>{
-  const {id} = req.params
+export const getInterviews = async (req, res) => {
+  const { id } = req.params;
 
-  if(!id){
-    res.status(501).json({ message: "ID NOT FOUND" })
+  if (!id) {
+    res.status(501).json({ message: "ID NOT FOUND" });
   }
 
   try {
     const interviews = await Interview.find({
       $or: [{ interviewerId: id }],
-    });
+    }).populate('candidateId');
 
     if (!interviews || interviews.length === 0) {
       return res.status(404).json({ message: "No interviews found" });
     }
 
-    return res.status(200).json({ message: "Interviews retrieved successfully", interviews });
+    return res
+      .status(200)
+      .json({ message: "Interviews retrieved successfully", interviews });
   } catch (error) {
     console.error("Error fetching interviews:", error);
     return res.status(500).json({ message: "Server error" });
   }
-}
+};
 
-
-export const getInterview = async (req,res)=>{
+export const getInterview = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
     return res.status(400).json({ message: "Candidate ID not provided" });
   }
   // console.log(id);
-  
+
   try {
     const interviews = await Interview.find({
       candidateId: id,
     });
 
     if (!interviews || interviews.length === 0) {
-      return res.status(404).json({ message: "No interviews found for the candidate" });
+      return res
+        .status(404)
+        .json({ message: "No interviews found for the candidate" });
     }
 
-    return res.status(200).json({ message: "Interviews retrieved successfully", interviews });
+    return res
+      .status(200)
+      .json({ message: "Interviews retrieved successfully", interviews });
   } catch (error) {
     console.error("Error fetching interviews for candidate:", error);
     return res.status(500).json({ message: "Server error" });
   }
-}
-
+};
 
 export const getInterviewByID = async (req, res) => {
   const { interviewID } = req.body;
@@ -270,7 +343,9 @@ export const getInterviewByID = async (req, res) => {
       return res.status(404).json({ message: "Interview not found" });
     }
 
-    return res.status(200).json({ message: "Interview retrieved successfully", interview });
+    return res
+      .status(200)
+      .json({ message: "Interview retrieved successfully", interview });
   } catch (error) {
     console.error("Error fetching interview by ID:", error);
     return res.status(500).json({ message: "Server error" });

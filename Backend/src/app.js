@@ -7,6 +7,7 @@ import interviewerRoute from "./routes/interviewer.route.js";
 import candidateRoute from "./routes/candidate.route.js";
 import evalFormRoute from "./routes/evalForm.route.js";
 import interviewRoute from "./routes/interview.route.js";
+import codeExecRoute from "./routes/codeexec.route.js";
 
 const app = express();
 // Middleware
@@ -18,7 +19,8 @@ app.use(
   cors({
     origin: [
       "https://interviewer-v1-fcsr.vercel.app",
-      "https://www.codeinterview.tech"
+      "https://www.codeinterview.tech",
+      "http://localhost:5173",
     ],
     credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "DELETE"], // Restrict methods
@@ -33,10 +35,8 @@ app.use("/api", interviewerRoute);
 app.use("/api", candidateRoute);
 app.use("/api", evalFormRoute);
 app.use("/api", interviewRoute);
+app.use("/api", codeExecRoute);
 export { app };
-
-
-
 
 // app.js (Express App Configuration)
 

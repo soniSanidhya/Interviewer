@@ -25,6 +25,12 @@ io.on("connection", (socket) => {
     socket.to(otherId).emit("pvt", message);
   });
 
+  socket.on("warning-caused", ({message,roomId}) => {
+    console.log("caused ",message, roomId);
+    
+    socket.broadcast.to(roomId).emit("warning-detected", message);
+  });
+
   // Broadcast content updates to all clients except the sender
   socket.on("editorContentUpdate", ({ newContent, roomId }) => {
     socket.broadcast.to(roomId).emit("editorContentUpdate", newContent);

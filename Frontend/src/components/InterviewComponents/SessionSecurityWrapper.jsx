@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Modal from 'react-modal';
+import { io } from 'socket.io-client';
 
 Modal.setAppElement('#root');
 
-export default function SessionSecurityWrapper({ children }) {
+export default function SessionSecurityWrapper({ children, socket , roomId}) {
+  
 
   const [terminated, setTerminated] = useState(false);
   const [warningModal, setWarningModal] = useState({ show: false, title: '', message: '', severity: 'warning' });
-  const [remainingWarnings, setRemainingWarnings] = useState(3);
+  const [remainingWarnings, setRemainingWarnings] = useState(6);
   const [inactivityTimer, setInactivityTimer] = useState(null);
   const INACTIVITY_LIMIT = 300; // in seconds
 
@@ -25,7 +27,9 @@ export default function SessionSecurityWrapper({ children }) {
     setWarningModal({ show: true, title, message, severity });
   };
 
-  const handleAcknowledge = () => {
+  const handleAcknowledge = (message) => {
+    console.log(message);
+    socket.emit('warning-caused', {message,roomId});
     setRemainingWarnings(prev => {
       const newCount = prev - 1;
       if (newCount <= 0) {
@@ -174,7 +178,7 @@ export default function SessionSecurityWrapper({ children }) {
       {children}
       <Modal
         isOpen={warningModal.show}
-        onRequestClose={handleAcknowledge}
+        onRequestClose={()=>{handleAcknowledge(warningModal.title)}}
         contentLabel="Warning"
         style={{
           overlay: { backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 10000 },
@@ -198,7 +202,7 @@ export default function SessionSecurityWrapper({ children }) {
           {warningModal.message}
         </p>
         <button
-          onClick={handleAcknowledge}
+          onClick={()=>{handleAcknowledge(warningModal.title)}}
           style={{
             marginTop: '10px',
             padding: '10px 20px',
