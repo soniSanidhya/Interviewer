@@ -1,64 +1,56 @@
 'use client'
-
-import { SplineScene } from "@/components/ui/splite";
 import NavBar from "@/components/NavBar";
-import Feature from "./Feature";
-import Footer from "./Footer";
 import { CheckCircle, ArrowRight, Zap, ChevronRight, Calendar, Video, ClipboardCheck } from 'lucide-react';
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <NavBar />
 
-      {/* Hero Section (unchanged but made more zoom-resistant) */}
-      <div className="w-full min-h-[600px] bg-neutral-950 relative overflow-hidden text-white flex items-center">
-        <div className="container mx-auto flex flex-col lg:flex-row items-center px-4 sm:px-6 lg:px-8 py-16">
-          <div className="lg:w-1/2 relative z-10">
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-300 leading-tight">
-              Conduct Better Technical Interviews in One Place
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-900 to-blue-700 text-white overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col lg:flex-row items-center">
+          <div className="lg:w-1/2 z-10 mb-16 lg:mb-0">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-800 bg-opacity-50 text-blue-100 mb-6">
+              <Zap className="w-4 h-4 mr-2" />
+              Next-gen technical interviews
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              Streamline Your <span className="text-blue-300">Technical Hiring</span>
             </h1>
-            <br />
-            <p className="mt-4 text-lg sm:text-xl text-neutral-300 max-w-xl">
-              Live coding + video calls + evaluation rubrics – no more app juggling.
+            <p className="text-xl text-blue-100 mb-10 max-w-lg">
+              All the tools you need for effective technical interviews in one seamless platform.
             </p>
-            <br />
-            <br />
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition text-base sm:text-lg">
-                Try Free Demo
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-white text-blue-700 hover:bg-blue-50 font-semibold py-3 px-8 rounded-lg transition-all transform hover:scale-105">
+                Get Started Free
               </button>
-              <button className="border border-neutral-500 text-neutral-300 hover:text-white hover:border-white font-semibold py-3 px-8 rounded-lg transition text-base sm:text-lg">
-                See How It Works
+              <button className="bg-transparent border-2 border-blue-300 text-blue-100 hover:bg-blue-800 hover:border-blue-400 font-semibold py-3 px-8 rounded-lg transition">
+                Watch Demo
               </button>
             </div>
           </div>
-          <div className="lg:w-1/2 relative hidden lg:block h-[400px] lg:h-[500px] mt-12 lg:mt-0">
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-          </div>
+        
         </div>
-      </div>
-      <div className="border-t-4 border-blue-500 my-4"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
+      </section>
+
       {/* Problem/Solution Section */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm sm:text-base font-medium mb-4">
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              The Interview Revolution
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              From Chaos to <span className="text-blue-600">Clarity</span>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              The Interview <span className="text-blue-600">Evolution</span>
             </h2>
+            <p className="text-lg text-gray-600">
+              Traditional technical interviews are fragmented and inefficient. We've built a better way.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-            <div className="bg-gray-50 p-6 sm:p-8 rounded-xl border border-gray-200">
-              <h3 className="text-lg sm:text-xl font-semibold text-red-500 mb-3 sm:mb-4">Current Pain Points</h3>
-              <ul className="space-y-3 sm:space-y-4 text-gray-600 text-base sm:text-lg">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-gray-900 text-white p-8 rounded-2xl shadow-xl">
+              <h3 className="text-xl font-semibold text-red-400 mb-6">The Problem</h3>
+              <ul className="space-y-4">
                 {[
                   "Switching between Zoom/LeetCode",
                   "Unreliable screensharing",
@@ -67,26 +59,20 @@ export function LandingPage() {
                   "No standardized evaluation"
                 ].map((item, index) => (
                   <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <svg className="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </div>
-                    <span className="ml-3">{item}</span>
+                    <span className="ml-3 text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="hidden md:flex items-center justify-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8" />
-              </div>
-            </div>
-
-            <div className="bg-blue-50 p-6 sm:p-8 rounded-xl border border-blue-200">
-              <h3 className="text-lg sm:text-xl font-semibold text-blue-600 mb-3 sm:mb-4">Our Solution</h3>
-              <ul className="space-y-3 sm:space-y-4 text-gray-700 text-base sm:text-lg">
+            <div className="bg-blue-600 text-white p-8 rounded-2xl shadow-xl">
+              <h3 className="text-xl font-semibold text-blue-200 mb-6">Our Solution</h3>
+              <ul className="space-y-4">
                 {[
                   "All tools in one workspace",
                   "Real-time code streaming",
@@ -95,10 +81,10 @@ export function LandingPage() {
                   "Automated candidate reports"
                 ].map((item, index) => (
                   <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <CheckCircle className="h-5 w-5 text-blue-500" />
+                    <div className="flex-shrink-0 mt-1">
+                      <CheckCircle className="h-5 w-5 text-blue-300" />
                     </div>
-                    <span className="ml-3">{item}</span>
+                    <span className="ml-3 text-blue-100">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -106,66 +92,62 @@ export function LandingPage() {
           </div>
         </div>
       </section>
-      {/* <div className="border-t-2 border-gray-500 my-4"></div> */}
-      {/* How It Works Section */}
-      <section className="py-16 sm:py-20 bg-blue-100">
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Simple Yet <span className="text-blue-600">Powerful</span>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              How It <span className="text-blue-600">Works</span>
             </h2>
-            <p className=" text-gray-900 mb-3 sm:mb-4">
-              Our streamlined process gets you from scheduling to hiring decision faster than ever.
+            <p className="text-lg text-gray-600">
+              A streamlined process that saves time and improves hiring quality.
             </p>
-            <br />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 title: "Schedule & Prepare",
                 description: "Set up interviews with custom rubrics and coding exercises.",
-                icon: <Calendar className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
+                icon: <Calendar className="w-10 h-10 text-blue-600" />
               },
               {
                 title: "Conduct Interview",
                 description: "Integrated video call and collaborative coding environment.",
-                icon: <Video className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
+                icon: <Video className="w-10 h-10 text-blue-600" />
               },
               {
                 title: "Evaluate & Decide",
                 description: "Score candidates in real-time and compare results.",
-                icon: <ClipboardCheck className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
+                icon: <ClipboardCheck className="w-10 h-10 text-blue-600" />
               }
             ].map((item, index) => (
-              <div key={index} className="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-lg flex items-center justify-center mb-5 sm:mb-6">
+              <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
                   {item.icon}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{index + 1}</h3>
-                <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">{item.title}</h4>
-                <p className="text-gray-600 text-base sm:text-lg">{item.description}</p>
+                <h3 className="text-xl font-bold text-center text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600 text-center">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
-      {/* <div className="border-t-2 border-gray-500 my-4"></div> */}
-      {/* Testimonials */}
-      <section className="py-16 sm:py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Trusted by <span className="text-blue-600">Engineering Teams</span>
-            </h2>
 
-            <p className=" text-gray-900 mb-3 sm:mb-4">
-              Don't just take our word for it. Here's what our users say.
+      {/* Testimonials */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Loved by <span className="text-blue-600">Engineering Teams</span>
+            </h2>
+            <p className="text-lg text-gray-600">
+              Join thousands of companies revolutionizing their hiring process.
             </p>
-            <br />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 quote: "Reduced our interview setup time by 70% while improving candidate experience significantly.",
@@ -180,7 +162,7 @@ export function LandingPage() {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 p-6 sm:p-8 rounded-xl border border-gray-200">
+              <div key={index} className="bg-gray-50 p-8 rounded-xl border border-gray-200 hover:border-blue-300 transition">
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -188,11 +170,11 @@ export function LandingPage() {
                     </svg>
                   ))}
                 </div>
-                <blockquote className="text-lg text-gray-700 mb-5 sm:mb-6">
+                <blockquote className="text-lg text-gray-700 mb-6 italic">
                   "{testimonial.quote}"
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gray-300"></div>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
                   <div>
                     <p className="font-medium text-gray-900">{testimonial.author}</p>
                     <p className="text-sm text-gray-500">{testimonial.role}</p>
@@ -204,36 +186,30 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 py-16 sm:py-20 text-white">
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-700 to-blue-800 text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-5 sm:mb-6">
-            Ready to Transform Your Hiring Process?
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Ready to Transform Your Hiring?
           </h2>
-          <p className=" text-white mb-3 sm:mb-4 underline">
-            Join thousands of teams making better hiring decisions faster with our all-in-one platform.
+          <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+            Join the new standard for technical interviews and make better hiring decisions faster.
           </p>
-          <br />
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition transform hover:-translate-y-1 duration-300 shadow-lg text-base sm:text-lg">
+            <button className="bg-white text-blue-700 hover:bg-blue-50 font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
               Start Free Trial
             </button>
-            <button className="bg-transparent border-2 border-white text-white font-semibold py-3 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition text-base sm:text-lg">
-              Schedule Demo
+            <button className="bg-transparent border-2 border-white text-white hover:bg-blue-600 font-semibold py-3 px-8 rounded-lg transition">
+              Book a Demo
             </button>
           </div>
-          <br />
-          <p className="mt-6 text-blue-100 text-sm sm:text-base">
+          <p className="mt-8 text-blue-200">
             No credit card required • 14-day free trial • Cancel anytime
           </p>
         </div>
-        <br />
-
       </section>
 
-
-
-      <Footer />
+      {/* Footer would go here */}
     </div>
   );
 }
