@@ -149,7 +149,7 @@ if (loading) return (
 
 return (
 <Box sx={{ p: 3, backgroundColor: '', minHeight: '100vh' }}>
- <Typography variant="h4" gutterBottom color="WHITE" sx={{ mb: 3 }}>
+ <Typography variant="h4" gutterBottom color="BLACK" sx={{ mb: 3 }}>
    Evaluation Forms Dashboard
  </Typography>
  

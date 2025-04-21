@@ -81,109 +81,110 @@ function ScheduleInterview() {
     }, [interviewerName]);
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-            <div className="w-full max-w-xl bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
-                <h1 className="text-3xl font-semibold text-indigo-700 mb-8 text-center">Schedule Interview</h1>
-                <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 px-4">
+  <div className="w-full max-w-xl bg-gray-800 shadow-xl rounded-2xl p-8 border border-gray-700">
+    <h1 className="text-3xl font-semibold text-indigo-400 mb-8 text-center">Schedule Interview</h1>
+    <form onSubmit={handleSubmit} className="space-y-6">
 
-                    {/* Input Component */}
-                    {[
-                        { label: "Interviewer Username", name: "interviewerUserName", readOnly: true, value: formData.interviewerUserName },
-                        { label: "Candidate Username", name: "candidateEmail", value: formData.candidateEmail },
-                        { label: "Interview Type", name: "interviewType", value: formData.interviewType },
-                        { label: "Time Zone", name: "timeZone", value: formData.timeZone },
-                    ].map((field) => (
-                        <div key={field.name}>
-                            <label className="block text-sm font-medium text-gray-700">{field.label}</label>
-                            <input
-                                type="text"
-                                name={field.name}
-                                value={field.value}
-                                onChange={handleChange}
-                                readOnly={field.readOnly}
-                                className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                            />
-                        </div>
-                    ))}
-
-                    {/* Evaluation Form Dropdown */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Evaluation Form</label>
-                        {loading ? (
-                            <div className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700">
-                                Loading evaluation forms...
-                            </div>
-                        ) : (
-                            <select
-                                name="evaluationFormId"
-                                value={formData.evaluationFormId}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            >
-                                <option value="">Select an evaluation form</option>
-                                {evalForms.map(form => (
-                                    <option key={form._id} value={form.evaluationFormId}>
-                                        {form.evaluationFormId}
-                                    </option>
-                                ))}
-                            </select>
-                        )}
-                    </div>
-
-                    {/* Date and Time */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Date</label>
-                            <input
-                                type="date"
-                                name="date"
-                                value={formData.date}
-                                onChange={handleChange}
-                                className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Time</label>
-                            <input
-                                type="time"
-                                name="time"
-                                value={formData.time}
-                                onChange={handleChange}
-                                className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Duration */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Duration (minutes)</label>
-                        <input
-                            type="number"
-                            name="duration"
-                            value={formData.duration}
-                            onChange={handleChange}
-                            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                    </div>
-
-                    {/* Feedback Messages */}
-                    {successMessage && (
-                        <p className="text-green-600 text-sm text-center">{successMessage}</p>
-                    )}
-                    {errorMessage && (
-                        <p className="text-red-500 text-sm text-center">{errorMessage}</p>
-                    )}
-
-                    <button
-                        type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-md transition-all duration-200"
-                    >
-                        Schedule Interview
-                    </button>
-                </form>
-            </div>
+      {/* Input Components */}
+      {[
+        { label: "Interviewer Username", name: "interviewerUserName", readOnly: true, value: formData.interviewerUserName },
+        { label: "Candidate Username", name: "candidateEmail", value: formData.candidateEmail },
+        { label: "Interview Type", name: "interviewType", value: formData.interviewType },
+        { label: "Time Zone", name: "timeZone", value: formData.timeZone },
+      ].map((field) => (
+        <div key={field.name}>
+          <label className="block text-sm font-medium text-gray-300">{field.label}</label>
+          <input
+            type="text"
+            name={field.name}
+            value={field.value}
+            onChange={handleChange}
+            readOnly={field.readOnly}
+            className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+          />
         </div>
+      ))}
+
+      {/* Evaluation Form Dropdown */}
+      <div>
+        <label className="block text-sm font-medium text-gray-300">Evaluation Form</label>
+        {loading ? (
+          <div className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-400">
+            Loading evaluation forms...
+          </div>
+        ) : (
+          <select
+            name="evaluationFormId"
+            value={formData.evaluationFormId}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="">Select an evaluation form</option>
+            {evalForms.map(form => (
+              <option key={form._id} value={form.evaluationFormId}>
+                {form.evaluationFormId}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      {/* Date and Time */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-300">Date</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300">Time</label>
+          <input
+            type="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+      </div>
+
+      {/* Duration */}
+      <div>
+        <label className="block text-sm font-medium text-gray-300">Duration (minutes)</label>
+        <input
+          type="number"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+          className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      {/* Feedback Messages */}
+      {successMessage && (
+        <p className="text-green-400 text-sm text-center">{successMessage}</p>
+      )}
+      {errorMessage && (
+        <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+      )}
+
+      <button
+        type="submit"
+        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-md transition-all duration-200"
+      >
+        Schedule Interview
+      </button>
+    </form>
+  </div>
+</div>
+
     );
 }
 

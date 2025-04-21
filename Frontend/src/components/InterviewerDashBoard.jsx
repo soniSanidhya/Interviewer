@@ -74,122 +74,123 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center">
-            <FaChalkboardTeacher className="text-3xl text-blue-600 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-800">Interview Dashboard</h1>
-          </div>
-          <button
-            onClick={()=>{navigate("/evalForm")}}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <FiPlus className="mr-2" />
-            Manage EvaluationForms
-          </button>
-          <button
-            onClick={scheduleNewInterview}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <FiPlus className="mr-2" />
-            Schedule New Interview
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 p-6 text-white">
+    <div className="max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <div className="flex items-center">
+          <FaChalkboardTeacher className="text-3xl text-blue-400 mr-3" />
+          <h1 className="text-3xl font-bold text-white">Interview Dashboard</h1>
         </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-gray-500 font-medium">Total Interviews</h3>
-            <p className="text-3xl font-bold text-gray-800">{interviews.length}</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-gray-500 font-medium">Upcoming</h3>
-            <p className="text-3xl font-bold text-gray-800">
-              {interviews.filter(i => i.status === 'Scheduled').length}
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-gray-500 font-medium">Completed</h3>
-            <p className="text-3xl font-bold text-gray-800">
-              {interviews.filter(i => i.status === 'Completed').length}
-            </p>
-          </div>
+        <button
+          onClick={() => {navigate("/evalForm")}}
+          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <FiPlus className="mr-2" />
+          Manage EvaluationForms
+        </button>
+        <button
+          onClick={scheduleNewInterview}
+          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <FiPlus className="mr-2" />
+          Schedule New Interview
+        </button>
+      </div>
+  
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-5 mb-8">
+        <div className="bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-700">
+          <h3 className="text-gray-400 font-medium">Total Interviews</h3>
+          <p className="text-3xl font-bold text-white">{interviews.length}</p>
         </div>
-
-        {/* Interviews List */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-          <div className="p-4 border-b border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800">Your Interviews</h2>
-          </div>
-
-          {interviews.length === 0 ? (
-            <div className="p-8 text-center">
-              <div className="text-gray-400 mb-4">No interviews scheduled yet</div>
-              <button
-                onClick={scheduleNewInterview}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Schedule Your First Interview
-              </button>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-100">
-              {interviews.map((interview) => (
-                <div key={interview._id} className="p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="mb-4 md:mb-0">
-                      <div className="flex items-center mb-2">
-                        <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mr-3">
-                          {interview.interviewType}
-                        </span>
-                        {getStatusBadge(interview.status)}
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-1 underline">
-                        Interview with {`(${interview?.candidateId?.email})` || 'Candidate'}
-                      </h3>
-                      <div className="flex flex-wrap items-center text-gray-600 text-sm gap-4">
-                        <div className="flex items-center">
-                          <FiCalendar className="mr-1.5" />
-                          {new Date(new Date(interview.scheduledAt).getTime() - 5.5 * 60 * 60 * 1000).toLocaleString()}
-                        </div>
-                        <div className="flex items-center">
-                          <FiClock className="mr-1.5" />
-                          {interview.durationMinutes} minutes
-                        </div>
-                        {interview.meetingLink && (
-                          <div className="flex items-center">
-                            <FiLink className="mr-1.5" />
-                            <a
-                              href={interview.meetingLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
-                            >
-                              Meeting Link
-                            </a>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => joinInterview(interview._id)}
-                        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        <FiVideo className="mr-2" />
-                        {interview.status === 'Completed' ? 'View Details' : 'Join Interview'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-700">
+          <h3 className="text-gray-400 font-medium">Upcoming</h3>
+          <p className="text-3xl font-bold text-white">
+            {interviews.filter(i => i.status === 'Scheduled').length}
+          </p>
+        </div>
+        <div className="bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-700">
+          <h3 className="text-gray-400 font-medium">Completed</h3>
+          <p className="text-3xl font-bold text-white">
+            {interviews.filter(i => i.status === 'Completed').length}
+          </p>
         </div>
       </div>
+  
+      {/* Interviews List */}
+      <div className="bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-700">
+        <div className="p-4 border-b border-gray-700">
+          <h2 className="text-xl font-semibold text-white">Your Interviews</h2>
+        </div>
+  
+        {interviews.length === 0 ? (
+          <div className="p-8 text-center">
+            <div className="text-gray-500 mb-4">No interviews scheduled yet</div>
+            <button
+              onClick={scheduleNewInterview}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Schedule Your First Interview
+            </button>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-700">
+            {interviews.map((interview) => (
+              <div key={interview._id} className="p-4 hover:bg-gray-700 transition-colors">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <div className="mb-4 md:mb-0">
+                    <div className="flex items-center mb-2">
+                      <span className="bg-blue-600 text-white text-sm font-medium px-3 py-1 rounded-full mr-3">
+                        {interview.interviewType}
+                      </span>
+                      {getStatusBadge(interview.status)}
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-1 underline">
+                      Interview with {`(${interview?.candidateId?.email})` || 'Candidate'}
+                    </h3>
+                    <div className="flex flex-wrap items-center text-gray-300 text-sm gap-4">
+                      <div className="flex items-center">
+                        <FiCalendar className="mr-1.5" />
+                        {new Date(new Date(interview.scheduledAt).getTime() - 5.5 * 60 * 60 * 1000).toLocaleString()}
+                      </div>
+                      <div className="flex items-center">
+                        <FiClock className="mr-1.5" />
+                        {interview.durationMinutes} minutes
+                      </div>
+                      {interview.meetingLink && (
+                        <div className="flex items-center">
+                          <FiLink className="mr-1.5" />
+                          <a
+                            href={interview.meetingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:underline"
+                          >
+                            Meeting Link
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => joinInterview(interview._id)}
+                      className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      <FiVideo className="mr-2" />
+                      {interview.status === 'Completed' ? 'View Details' : 'Join Interview'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
+  </div>
+  
   );
 }
 

@@ -7,15 +7,13 @@ import { BASE_URL } from '../utils/constants';
 
 const CandidateLogin = () => {
     const [formData, setFormData] = useState({
-        fullName: "Donald Trump",
         userName: "rishi",
-        email: "donald@trump.com",
         password: "rishi123"
     });
+        
 
     const [formErrors, setFormErrors] = useState({});
     const [error, setError] = useState("");
-    const [isLoginForm, setIsLoginForm] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [alreadyLogin, setAlreadyLogin] = useState(false);
@@ -36,17 +34,11 @@ const CandidateLogin = () => {
     }, []);
 
     const validate = () => {
-        const { fullName, userName, email, password } = formData;
+        const { userName, password } = formData;
         const errors = {};
 
         if (!userName.trim()) errors.userName = "Username is required";
         if (!password.trim()) errors.password = "Password is required";
-
-        if (!isLoginForm) {
-            if (!fullName.trim()) errors.fullName = "Full name is required";
-            if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) errors.email = "Valid email is required";
-            if (password.length < 6) errors.password = "Password must be at least 6 characters";
-        }
 
         return errors;
     };
@@ -64,14 +56,8 @@ const CandidateLogin = () => {
         }
 
         try {
-            const endpoint = isLoginForm ? "/candidate-login" : "/candidate-signup";
-            const payload = isLoginForm
-                ? { userName: formData.userName, password: formData.password }
-                : formData;
-
-            const res = await axios.post(`${BASE_URL}${endpoint}`, payload, { withCredentials: true });
+            const res = await axios.post(`${BASE_URL}/candidate-login`, formData, { withCredentials: true });
             dispatch(addUser(res.data));
-
             navigate("/interview-dashboard");
         } catch (err) {
             setError(err?.response?.data || "Something went wrong");
@@ -97,39 +83,31 @@ const CandidateLogin = () => {
     );
 
     return (
-        <div className="flex items-center justify-center px-4 md:px-0 my-16">
-            <div className="card bg-neutral text-neutral-content w-full max-w-md p-6 shadow-xl">
-                <div className="card-body items-center text-center gap-6">
-                    <h2 className="card-title text-lg md:text-2xl">
-                        {isLoginForm ? "Login" : "Sign Up"}
-                    </h2>
-
-                    {!isLoginForm && renderInput("fullName", "Full Name")}
-                    {renderInput("userName", "User Name")}
-                    {!isLoginForm && renderInput("email", "Email")}
-                    {renderInput("password", "Password", "password")}
-
-                    {error && (
-                        <p className="text-red-500 text-sm">{typeof error === "string" ? error : JSON.stringify(error)}</p>
-                    )}
-
-                    <span
-                        className="label-text-alt hover:cursor-pointer underline"
-                        onClick={() => {
-                            setIsLoginForm(!isLoginForm);
-                            setError("");
-                            setFormErrors({});
-                        }}
-                    >
-                        {isLoginForm ? "New User? Signup Here" : "Existing User? Login Here"}
-                    </span>
-
-                    <button className="btn btn-primary w-full" onClick={handleSubmit}>
-                        {isLoginForm ? "Login" : "Sign Up"}
-                    </button>
-                </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 flex items-center justify-center px-4">
+        <div className="backdrop-blur-lg bg-gray-800/80 border border-gray-700 text-white w-full max-w-md rounded-2xl shadow-2xl p-8 transition-all duration-300">
+            <div className="flex flex-col items-center text-center space-y-6">
+                <h2 className="text-3xl font-bold text-white">Candidate Login</h2>
+                <p className="text-gray-400 text-sm">Access your interview dashboard</p>
+    
+                {renderInput("userName", "User Name")}
+                {renderInput("password", "Password", "password")}
+    
+                {error && (
+                    <p className="text-red-400 text-sm -mt-2">
+                        {typeof error === "string" ? error : JSON.stringify(error)}
+                    </p>
+                )}
+    
+                <button
+                    className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all duration-200 rounded-lg font-medium text-white tracking-wide"
+                    onClick={handleSubmit}
+                >
+                    Login
+                </button>
             </div>
         </div>
+    </div>
+    
     );
 };
 

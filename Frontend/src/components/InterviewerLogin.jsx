@@ -7,13 +7,13 @@ import { BASE_URL } from '../utils/constants';
 
 const InterviewerLogin = () => {
     const [formData, setFormData] = useState({
-        fullName: "Donald Trump",
+        fullName: "",
         userName: "akshat",
-        email: "donald@trump.com",
+        email: "",
         password: "akshat123",
-        company: "Trump Organization",
-        position: "CEO",
-        role: "Founder"
+        company: "",
+        position: "",
+        role: ""
     });
 
     const [formErrors, setFormErrors] = useState({});
@@ -109,51 +109,56 @@ const InterviewerLogin = () => {
     );
 
     return (
-        <div className="flex items-center justify-center px-4 md:px-0 my-16">
-            <div className="card bg-neutral text-neutral-content w-full max-w-md p-6 shadow-xl">
-                <div className="card-body items-center text-center gap-6">
-                    <h2 className="card-title text-lg md:text-2xl">{isLoginForm ? "Login" : "Sign Up"}</h2>
+        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 flex items-center justify-center px-4">
+    <div className="backdrop-blur-lg bg-gray-800/80 border border-gray-700 text-white w-full max-w-md rounded-2xl shadow-2xl p-8 transition-all duration-300">
+        <div className="flex flex-col items-center text-center space-y-6 w-full">
+            <h2 className="text-3xl font-bold">
+                {isLoginForm ? "Login" : "Sign Up"}
+            </h2>
 
-                    {!isLoginForm && (
-                        <>
-                            {renderInput("fullName", "Full Name")}
-                            {renderInput("email", "Email")}
-                            {renderInput("company", "Company")}
-                            {renderInput("position", "Position")}
-                            {renderInput("role", "Role")}
-                        </>
-                    )}
+            {!isLoginForm && (
+                <>
+                    {renderInput("fullName", "Full Name")}
+                    {renderInput("email", "Email")}
+                    {renderInput("company", "Company")}
+                    {renderInput("position", "Position")}
+                    {renderInput("role", "Role")}
+                </>
+            )}
 
-                    {renderInput("userName", "User Name")}
-                    {renderInput("password", "Password", "password")}
+            {renderInput("userName", "User Name")}
+            {renderInput("password", "Password", "password")}
 
-                    {error && (
-                        <p className="text-red-500 text-sm text-center">{typeof error === "string" ? error : JSON.stringify(error)}</p>
-                    )}
+            {error && (
+                <p className="text-red-400 text-sm">
+                    {typeof error === "string" ? error : JSON.stringify(error)}
+                </p>
+            )}
 
-                    <span
-                        className="label-text-alt hover:cursor-pointer underline"
-                        onClick={() => {
-                            setIsLoginForm(!isLoginForm);
-                            setError("");
-                            setFormErrors({});
-                        }}
-                    >
-                        {isLoginForm ? "New User? Signup Here" : "Existing User? Login Here"}
-                    </span>
+            <span
+                className="text-sm text-blue-400 hover:text-blue-500 transition-all duration-200 cursor-pointer underline"
+                onClick={() => {
+                    setIsLoginForm(!isLoginForm);
+                    setError("");
+                    setFormErrors({});
+                }}
+            >
+                {isLoginForm ? "New User? Sign up here" : "Existing User? Login here"}
+            </span>
 
-                    <button
-                        className="btn btn-primary w-full"
-                        onClick={handleSubmit}
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting
-                            ? (isLoginForm ? "Logging in..." : "Signing up...")
-                            : (isLoginForm ? "Login" : "Sign Up")}
-                    </button>
-                </div>
-            </div>
+            <button
+                className="w-full py-2 px-4 mt-2 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all duration-200 rounded-lg font-medium text-white tracking-wide"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+            >
+                {isSubmitting
+                    ? (isLoginForm ? "Logging in..." : "Signing up...")
+                    : (isLoginForm ? "Login" : "Sign Up")}
+            </button>
         </div>
+    </div>
+</div>
+
     );
 };
 
