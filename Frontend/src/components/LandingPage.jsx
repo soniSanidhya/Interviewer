@@ -52,7 +52,7 @@ export function LandingPage() {
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
 
             <div className="flex gap-4 p-4">
-              <button onClick={()=>{window.location.href="/candidate-signup"}} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105">
+              <button onClick={()=>{window.location.href="/interviewer-signup"}} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105">
                 Enter as Interviewer
               </button>
               <button
