@@ -52,7 +52,7 @@ function CandidateDashBoard({ candidateID }) {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Your Interviews</h1>
+        <h1 className="text-2xl p-4 font-bold text-gray-800 mb-6">Candidate Interviews</h1>
         
         {interviews.length === 0 ? (
           <div className="bg-white p-8 rounded-lg shadow text-center">

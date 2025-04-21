@@ -80,7 +80,7 @@ useEffect(() => {
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center">
           <FaChalkboardTeacher className="text-3xl text-blue-400 mr-3" />
-          <h1 className="text-3xl font-bold text-white">Interview Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white">Interviewer Dashboard</h1>
         </div>
         <button
           onClick={() => {navigate("/evalForm")}}
