@@ -8,7 +8,6 @@ function ScheduleInterview() {
     const [interviewerId, setInterviewerId] = useState('');
     const [evalForms, setEvalForms] = useState([]);
     const [loadingForms, setLoadingForms] = useState(true);
-    const [loading, setLoading] = useState(true);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [modal, setModal] = useState({ show: false, success: false, message: '' });
     const navigate = useNavigate();
@@ -40,9 +39,9 @@ function ScheduleInterview() {
 
     const [formData, setFormData] = useState({
         interviewerUserName: '',
-        candidateEmail: '',
-        date: '',
-        time: '',
+        candidateEmail: 'rishi@gmail.com',
+        date: '2025-04-04',
+        time: '11:21',
         duration: 10,
         timeZone: 'Asia/Kolkata',
         interviewType: 'technical',
@@ -92,7 +91,7 @@ function ScheduleInterview() {
     const handleModalClose = () => {
         setModal({ show: false, success: false, message: '' });
         if (modal.success) {
-            navigate('/interview-dashboard'); // Replace with your actual dashboard route
+            navigate('/dashboard'); // Replace with your actual dashboard route
         } else {
             navigate(0); // Refresh current page
         }
@@ -106,7 +105,7 @@ function ScheduleInterview() {
                      {/* Input Components */}
       {[
         { label: "Interviewer Username", name: "interviewerUserName", readOnly: true, value: formData.interviewerUserName },
-        { label: "Candidate Email", name: "candidateEmail", value: formData.candidateEmail },
+        { label: "Candidate Username", name: "candidateEmail", value: formData.candidateEmail },
         { label: "Interview Type", name: "interviewType", value: formData.interviewType },
         { label: "Time Zone", name: "timeZone", value: formData.timeZone },
       ].map((field) => (
@@ -126,7 +125,7 @@ function ScheduleInterview() {
       {/* Evaluation Form Dropdown */}
       <div>
         <label className="block text-sm font-medium text-gray-300">Evaluation Form</label>
-        {loadingForms ? (
+        {loading ? (
           <div className="mt-1 w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-400">
             Loading evaluation forms...
           </div>
