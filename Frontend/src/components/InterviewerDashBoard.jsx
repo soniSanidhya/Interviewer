@@ -29,7 +29,7 @@ useEffect(() => {
           cacheRef.current = response.data.interviews; // Cache it
           setLoading(false);
         } catch (err) {
-          setError('Failed to fetch interviews');
+          // setError('Failed to fetch interviews');
           setLoading(false);
         }
       }

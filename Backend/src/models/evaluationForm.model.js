@@ -8,6 +8,11 @@ const evaluationFormSchema = new Schema(
       required: true,
       unique: true,
     },
+    formName:{
+      type: String,
+      required: true,
+      unique: true,
+    },
     interviewerId: {
       type: Schema.Types.ObjectId,
       ref: "Interviewer",

@@ -140,8 +140,8 @@ function ScheduleInterview() {
           >
             <option value="">Select an evaluation form</option>
             {evalForms.map(form => (
-              <option key={form._id} value={form.evaluationFormId}>
-                {form.evaluationFormId}
+              <option key={form._id} value={form.formName}>
+                {form.formName}
               </option>
             ))}
           </select>

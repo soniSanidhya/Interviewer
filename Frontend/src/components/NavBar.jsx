@@ -15,16 +15,16 @@ export default function Navbar() {
     axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
       withCredentials: true
     })
-    .then(response => {
-      if (response.data?.user?.type === 'candidate') {
-        setIsCandidate(true);
-        setCandidateId(response.data.user._id);
-      } else if (response.data?.user?.type === 'interviewer') {
-        setIsInterviewer(true);
-        setInterviewerId(response.data.user._id);
-      }
-    })
-    .catch(error => console.error("Error fetching current user:", error));
+      .then(response => {
+        if (response.data?.user?.type === 'candidate') {
+          setIsCandidate(true);
+          setCandidateId(response.data.user._id);
+        } else if (response.data?.user?.type === 'interviewer') {
+          setIsInterviewer(true);
+          setInterviewerId(response.data.user._id);
+        }
+      })
+      .catch(error => console.error("Error fetching current user:", error));
   }, []);
 
   const handleLogout = () => {
@@ -59,7 +59,8 @@ export default function Navbar() {
                 Candidate Dashboard
               </Link>
             )}
-
+            <div className="px-4 py-2 ">
+            </div>
             {isInterviewer && (
               <Link
                 to={`/interview-dashboard`}
@@ -72,7 +73,7 @@ export default function Navbar() {
             {(isCandidate || isInterviewer) ? (
               <button
                 onClick={handleLogout}
-                className="text-white bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                className="text-white gap bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition"
               >
                 Logout
               </button>
@@ -87,6 +88,7 @@ export default function Navbar() {
                       Candidate
                     </Link>
                   </li>
+
                   <li>
                     <Link to="/interviewer-signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       Interviewer

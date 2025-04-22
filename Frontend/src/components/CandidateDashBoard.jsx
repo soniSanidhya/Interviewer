@@ -25,7 +25,7 @@ function CandidateDashBoard({ candidateID }) {
           setInterviews(response.data.interviews || []);
           setLoading(false);
         } catch (err) {
-          setError('Failed to fetch interviews. Please try again later.');
+          // setError('Failed to fetch interviews. Please try again later.');
           setLoading(false);
         }
       }

@@ -94,8 +94,11 @@ function CreateEvaluationForm() {
     const [theoryQuestion, setTheoryQuestion] = useState("");
     const [otherQuestion, setOtherQuestion] = useState("");
     const [activeTab, setActiveTab] = useState("technical");
+    const [formName, setFormName] = useState("Coding_eval_form_1");
 
-
+    const handleChange = (e) => {
+        setFormName(e.target.value);
+    };
 
     const handleCheckboxChange = (category, subcategory, field) => {
         setFormData({
@@ -150,6 +153,7 @@ function CreateEvaluationForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        formData.formName = formName
         // console.log("Submitting form data:", formData);
         axios.post(`${BASE_URL}/create-evalForm`, formData, { withCredentials: true })
             .then((resp) => {
@@ -674,25 +678,28 @@ function CreateEvaluationForm() {
                 </header>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
+                    
+                    {/* */}
                     <div className="bg-gray-800/50 p-5 rounded-xl shadow-xl backdrop-blur-sm border border-gray-700/50">
-                        <div className="flex items-center mb-4">
-                            <FiUser className="text-purple-500 mr-2" size={20} />
-                            <label className="text-lg font-medium text-purple-300">Interviewer Details</label>
-                        </div>
+            <div className="flex items-center mb-4">
+                <label className="text-lg font-medium text-purple-300">
+                    Evaluation Form Name
+                </label>
+            </div>
 
-                        <div className="relative">
-                            <input
-                                type="text"
-                                value={intvName}
-                                className="w-full bg-gray-700/50 border-0 rounded-lg text-white px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none pl-10"
-                                placeholder="Your full name"
-                                required
-                                readOnly
-                            />
-                            <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        </div>
-                    </div>
-
+            <div className="relative">
+                <input
+                    type="text"
+                    value={formName}
+                    onChange={handleChange}
+                    className="w-full bg-gray-700/50 border-0 rounded-lg text-white px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none pl-10"
+                    placeholder="Your full name"
+                    required
+                />
+                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+        </div>
+                    {/* */}
                     <div className="bg-gray-800/50 p-6 rounded-xl shadow-xl backdrop-blur-sm border border-gray-700/50">
                         <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto">
                             <TabButton

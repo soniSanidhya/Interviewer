@@ -5,6 +5,7 @@ import { Interviewer } from "../models/interviewer.model.js";
 import mongoose from "mongoose";
 import uniqid from 'uniqid';
 import mailKaro from "../utils/nodemailer.js";
+import { EvaluationForm } from "../models/evaluationForm.model.js";
 
 export const scheduleInterview = async (req, res) => {
   const {
@@ -17,6 +18,9 @@ export const scheduleInterview = async (req, res) => {
     interviewType,
     evaluationFormId,
   } = req.body;
+
+  const eId = await EvaluationForm.findOne({formName : evaluationFormId})
+  console.log("abc ", eId._id)
 
   if (
     !interviewerUserName ||
@@ -32,6 +36,8 @@ export const scheduleInterview = async (req, res) => {
   } else {
     // console.log("not missing");
   }
+
+
 
   //generate user credentials
   //call candidate signup /candidate-signup with  const { userName, fullName, email, password } data
@@ -116,7 +122,7 @@ export const scheduleInterview = async (req, res) => {
     durationMinutes,
     timeZone,
     interviewType,
-    evaluationFormId,
+    evaluationFormId:eId,
   };
 
   const createdInterview = await Interview.create(newInterview);

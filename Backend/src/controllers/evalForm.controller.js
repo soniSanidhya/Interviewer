@@ -5,8 +5,10 @@ import { Interviewer } from "../models/interviewer.model.js";
 
 export const createEvalForm = async (req, res) => {
   try {
-    const { interviewerName, evalForm } = req.body;
-    // console.log(interviewerName);
+    const { interviewerName,formName, evalForm } = req.body;
+    console.log(interviewerName);
+    console.log(formName);
+    console.log(evalForm);
 
     if (!interviewerName || !evalForm) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -26,6 +28,7 @@ export const createEvalForm = async (req, res) => {
     const newEvalForm = await EvaluationForm.create({
       evaluationFormId: new mongoose.Types.ObjectId(),
       interviewerId: interviewer._id,
+      formName,
       evalForm: parsedEvalForm,
     });
 
