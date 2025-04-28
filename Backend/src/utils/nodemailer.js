@@ -1,4 +1,6 @@
 import { createTransport } from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 const transporter = createTransport({
   service: "gmail",
@@ -9,6 +11,11 @@ const transporter = createTransport({
 });
 
 const mailKaro = async (email, sub, bodyText, credentials) => {
+  if (!process.env.EMAIL || !process.env.NODEMAILER) {
+    throw new Error("Email credentials missing from environment variables.");
+  }
+  
+  
     const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
     <h2 style="color: #333;">${sub}</h2>

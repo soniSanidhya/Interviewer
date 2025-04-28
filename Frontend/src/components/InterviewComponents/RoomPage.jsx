@@ -730,10 +730,10 @@ function RoomPage() {
                             className={`p-4 transition-all duration-300 ${panels.videoCall ? 'block' : 'hidden'
                                 } ${isFullscreen ? 'h-full' : ''}`}
                         >
-                            <div className={`${isFullscreen ? 'h-full' : ''}`}>
-                                <VideoCallWindow roomId={roomId} isFullscreen={isFullscreen} />
+                          {  <div className={`${isFullscreen ? 'h-full' : ''}`}>
+                                {<VideoCallWindow roomId={roomId} isFullscreen={isFullscreen} />}
 
-                            </div>
+                            </div>}
                         </div>
                     </div>
 

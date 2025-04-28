@@ -58,11 +58,15 @@ export const getEvalFormByInterviewId = async (req, res) => {
     if (!interview) {
       return res.status(400).json({ message: "Missing interview ID" });
     }
-    // console.log(interview);
+
+    console.log(interview.evaluationFormId);
 
     const evalForm = await EvaluationForm.findOne({
-      evaluationFormId: interview.evaluationFormId,
+      _id: interview.evaluationFormId,
     });
+
+    console.log("ev ",evalForm);
+     
 
     if (!evalForm) {
       return res.status(404).json({ message: "Evaluation form not found" });

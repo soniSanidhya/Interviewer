@@ -82,7 +82,7 @@ export default function Navbar() {
                 <button className="bg-[#3d3d3d] text-white px-4 py-2 rounded-lg hover:bg-[#00E8C6] hover:text-black transition">
                   Get Started as
                 </button>
-                <ul className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-200 ease-in-out pointer-events-none group-hover:pointer-events-auto z-50">
+                <ul className="absolute right-0 w-50 bg-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 ease-in-out pointer-events-none group-hover:pointer-events-auto z-50">
                   <li>
                     <Link to="/candidate-signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       Candidate
