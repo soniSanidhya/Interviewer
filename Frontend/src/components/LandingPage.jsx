@@ -14,29 +14,31 @@ export function LandingPage() {
     <div className="min-h-screen flex flex-col bg-slate-50 relative overflow-hidden">
       {/* Global Background Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Main Gradient Background - Improved contrast */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-white"></div>
+  {/* Main Gradient Background */}
+  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-white"></div>
 
-        {/* Glow Circles - Adjusted opacity for better visibility without distraction */}
-        <div className="absolute w-[1200px] h-[1200px] bg-blue-500 rounded-full opacity-8 blur-3xl -top-1/4 -left-1/4 animate-glow-slow"></div>
-        <div className="absolute w-[800px] h-[800px] bg-indigo-400 rounded-full opacity-8 blur-3xl bottom-1/4 -right-1/4 animate-glow-slower"></div>
+  {/* Glow Circles */}
+  <div className="absolute w-[1200px] h-[1200px] bg-blue-500 rounded-full opacity-10 blur-3xl -top-1/4 -left-1/4 animate-glow-slow"></div>
+  <div className="absolute w-[800px] h-[800px] bg-indigo-400 rounded-full opacity-10 blur-3xl bottom-1/4 -right-1/4 animate-glow-slower"></div>
 
-        {/* Meteor Shower */}
-        {[...Array(100)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute w-[2px] h-[2px] bg-blue-400 rounded-full animate-meteor"
-            style={{
-              top: `0%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${(i % 20) * 0.3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-              opacity: 0.7,
-              boxShadow: `0 0 6px 3px rgba(59,130,246,0.15)`, // blue-500
-            }}
-          />
-        ))}
-      </div>
+  {/* Meteor Shower */}
+  {[...Array(100)].map((_, i) => (
+    <span
+      key={i}
+      className="absolute w-[2px] h-[2px] bg-blue-500 rounded-full animate-meteor"
+      style={{
+        top: `0%`,
+        left: `${Math.random() * 100}%`,
+        animationDelay: `${(i % 20) * 0.3}s`,
+        animationDuration: `${2 + Math.random() * 3}s`,
+        opacity: 1,
+        boxShadow: `0 0 5px 4px rgba(59,130,246,0.5)`, // brighter glow
+        filter: `brightness(150%)`, // boost light output
+      }}
+    />
+  ))}
+</div>
+
 
       <NavBar />
 
