@@ -70,16 +70,11 @@ function CreateEvaluationForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // // console.log("candidate is ", isCandidate);
-        // // console.log("interviewer is ", isInterviewer);
-
         axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
             withCredentials: true
         })
             .then(response => {
-                // console.log("Current user data:", response.data)
                 if (response.data.user.type == "interviewer") {
-                    // console.log("heyy ", response.data.user.userName);
                     setIntvName(response.data.user.userName)
                     setFormData({ ...formData, interviewerName: response.data.user.userName });
                 }
@@ -94,7 +89,7 @@ function CreateEvaluationForm() {
     const [theoryQuestion, setTheoryQuestion] = useState("");
     const [otherQuestion, setOtherQuestion] = useState("");
     const [activeTab, setActiveTab] = useState("technical");
-    const [formName, setFormName] = useState("Coding_eval_form_1");
+    const [formName, setFormName] = useState("");
 
     const handleChange = (e) => {
         setFormName(e.target.value);
@@ -154,10 +149,8 @@ function CreateEvaluationForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         formData.formName = formName
-        // console.log("Submitting form data:", formData);
         axios.post(`${BASE_URL}/create-evalForm`, formData, { withCredentials: true })
             .then((resp) => {
-                // console.log(resp.data); // This is the parsed JSON response
                 navigate("/evalForm")
             })
             .catch((error) => {
@@ -197,8 +190,8 @@ function CreateEvaluationForm() {
     };
 
     const Checkbox = ({ id, checked, onChange, label, className = "" }) => (
-        <div className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700/30 transition-colors ${className}`}>
-            <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${checked ? 'bg-purple-600 border-purple-600' : 'border-gray-500'}`}>
+        <div className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors ${className}`}>
+            <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${checked ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`}>
                 {checked && <FiCheck className="text-white" size={14} />}
             </div>
             <input
@@ -208,14 +201,14 @@ function CreateEvaluationForm() {
                 onChange={onChange}
                 className="hidden"
             />
-            <label htmlFor={id} className="cursor-pointer flex-1">{label}</label>
+            <label htmlFor={id} className="cursor-pointer flex-1 text-gray-700">{label}</label>
         </div>
     );
 
     const TabButton = ({ active, icon, label, onClick }) => (
         <button
             onClick={onClick}
-            className={`flex items-center space-x-2 py-3 px-4 rounded-lg transition-all ${active ? 'bg-gray-700 text-purple-400 shadow-md' : 'hover:bg-gray-800'}`}
+            className={`flex items-center space-x-2 py-3 px-4 rounded-lg transition-all ${active ? 'bg-blue-50 text-blue-600 shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}
         >
             {icon}
             <span className="font-medium">{label}</span>
@@ -227,14 +220,14 @@ function CreateEvaluationForm() {
             case 'technical':
                 return (
                     <div className="space-y-8 animate-fadeIn">
-                        <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2 pb-2 border-b border-purple-500/30">
+                        <h2 className="text-2xl font-bold text-blue-600 flex items-center gap-2 pb-2 border-b border-gray-200">
                             <FiCode />
                             Technical Evaluation
                         </h2>
 
                         <div className="space-y-6">
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-cyan-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-700 flex items-center gap-2 mb-4">
                                     <FiCode />
                                     Coding Skills
                                 </h3>
@@ -266,8 +259,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-cyan-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-700 flex items-center gap-2 mb-4">
                                     <FiDatabase />
                                     System Design
                                 </h3>
@@ -299,8 +292,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-cyan-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-700 flex items-center gap-2 mb-4">
                                     <FiTool />
                                     Tools & Platforms
                                 </h3>
@@ -331,14 +324,14 @@ function CreateEvaluationForm() {
             case 'soft':
                 return (
                     <div className="space-y-8 animate-fadeIn">
-                        <h2 className="text-2xl font-bold text-green-400 flex items-center gap-2 pb-2 border-b border-green-500/30">
+                        <h2 className="text-2xl font-bold text-green-600 flex items-center gap-2 pb-2 border-b border-gray-200">
                             <FiMessageSquare />
                             Soft Skills Assessment
                         </h2>
 
                         <div className="space-y-6">
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-green-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-green-700 flex items-center gap-2 mb-4">
                                     <FiMessageSquare />
                                     Communication
                                 </h3>
@@ -364,8 +357,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-green-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-green-700 flex items-center gap-2 mb-4">
                                     <FiUsers />
                                     Collaboration
                                 </h3>
@@ -391,8 +384,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-green-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-green-700 flex items-center gap-2 mb-4">
                                     <FiRefreshCw />
                                     Adaptability
                                 </h3>
@@ -417,14 +410,14 @@ function CreateEvaluationForm() {
             case 'cultural':
                 return (
                     <div className="space-y-8 animate-fadeIn">
-                        <h2 className="text-2xl font-bold text-yellow-400 flex items-center gap-2 pb-2 border-b border-yellow-500/30">
+                        <h2 className="text-2xl font-bold text-amber-500 flex items-center gap-2 pb-2 border-b border-gray-200">
                             <FiHeart />
                             Cultural Fit
                         </h2>
 
                         <div className="space-y-6">
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-amber-500 flex items-center gap-2 mb-4">
                                     <FiHeart />
                                     Values Alignment
                                 </h3>
@@ -444,8 +437,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-amber-500 flex items-center gap-2 mb-4">
                                     <FiBook />
                                     Growth Mindset
                                 </h3>
@@ -459,19 +452,19 @@ function CreateEvaluationForm() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h4 className="font-medium text-yellow-300">Certifications</h4>
+                                    <h4 className="font-medium text-gray-700">Certifications</h4>
                                     <div className="flex gap-2">
                                         <input
                                             type="text"
                                             value={certification}
                                             onChange={(e) => setCertification(e.target.value)}
-                                            className="flex-1 bg-gray-700/50 border-0 rounded-lg text-white px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                            className="flex-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                             placeholder="Add certification"
                                         />
                                         <button
                                             type="button"
                                             onClick={addCertification}
-                                            className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
+                                            className="bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
                                         >
                                             <FiPlus size={20} />
                                         </button>
@@ -480,12 +473,12 @@ function CreateEvaluationForm() {
                                     {formData.evalForm.culturalFit.growthMindset.certifications.length > 0 && (
                                         <div className="space-y-2 mt-3">
                                             {formData.evalForm.culturalFit.growthMindset.certifications.map((cert, index) => (
-                                                <div key={index} className="flex items-center justify-between bg-gray-700/30 px-3 py-2 rounded-lg">
-                                                    <span>{cert}</span>
+                                                <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                                                    <span className="text-gray-700">{cert}</span>
                                                     <button
                                                         type="button"
                                                         onClick={() => removeCertification(index)}
-                                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                                        className="text-red-500 hover:text-red-600 transition-colors"
                                                     >
                                                         &times;
                                                     </button>
@@ -496,8 +489,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2 mb-4">
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-amber-500 flex items-center gap-2 mb-4">
                                     <FiClock />
                                     Work Ethic
                                 </h3>
@@ -522,14 +515,14 @@ function CreateEvaluationForm() {
             case 'custom':
                 return (
                     <div className="space-y-8 animate-fadeIn">
-                        <h2 className="text-2xl font-bold text-pink-400 flex items-center gap-2 pb-2 border-b border-pink-500/30">
+                        <h2 className="text-2xl font-bold text-blue-800 flex items-center gap-2 pb-2 border-b border-gray-200">
                             <FiMessageSquare />
                             Custom Questions
                         </h2>
 
                         <div className="space-y-6">
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-pink-400 mb-4">Program Questions</h3>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-800 mb-4">Program Questions</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex gap-2">
@@ -537,13 +530,13 @@ function CreateEvaluationForm() {
                                             type="text"
                                             value={programQuestion}
                                             onChange={(e) => setProgramQuestion(e.target.value)}
-                                            className="flex-1 bg-gray-700/50 border-0 rounded-lg text-white px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                            className="flex-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                             placeholder="Add a programming question"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => addQuestion('programQuestions', programQuestion, setProgramQuestion)}
-                                            className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
+                                            className="bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
                                         >
                                             <FiPlus size={20} />
                                         </button>
@@ -552,12 +545,12 @@ function CreateEvaluationForm() {
                                     {formData.evalForm.customQuestions.programQuestions.length > 0 && (
                                         <div className="space-y-2 mt-3">
                                             {formData.evalForm.customQuestions.programQuestions.map((q, index) => (
-                                                <div key={index} className="flex items-center justify-between bg-gray-700/30 px-3 py-2 rounded-lg">
-                                                    <span>{q}</span>
+                                                <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                                                    <span className="text-gray-700">{q}</span>
                                                     <button
                                                         type="button"
                                                         onClick={() => removeQuestion('programQuestions', index)}
-                                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                                        className="text-red-500 hover:text-red-600 transition-colors"
                                                     >
                                                         &times;
                                                     </button>
@@ -568,8 +561,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-pink-400 mb-4">Theory Questions</h3>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-800 mb-4">Theory Questions</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex gap-2">
@@ -577,13 +570,13 @@ function CreateEvaluationForm() {
                                             type="text"
                                             value={theoryQuestion}
                                             onChange={(e) => setTheoryQuestion(e.target.value)}
-                                            className="flex-1 bg-gray-700/50 border-0 rounded-lg text-white px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                            className="flex-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                             placeholder="Add a theory question"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => addQuestion('theoryQuestions', theoryQuestion, setTheoryQuestion)}
-                                            className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
+                                            className="bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
                                         >
                                             <FiPlus size={20} />
                                         </button>
@@ -592,12 +585,12 @@ function CreateEvaluationForm() {
                                     {formData.evalForm.customQuestions.theoryQuestions.length > 0 && (
                                         <div className="space-y-2 mt-3">
                                             {formData.evalForm.customQuestions.theoryQuestions.map((q, index) => (
-                                                <div key={index} className="flex items-center justify-between bg-gray-700/30 px-3 py-2 rounded-lg">
-                                                    <span>{q}</span>
+                                                <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                                                    <span className="text-gray-700">{q}</span>
                                                     <button
                                                         type="button"
                                                         onClick={() => removeQuestion('theoryQuestions', index)}
-                                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                                        className="text-red-500 hover:text-red-600 transition-colors"
                                                     >
                                                         &times;
                                                     </button>
@@ -608,8 +601,8 @@ function CreateEvaluationForm() {
                                 </div>
                             </div>
 
-                            <div className="bg-gray-800/50 p-5 rounded-xl shadow-md">
-                                <h3 className="text-xl font-semibold text-pink-400 mb-4">Other Questions</h3>
+                            <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                                <h3 className="text-xl font-semibold text-blue-800 mb-4">Other Questions</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex gap-2">
@@ -617,13 +610,13 @@ function CreateEvaluationForm() {
                                             type="text"
                                             value={otherQuestion}
                                             onChange={(e) => setOtherQuestion(e.target.value)}
-                                            className="flex-1 bg-gray-700/50 border-0 rounded-lg text-white px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                            className="flex-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                             placeholder="Add other question"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => addQuestion('otherQuestions', otherQuestion, setOtherQuestion)}
-                                            className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
+                                            className="bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-lg transition-colors flex items-center justify-center"
                                         >
                                             <FiPlus size={20} />
                                         </button>
@@ -632,12 +625,12 @@ function CreateEvaluationForm() {
                                     {formData.evalForm.customQuestions.otherQuestions.length > 0 && (
                                         <div className="space-y-2 mt-3">
                                             {formData.evalForm.customQuestions.otherQuestions.map((q, index) => (
-                                                <div key={index} className="flex items-center justify-between bg-gray-700/30 px-3 py-2 rounded-lg">
-                                                    <span>{q}</span>
+                                                <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                                                    <span className="text-gray-700">{q}</span>
                                                     <button
                                                         type="button"
                                                         onClick={() => removeQuestion('otherQuestions', index)}
-                                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                                        className="text-red-500 hover:text-red-600 transition-colors"
                                                     >
                                                         &times;
                                                     </button>
@@ -651,13 +644,12 @@ function CreateEvaluationForm() {
                         <div className="flex justify-end">
                             <button
                                 type="submit"
-                                className="group relative py-3 px-8 rounded-lg overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:-translate-y-1"
+                                className="group relative py-3 px-8 rounded-lg overflow-hidden bg-blue-600 text-white font-medium shadow-lg hover:shadow-blue-200 transition-all duration-300 hover:bg-blue-800"
                             >
                                 <span className="flex items-center gap-2">
-                                    <FiSend className="animate-pulse" />
+                                    <FiSend />
                                     Submit Evaluation
                                 </span>
-                                <span className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
                             </button>
                         </div>
                     </div>
@@ -668,74 +660,80 @@ function CreateEvaluationForm() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-200">
+        <div className="min-h-screen bg-gray-50 text-gray-800">
+            <div className="container mx-auto p-2 pt-3">
+                <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium mb-6"
+                >
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Back
+                </button>
+            </div>
             <div className="container mx-auto p-6">
                 <header className="mb-8">
-                    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-                        Candidate Evaluation Dashboard
+                    <h1 className="text-2xl font-bold text-gray-900">
+                        Create Candidate Evaluation Form
                     </h1>
-                    <p className="text-gray-400 mt-2">Complete the evaluation form for your interview candidate</p>
+                   
                 </header>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
-                    
-                    {/* */}
-                    <div className="bg-gray-800/50 p-5 rounded-xl shadow-xl backdrop-blur-sm border border-gray-700/50">
-            <div className="flex items-center mb-4">
-                <label className="text-lg font-medium text-purple-300">
-                    Evaluation Form Name
-                </label>
-            </div>
+                    <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                        <div className="flex items-center mb-4">
+                            <label className="text-lg font-medium text-gray-700">
+                                Evaluation Form Name
+                            </label>
+                        </div>
 
-            <div className="relative">
-                <input
-                    type="text"
-                    value={formName}
-                    onChange={handleChange}
-                    className="w-full bg-gray-700/50 border-0 rounded-lg text-white px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none pl-10"
-                    placeholder="Your full name"
-                    required
-                />
-                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            </div>
-        </div>
-                    {/* */}
-                    <div className="bg-gray-800/50 p-6 rounded-xl shadow-xl backdrop-blur-sm border border-gray-700/50">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={formName}
+                                onChange={handleChange}
+                                className="w-full bg-gray-50 border border-gray-300 rounded-lg text-gray-700 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                placeholder="Enter form name"
+                                required
+                            />
+                            <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                         <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto">
                             <TabButton
                                 active={activeTab === 'technical'}
                                 onClick={() => setActiveTab('technical')}
-                                icon={<FiCode className={activeTab === 'technical' ? 'text-purple-400' : 'text-gray-400'} />}
+                                icon={<FiCode className={activeTab === 'technical' ? 'text-blue-600' : 'text-gray-500'} />}
                                 label="Technical"
                             />
                             <TabButton
                                 active={activeTab === 'soft'}
                                 onClick={() => setActiveTab('soft')}
-                                icon={<FiMessageSquare className={activeTab === 'soft' ? 'text-green-400' : 'text-gray-400'} />}
+                                icon={<FiMessageSquare className={activeTab === 'soft' ? 'text-green-600' : 'text-gray-500'} />}
                                 label="Soft Skills"
                             />
                             <TabButton
                                 active={activeTab === 'cultural'}
                                 onClick={() => setActiveTab('cultural')}
-                                icon={<FiHeart className={activeTab === 'cultural' ? 'text-yellow-400' : 'text-gray-400'} />}
+                                icon={<FiHeart className={activeTab === 'cultural' ? 'text-amber-500' : 'text-gray-500'} />}
                                 label="Cultural Fit"
                             />
                             <TabButton
                                 active={activeTab === 'custom'}
                                 onClick={() => setActiveTab('custom')}
-                                icon={<FiMessageSquare className={activeTab === 'custom' ? 'text-pink-400' : 'text-gray-400'} />}
+                                icon={<FiMessageSquare className={activeTab === 'custom' ? 'text-blue-800' : 'text-gray-500'} />}
                                 label="Custom Questions"
                             />
-
                         </div>
 
                         <div className="min-h-[400px]">
                             {renderTabContent()}
                         </div>
-
                     </div>
-
-
                 </form>
             </div>
         </div>

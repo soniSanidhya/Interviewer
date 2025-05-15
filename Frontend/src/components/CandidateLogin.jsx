@@ -11,7 +11,6 @@ const CandidateLogin = () => {
         password: "rishi123"
     });
         
-
     const [formErrors, setFormErrors] = useState({});
     const [error, setError] = useState("");
     const dispatch = useDispatch();
@@ -65,49 +64,51 @@ const CandidateLogin = () => {
     };
 
     const renderInput = (name, placeholder, type = "text") => (
-        <div className="w-full">
-            <label className="input input-bordered flex items-center gap-2 w-full">
+        <div className="w-full mb-4">
+            <label className="flex flex-col w-full">
+                {/* <span className="text-sm text-slate-600 mb-1">{placeholder}</span> */}
                 <input
                     type={type}
                     name={name}
                     placeholder={placeholder}
                     value={formData[name]}
                     onChange={handleChange}
-                    className="grow"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-200 bg-white text-slate-800"
                 />
             </label>
             {formErrors[name] && (
-                <p className="text-red-400 text-sm mt-1 px-1">{formErrors[name]}</p>
+                <p className="text-red-500 text-sm mt-1 px-1">{formErrors[name]}</p>
             )}
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 flex items-center justify-center px-4">
-        <div className="backdrop-blur-lg bg-gray-800/80 border border-gray-700 text-white w-full max-w-md rounded-2xl shadow-2xl p-8 transition-all duration-300">
-            <div className="flex flex-col items-center text-center space-y-6">
-                <h2 className="text-3xl font-bold text-white">Candidate Login</h2>
-                <p className="text-gray-400 text-sm">Access your interview dashboard</p>
-    
-                {renderInput("userName", "User Name")}
-                {renderInput("password", "Password", "password")}
-    
-                {error && (
-                    <p className="text-red-400 text-sm -mt-2">
-                        {typeof error === "string" ? error : JSON.stringify(error)}
-                    </p>
-                )}
-    
-                <button
-                    className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all duration-200 rounded-lg font-medium text-white tracking-wide"
-                    onClick={handleSubmit}
-                >
-                    Login
-                </button>
+        <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center px-4">
+            <div className="bg-white border border-[#E5E7EB] w-full max-w-md rounded-2xl shadow-lg p-8 transition-all duration-300">
+                <div className="flex flex-col items-center text-center space-y-6">
+                    <h2 className="text-3xl font-bold text-[#111827]">Candidate Login</h2>
+                    <p className="text-[#6B7280] text-sm">Access your interview dashboard</p>
+                
+                    <div className="w-full space-y-4 pt-4">
+                        {renderInput("userName", "User Name")}
+                        {renderInput("password", "Password", "password")}
+                    </div>
+            
+                    {error && (
+                        <p className="text-[#EF4444] text-sm w-full text-left">
+                            {typeof error === "string" ? error : JSON.stringify(error)}
+                        </p>
+                    )}
+            
+                    <button
+                        className="w-full py-3 px-4 bg-[#2563EB] hover:bg-[#1E40AF] active:scale-98 transition-all duration-200 rounded-lg font-medium text-white tracking-wide shadow-sm"
+                        onClick={handleSubmit}
+                    >
+                        Login
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    
     );
 };
 

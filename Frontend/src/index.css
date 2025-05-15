@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@plugin "daisyui";
+
 
 #ZegoRoomLeaveButton {
   display: none !important;        /* Completely hides the button */
@@ -8,3 +8,5 @@
   opacity: 0 !important;           /* Makes it fully transparent if shown */
   visibility: hidden !important;   /* Makes it invisible */
 }
+
+

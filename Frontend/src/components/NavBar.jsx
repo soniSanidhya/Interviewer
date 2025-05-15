@@ -40,31 +40,30 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1A1B1E]/95 backdrop-blur-md shadow-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Zap className="h-6 w-6 text-[#00E8C6]" />
-            <span className="text-white font-bold text-xl tracking-wide">CodeInterview.Tech</span>
+            <Zap className="h-6 w-6 text-blue-600" />
+            <span className="text-gray-800 font-bold text-xl tracking-wide">CodeInterview.Tech</span>
           </Link>
 
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
             {isCandidate && (
               <Link
-                to={`/interview-dashboard`}
-                className="text-white bg-[#00E8C6] px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+                to="/interview-dashboard"
+                className="text-white bg-blue-600 px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm"
               >
                 Candidate Dashboard
               </Link>
             )}
-            <div className="px-4 py-2 ">
-            </div>
+            
             {isInterviewer && (
               <Link
-                to={`/interview-dashboard`}
-                className="text-white bg-[#00E8C6] px-4 py-2 rounded-lg hover:bg-white hover:text-black transition"
+                to="/interview-dashboard"
+                className="text-white bg-blue-600 px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm"
               >
                 Interviewer Dashboard
               </Link>
@@ -73,25 +72,24 @@ export default function Navbar() {
             {(isCandidate || isInterviewer) ? (
               <button
                 onClick={handleLogout}
-                className="text-white gap bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                className="text-white bg-red-500 px-5 py-2 rounded-md font-medium hover:bg-red-600 transition shadow-sm"
               >
                 Logout
               </button>
             ) : (
               <div className="relative group">
-                <button className="bg-[#3d3d3d] text-white px-4 py-2 rounded-lg hover:bg-[#00E8C6] hover:text-black transition">
-                  Get Started as
+                <button className="bg-blue-600 text-white px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm">
+                  Get Started
                 </button>
-                <ul className="absolute right-0 w-50 bg-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 ease-in-out pointer-events-none group-hover:pointer-events-auto z-50">
+                <ul className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out border border-gray-200 overflow-hidden">
                   <li>
-                    <Link to="/candidate-signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Candidate
+                    <Link to="/candidate-signup" className="block px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium">
+                      As Candidate
                     </Link>
                   </li>
-
                   <li>
-                    <Link to="/interviewer-signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Interviewer
+                    <Link to="/interviewer-signup" className="block px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium">
+                      As Interviewer
                     </Link>
                   </li>
                 </ul>
