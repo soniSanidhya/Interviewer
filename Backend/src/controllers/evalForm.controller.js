@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { EvaluationForm } from "../models/evaluationForm.model.js";
 import { Interview } from "../models/interview.model.js";
 import { Interviewer } from "../models/interviewer.model.js";
+import { Result } from "../models/result.model.js";
 
 export const createEvalForm = async (req, res) => {
   try {
@@ -111,3 +112,65 @@ export const getAllEvaluationFormByInterviewerId = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+export const saveEvalForm = async (req, res) => {
+  const { interviewId } = req.params;
+
+  try {
+    const { data } = req.body;
+    if (!data) {
+      return res.status(400).json({ message: "Missing data to save" });
+    }
+
+    // Check if a result already exists for this interviewId
+    let savedResult = await Result.findOne({ interviewId });
+
+    if (savedResult) {
+      // Update the existing result's evaluationFormId (or other relevant fields)
+      savedResult.evaluationFormId = data;
+      await savedResult.save();
+      return res.status(200).json({
+        message: "Result updated successfully",
+        result: savedResult,
+      });
+    } else {
+      // Create a new result
+      savedResult = await Result.create({
+        interviewId,
+        evaluationFormId: data,
+      });
+      return res.status(201).json({
+        message: "Result saved successfully",
+        result: savedResult,
+      });
+    }
+  } catch (error) {
+    console.error("Error saving result:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const getSavedEvalFormById = async (req,res)=>{
+  try {
+    const { interviewId } = req.params;
+
+    if (!interviewId) {
+      return res.status(400).json({ message: "Missing interview ID" });
+    }
+
+    const result = await Result.findOne({ interviewId });
+
+    if (!result) {
+      return res.status(404).json({ message: "No saved evaluation form found for this interview" });
+    }
+
+    return res.status(200).json({ result });
+  } catch (error) {
+    console.error("Error fetching saved evaluation form:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+
+
+
+
+}
