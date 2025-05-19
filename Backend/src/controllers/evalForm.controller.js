@@ -115,7 +115,8 @@ export const getAllEvaluationFormByInterviewerId = async (req, res) => {
 
 export const saveEvalForm = async (req, res) => {
   const { interviewId } = req.params;
-
+  console.log(interviewId);
+  
   try {
     const { data } = req.body;
     if (!data) {
@@ -127,7 +128,7 @@ export const saveEvalForm = async (req, res) => {
 
     if (savedResult) {
       // Update the existing result's evaluationFormId (or other relevant fields)
-      savedResult.evaluationFormId = data;
+      savedResult.evaluationForm = data;
       await savedResult.save();
       return res.status(200).json({
         message: "Result updated successfully",
@@ -137,7 +138,7 @@ export const saveEvalForm = async (req, res) => {
       // Create a new result
       savedResult = await Result.create({
         interviewId,
-        evaluationFormId: data,
+        evaluationForm: data,
       });
       return res.status(201).json({
         message: "Result saved successfully",

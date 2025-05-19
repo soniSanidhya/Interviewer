@@ -21,9 +21,19 @@ function RoomPage() {
         { sender: 'Auto Generated', text: 'Start Messaging', time: '' },
     ]);
     const [newMessage, setNewMessage] = useState("");
-    const [cheatLogs, setCheatLogs] = useState([
-    ]);
-    const [notes, setNotes] = useState("Candidate seems nervous but has good fundamentals.");
+    const [cheatLogs, setCheatLogs] = useState(() => {
+        try {
+            const savedLogs = localStorage.getItem(`security_${roomId}`);
+            return savedLogs ? JSON.parse(savedLogs) : [];
+        } catch (e) {
+            console.error("Error parsing saved security logs:", e);
+            return [];
+        }
+    });
+    const [notes, setNotes] = useState(() => {
+        const savedNotes = localStorage.getItem(`notes_${roomId}`);
+        return savedNotes || "Candidate seems nervous but has good fundamentals.";
+    });
     const [evaluation, setEvaluation] = useState(null);
     const [panels, setPanels] = useState({
         codeEditor: true,
@@ -105,6 +115,17 @@ function RoomPage() {
 
             } catch (error) {
                 console.error("Failed to fetch evaluation form:", error);
+                
+                // Try to load from localStorage if fetch fails
+                const savedEvaluation = localStorage.getItem(`evaluation_${roomId}`);
+                if (savedEvaluation) {
+                    try {
+                        setEvaluation(JSON.parse(savedEvaluation));
+                        console.log("Loaded evaluation from local storage");
+                    } catch (e) {
+                        console.error("Error parsing saved evaluation:", e);
+                    }
+                }
             }
         };
 
@@ -200,7 +221,26 @@ function RoomPage() {
     //evaluation start
     const handleSubmitEvaluation = () => {
         alert("Evaluation submitted!");
-        // console.log("Evaluation:", evaluation);
+        console.log("Evaluation:", JSON.stringify(evaluation));
+        
+        // Save to localStorage first for backup
+        localStorage.setItem(`evaluation_${roomId}`, JSON.stringify(evaluation));
+        
+        fetch(`${BASE_URL}/saveEvalForm/${roomId}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: evaluation }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Optionally show success message
+            console.log('Evaluation saved successfully');
+        })
+        .catch(err => {
+            console.error('Failed to save evaluation:', err);
+            alert('There was an error saving the evaluation, but your data is backed up locally');
+        });
     };
     //evaluation end
 
@@ -224,6 +264,34 @@ function RoomPage() {
     const togglePanel = (panel) => {
         setPanels(prev => ({ ...prev, [panel]: !prev[panel] }));
     };
+
+    // Add a function to save notes
+    const handleSaveNotes = () => {
+        localStorage.setItem(`notes_${roomId}`, notes);
+        alert("Notes saved successfully!");
+    };
+
+    // Add useEffect to save cheatLogs to localStorage when they change
+    useEffect(() => {
+        if (cheatLogs.length > 0) {
+            localStorage.setItem(`security_${roomId}`, JSON.stringify(cheatLogs));
+        }
+    }, [cheatLogs, roomId]);
+
+    // Update the clear alerts button
+    const handleClearAlerts = () => {
+        setCheatLogs([]);
+        localStorage.removeItem(`security_${roomId}`);
+    };
+
+    // Add this useEffect for auto-saving notes with debounce
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            localStorage.setItem(`notes_${roomId}`, notes);
+        }, 1000); // Save after 1 second of inactivity
+        
+        return () => clearTimeout(debounceTimer);
+    }, [notes, roomId]);
 
     return (
         <div className="bg-night flex flex-col h-screen bg-gray-900 p-2">
@@ -532,7 +600,7 @@ function RoomPage() {
                         </div>
                         <div className="p-3 border-t">
                             <button
-                                onClick={() => console.log("Notes saved:", notes)}
+                                onClick={handleSaveNotes}
                                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm w-full"
                             >
                                 Save Notes
@@ -608,7 +676,7 @@ function RoomPage() {
                         </div>
                         <div className="p-3 border-t">
                             <button
-                                onClick={() => setCheatLogs([])}
+                                onClick={handleClearAlerts}
                                 className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded text-sm w-full"
                             >
                                 Clear All Alerts

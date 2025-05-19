@@ -7,7 +7,7 @@ const resultSchema = new Schema(
       ref: "Interview",
       required: true,
     },
-    evaluationFormId: {
+    evaluationForm: {
       type: JSON, 
       required: true,
     },
