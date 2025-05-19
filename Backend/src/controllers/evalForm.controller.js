@@ -175,3 +175,70 @@ export const getSavedEvalFormById = async (req,res)=>{
 
 
 }
+
+export const saveNotes = async (req, res) => {
+  const { interviewId } = req.params;
+  try {
+    const { notes } = req.body;
+    if (!notes) {
+      return res.status(400).json({ message: "Missing notes to save" });
+    }
+
+    let savedResult = await Result.findOne({ interviewId });
+
+    if (savedResult) {
+      savedResult.notes = notes;
+      await savedResult.save();
+      return res.status(200).json({
+        message: "Notes updated successfully",
+        result: savedResult,
+      });
+    } else {
+      savedResult = await Result.create({
+        interviewId,
+        notes,
+      });
+      return res.status(201).json({
+        message: "Notes saved successfully",
+        result: savedResult,
+      });
+    }
+  } catch (error) {
+    console.error("Error saving notes:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const saveSecurityLogs = async (req, res) => {
+  const { interviewId } = req.params;
+  try {
+    const { securityLogs } = req.body;
+    if (!securityLogs) {
+      return res.status(400).json({ message: "Missing security logs to save" });
+    }
+
+    let savedResult = await Result.findOne({ interviewId });
+
+    if (savedResult) {
+      savedResult.securityLogs = securityLogs;
+      await savedResult.save();
+      return res.status(200).json({
+        message: "Security logs updated successfully",
+        result: savedResult,
+      });
+    } else {
+      savedResult = await Result.create({
+        interviewId,
+        securityLogs,
+      });
+      return res.status(201).json({
+        message: "Security logs saved successfully",
+        result: savedResult,
+      });
+    }
+  } catch (error) {
+    console.error("Error saving security logs:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+

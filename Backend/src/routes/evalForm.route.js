@@ -5,6 +5,8 @@ import {
   getAllEvaluationFormByInterviewerId,
   getSavedEvalFormById,
   saveEvalForm,
+  saveNotes,
+  saveSecurityLogs,
 } from "../controllers/evalForm.controller.js";
 import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js.js";
 
@@ -25,4 +27,7 @@ app.post("/getSavedEvalFormById/:interviewId", getSavedEvalFormById);
 
 app.post("/saveEvalForm/:interviewId", saveEvalForm);
 
+app.post("/saveNotes/:interviewId", saveNotes);
+
+app.post("/saveSecurityLogs/:interviewId", saveSecurityLogs);
 export default app;

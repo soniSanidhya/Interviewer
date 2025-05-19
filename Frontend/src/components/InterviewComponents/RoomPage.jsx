@@ -115,7 +115,7 @@ function RoomPage() {
 
             } catch (error) {
                 console.error("Failed to fetch evaluation form:", error);
-                
+
                 // Try to load from localStorage if fetch fails
                 const savedEvaluation = localStorage.getItem(`evaluation_${roomId}`);
                 if (savedEvaluation) {
@@ -222,25 +222,25 @@ function RoomPage() {
     const handleSubmitEvaluation = () => {
         alert("Evaluation submitted!");
         console.log("Evaluation:", JSON.stringify(evaluation));
-        
+
         // Save to localStorage first for backup
         localStorage.setItem(`evaluation_${roomId}`, JSON.stringify(evaluation));
-        
+
         fetch(`${BASE_URL}/saveEvalForm/${roomId}`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: evaluation }),
         })
-        .then(res => res.json())
-        .then(data => {
-            // Optionally show success message
-            console.log('Evaluation saved successfully');
-        })
-        .catch(err => {
-            console.error('Failed to save evaluation:', err);
-            alert('There was an error saving the evaluation, but your data is backed up locally');
-        });
+            .then(res => res.json())
+            .then(data => {
+                // Optionally show success message
+                console.log('Evaluation saved successfully');
+            })
+            .catch(err => {
+                console.error('Failed to save evaluation:', err);
+                alert('There was an error saving the evaluation, but your data is backed up locally');
+            });
     };
     //evaluation end
 
@@ -269,6 +269,22 @@ function RoomPage() {
     const handleSaveNotes = () => {
         localStorage.setItem(`notes_${roomId}`, notes);
         alert("Notes saved successfully!");
+
+        fetch(`${BASE_URL}/saveNotes/${roomId}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ notes: notes }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                // Optionally show success message
+                console.log('Notes saved successfully');
+            })
+            .catch(err => {
+                console.error('Failed to save evaluation:', err);
+                alert('There was an error saving the notes');
+            });
     };
 
     // Add useEffect to save cheatLogs to localStorage when they change
@@ -276,6 +292,22 @@ function RoomPage() {
         if (cheatLogs.length > 0) {
             localStorage.setItem(`security_${roomId}`, JSON.stringify(cheatLogs));
         }
+
+        fetch(`${BASE_URL}/saveSecurityLogs/${roomId}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ securityLogs: JSON.stringify(cheatLogs) }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                // Optionally show success message
+                console.log('cheatLogs saved successfully');
+            })
+            .catch(err => {
+                console.error('Failed to save evaluation:', err);
+                alert('There was an error saving the cheatLogs, but your data is backed up locally');
+            });
     }, [cheatLogs, roomId]);
 
     // Update the clear alerts button
@@ -285,29 +317,29 @@ function RoomPage() {
     };
 
     // Improved auto-save logic with status indication
-const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'saved', 'error'
+    const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'saved', 'error'
 
-useEffect(() => {
-    setSaveStatus('saving');
-    const debounceTimer = setTimeout(() => {
-        try {
-            localStorage.setItem(`notes_${roomId}`, notes);
-            setSaveStatus('saved');
-            
-            // Reset status after 3 seconds
-            const resetTimer = setTimeout(() => {
-                setSaveStatus('idle');
-            }, 3000);
-            
-            return () => clearTimeout(resetTimer);
-        } catch (error) {
-            console.error("Failed to save notes:", error);
-            setSaveStatus('error');
-        }
-    }, 1000); // Save after 1 second of inactivity
-    
-    return () => clearTimeout(debounceTimer);
-}, [notes, roomId]);
+    useEffect(() => {
+        setSaveStatus('saving');
+        const debounceTimer = setTimeout(() => {
+            try {
+                localStorage.setItem(`notes_${roomId}`, notes);
+                setSaveStatus('saved');
+
+                // Reset status after 3 seconds
+                const resetTimer = setTimeout(() => {
+                    setSaveStatus('idle');
+                }, 3000);
+
+                return () => clearTimeout(resetTimer);
+            } catch (error) {
+                console.error("Failed to save notes:", error);
+                setSaveStatus('error');
+            }
+        }, 1000); // Save after 1 second of inactivity
+
+        return () => clearTimeout(debounceTimer);
+    }, [notes, roomId]);
 
     return (
         <div className="flex flex-col h-screen bg-gray-950 p-3">
@@ -321,7 +353,7 @@ useEffect(() => {
                             <span className="text-gray-300 text-xs">Live Session</span>
                         </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3">
                         <div className="flex bg-gray-800 rounded-lg overflow-hidden">
                             <button
@@ -329,52 +361,49 @@ useEffect(() => {
                                     setShowSecurityAlerts(!showSecurityAlerts);
                                     if (!showSecurityAlerts) setActivePanel('security');
                                 }}
-                                className={`px-3 py-2 text-sm flex items-center transition-all ${
-                                    showSecurityAlerts ? 'bg-red-500 text-white' : 'text-gray-300 hover:bg-gray-700'
-                            }`}
+                                className={`px-3 py-2 text-sm flex items-center transition-all ${showSecurityAlerts ? 'bg-red-500 text-white' : 'text-gray-300 hover:bg-gray-700'
+                                    }`}
                             >
-                                <FiAlertTriangle className={`mr-1.5 ${cheatLogs.length > 0 ? 'text-red-400' : ''}`} /> 
+                                <FiAlertTriangle className={`mr-1.5 ${cheatLogs.length > 0 ? 'text-red-400' : ''}`} />
                                 <span>{cheatLogs.length > 0 ? `Alerts (${cheatLogs.length})` : 'Security'}</span>
                             </button>
-                            
+
                             <button
                                 onClick={() => {
                                     setShowEvaluationForm(!showEvaluationForm);
                                     if (!showEvaluationForm) setActivePanel('evaluation');
                                 }}
-                                className={`px-3 py-2 text-sm flex items-center transition-all ${
-                                    showEvaluationForm ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'
-                            }`}
+                                className={`px-3 py-2 text-sm flex items-center transition-all ${showEvaluationForm ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                                    }`}
                             >
                                 <FiEdit2 className="mr-1.5" /> Evaluate
                             </button>
-                            
+
                             <button
                                 onClick={() => {
                                     setShowNotesPanel(!showNotesPanel);
-                                     setActivePanel('notes');
-                                                                    }}
-                                                                    className={`px-3 py-2 text-sm flex items-center transition-all ${
-                                                                        showNotesPanel ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-700'
-                                                                }`}
-                                                                >
-                                                                    <FiFileText className="mr-1.5" /> Notes
-                                                                </button>
-                                                            </div>
-                                                            
-                                                            <button
-                                                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center"
-                                                                onClick={() => {
-                                                                    window.location.href = window.location.origin + '/';
-                                                                }}
-                                                            >
-                                                                <span className="mr-1.5">•</span> End Interview
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </header>
-                                                
-                                                {/* Floating Evaluation Form */}
+                                    setActivePanel('notes');
+                                }}
+                                className={`px-3 py-2 text-sm flex items-center transition-all ${showNotesPanel ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                                    }`}
+                            >
+                                <FiFileText className="mr-1.5" /> Notes
+                            </button>
+                        </div>
+
+                        <button
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center"
+                            onClick={() => {
+                                window.location.href = window.location.origin + '/';
+                            }}
+                        >
+                            <span className="mr-1.5">•</span> End Interview
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            {/* Floating Evaluation Form */}
 
 
             {showEvaluationForm && (
@@ -743,7 +772,7 @@ useEffect(() => {
                                 <FiPlay className="mr-1.5" /> Run Code
                             </button>
                         </div>
-                        
+
                         <div className="border-gray-700 overflow-hidden">
                             <Editor
                                 height="58vh"
@@ -763,15 +792,15 @@ useEffect(() => {
                                 }}
                             />
                         </div>
-                        
+
                         <div className="p-3 bg-gray-800 border-t border-gray-700">
                             <div className="flex items-center mb-2">
                                 <span className="bg-gray-700 px-3 py-1 text-sm font-medium rounded-md text-gray-200">
                                     Output
                                 </span>
                                 {output && (
-                                    <button 
-                                        onClick={() => setOutput("")} 
+                                    <button
+                                        onClick={() => setOutput("")}
                                         className="ml-2 text-xs text-gray-400 hover:text-gray-200"
                                     >
                                         Clear
@@ -824,7 +853,7 @@ useEffect(() => {
                             className={`p-4 transition-all duration-300 ${panels.videoCall ? 'block' : 'hidden'
                                 } ${isFullscreen ? 'h-full' : ''}`}
                         >
-                          {  <div className={`${isFullscreen ? 'h-full' : ''}`}>
+                            {<div className={`${isFullscreen ? 'h-full' : ''}`}>
                                 {<VideoCallWindow roomId={roomId} isFullscreen={isFullscreen} />}
 
                             </div>}
@@ -855,8 +884,8 @@ useEffect(() => {
                                     {messages.slice(1).map((msg, i) => (
                                         <div key={i} className={`flex ${msg.sender === 'Interviewer' ? 'justify-end' : 'justify-start'}`}>
                                             <div className={`max-w-[75%] px-3 py-2 rounded-lg 
-                                                ${msg.sender !== 'Interviewer' 
-                                                    ? 'bg-gray-800 text-gray-200' 
+                                                ${msg.sender !== 'Interviewer'
+                                                    ? 'bg-gray-800 text-gray-200'
                                                     : 'bg-blue-600 text-white'}`}
                                             >
                                                 <p className="break-words">{msg.text}</p>

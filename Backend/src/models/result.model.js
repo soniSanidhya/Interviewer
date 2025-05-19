@@ -8,8 +8,13 @@ const resultSchema = new Schema(
       required: true,
     },
     evaluationForm: {
-      type: JSON, 
-      required: true,
+      type: JSON,
+    },
+    notes: {
+      type: String,
+    },
+    securityLogs: {
+      type: String,
     },
     score: {
       type: Number,
