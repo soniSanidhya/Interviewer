@@ -137,12 +137,12 @@ function ScheduleInterview() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className=" min-h-screen bg-gray-50 py-12  flex items-center justify-center  px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-md p-8">
                     <div className="flex items-center justify-between mb-8">
                         <h1 className="text-2xl font-bold text-gray-900">Schedule New Interview</h1>
-                        <button 
+                        <button
                             onClick={() => navigate('/interview-dashboard')}
                             className="text-gray-500 hover:text-gray-700 focus:outline-none transition-colors"
                         >
@@ -152,23 +152,23 @@ function ScheduleInterview() {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            {renderFormField({ 
-                                label: "Interviewer Username", 
-                                name: "interviewerUserName", 
-                                readOnly: true, 
-                                value: formData.interviewerUserName 
+                            {renderFormField({
+                                label: "Interviewer Username",
+                                name: "interviewerUserName",
+                                readOnly: true,
+                                value: formData.interviewerUserName
                             })}
 
-                            {renderFormField({ 
-                                label: "Candidate Email", 
-                                name: "candidateEmail", 
+                            {renderFormField({
+                                label: "Candidate Email",
+                                name: "candidateEmail",
                                 type: "email",
-                                value: formData.candidateEmail 
+                                value: formData.candidateEmail
                             })}
 
-                            {renderFormField({ 
-                                label: "Interview Type", 
-                                name: "interviewType", 
+                            {renderFormField({
+                                label: "Interview Type",
+                                name: "interviewType",
                                 value: formData.interviewType,
                                 options: [
                                     { value: "technical", label: "Technical" },
@@ -178,9 +178,9 @@ function ScheduleInterview() {
                                 ]
                             })}
 
-                            {renderFormField({ 
-                                label: "Time Zone", 
-                                name: "timeZone", 
+                            {renderFormField({
+                                label: "Time Zone",
+                                name: "timeZone",
                                 value: formData.timeZone,
                                 options: [
                                     { value: "Asia/Kolkata", label: "India (IST)" },
@@ -220,31 +220,31 @@ function ScheduleInterview() {
                                 )}
                             </div>
 
-                            {renderFormField({ 
-                                label: "Date", 
-                                name: "date", 
+                            {renderFormField({
+                                label: "Date",
+                                name: "date",
                                 type: "date",
-                                value: formData.date 
+                                value: formData.date
                             })}
 
-                            {renderFormField({ 
-                                label: "Time", 
-                                name: "time", 
+                            {renderFormField({
+                                label: "Time",
+                                name: "time",
                                 type: "time",
-                                value: formData.time 
+                                value: formData.time
                             })}
 
-                            {renderFormField({ 
-                                label: "Duration (minutes)", 
-                                name: "duration", 
+                            {renderFormField({
+                                label: "Duration (minutes)",
+                                name: "duration",
                                 type: "number",
-                                value: formData.duration 
+                                value: formData.duration
                             })}
                         </div>
 
                         <div className="pt-4">
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 disabled={loadingSubmit}
                                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-70"
                             >

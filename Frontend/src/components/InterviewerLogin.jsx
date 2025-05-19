@@ -82,7 +82,7 @@ const InterviewerLogin = () => {
 
       const res = await axios.post(`${BASE_URL}${endpoint}`, payload, { withCredentials: true });
       dispatch(addUser(res.data));
-      navigate("/interview-dashboard");
+      navigate("/");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
     } finally {

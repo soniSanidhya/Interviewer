@@ -98,6 +98,7 @@ function RoomPage() {
     }
 
     useEffect(() => {
+        
         const getEvaluationForm = async () => {
             try {
                 const response = await fetch(`${BASE_URL}/getEvalForm/${roomId}`, {
@@ -201,6 +202,8 @@ function RoomPage() {
 
     //code execution start
     const handleRunCode = async () => {
+        console.log("hii");
+        
         const response = await fetch(`${BASE_URL}/exec-code`, {
             method: 'POST',
             credentials: 'include',

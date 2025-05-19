@@ -43,7 +43,7 @@ function EvalFormDashBoard() {
       setEvalForms(response.data.evalForms || []);
     } catch (err) {
       console.error('Error fetching evaluation forms:', err);
-      setError("Failed to load evaluation forms. Please try again later.");
+      
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import VideoCallWindow from './VideoCallWindow';
 import { FiMaximize2, FiMinimize2, FiChevronDown, FiChevronUp, FiCode, FiMessageSquare, FiVideo, FiAlertTriangle, FiEdit2, FiCheckCircle, FiPlay, FiFileText } from 'react-icons/fi';
@@ -10,8 +10,10 @@ import { Rnd } from 'react-rnd';
 import '../../stylings/RoomPage.css';
 import Rating from 'react-rating';
 import { FaStar, FaRegStar } from 'react-icons/fa';
+import { BASE_URL } from '@/utils/constants';
 
 function CandidateRoom() {
+    const navigate = useNavigate()
     const { roomId } = useParams();
     const [id, setId] = useState("no");
     const [content, setContent] = useState("// Write your code here\nfunction hello() {\n  return \"Hello World!\";\n}");
@@ -39,67 +41,16 @@ function CandidateRoom() {
     const [showSecurityAlerts, setShowSecurityAlerts] = useState(false);
     const [showNotesPanel, setShowNotesPanel] = useState(false);
     const [activePanel, setActivePanel] = useState(null);
-
     const [isFullscreen, setIsFullscreen] = useState(false);
     const toggleFullscreen = () => setIsFullscreen(prev => !prev);
     const editorWidth = "100%";
 
-    //new work start
-    function generateEvaluationState(evalForm) {
-        const result = {};
-
-        for (const section in evalForm) {
-            const sectionData = evalForm[section];
-            result[section] = {};
-
-            for (const subSection in sectionData) {
-                const items = sectionData[subSection];
-
-                // If it's an object with booleans
-                if (typeof items === 'object' && !Array.isArray(items)) {
-                    const subSectionObj = {};
-                    for (const [key, val] of Object.entries(items)) {
-                        if (val === true) {
-                            subSectionObj[key] = { rating: 0, notes: "" };
-                        } else if (Array.isArray(val)) {
-                            // For arrays inside objects, like certifications
-                            const questionObj = {};
-                            val.forEach((q) => {
-                                questionObj[q] = { rating: 0, notes: "" };
-                            });
-                            subSectionObj[key] = questionObj;
-                        }
-                    }
-                    if (Object.keys(subSectionObj).length > 0) {
-                        result[section][subSection] = subSectionObj;
-                    }
-                }
-
-                // If it's an array (questions)
-                if (Array.isArray(items)) {
-                    result[section][subSection] = {};
-                    items.forEach((q) => {
-                        result[section][subSection][q] = { rating: 0, notes: "" };
-                    });
-                }
-            }
-        }
-        // console.log("result ", result);
-
-        return result;
-    }
-
-
-    //new work end
-
-    //socket work start
-    // const socket = useMemo(() => io("http://localhost:4000"), []);
     const socket = useMemo(() => io("https://socketnodejs-a2g8c8f7g7avaudc.southindia-01.azurewebsites.net"), []);
+    
     useEffect(() => {
         socket.emit('join-room', roomId);
 
         socket.on("connect", () => {
-            // console.log("connected", socket.id);
             setId(socket.id);
         });
 
@@ -131,7 +82,6 @@ function CandidateRoom() {
     };
 
     const handleSendMessage = () => {
-
         if (newMessage.trim()) {
             const message = {
                 sender: "Candidate",
@@ -139,31 +89,32 @@ function CandidateRoom() {
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             socket.emit("sendMessage", { roomId, message });
-            // console.log("emitted ", message);
-
             setMessages(prev => [...prev, message]);
             setNewMessage("");
         }
     };
-    //socket work end
 
+    const handleRunCode = async () => {
+            const response = await fetch(`${BASE_URL}/exec-code`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    code: content,
+                    language: language.toLowerCase()
+                }),
+            });
+            const data = await response.json()
+            const mockOutput = `Running ${language} code...\n\n> ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}\n\n"Hello World!"\n\nCode executed successfully at ${new Date().toLocaleTimeString()}`;
+            setOutput(data.output);
+            // console.log("op: ",data);
+    
+        };
 
-    //code execution start
-    const handleRunCode = () => {
-        const mockOutput = `Running ${language} code...\n\n> ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}\n\n"Hello World!"\n\nCode executed successfully at ${new Date().toLocaleTimeString()}`;
-        setOutput(mockOutput);
-    };
-    //code execution end
-
-    //evaluation start
     const handleSubmitEvaluation = () => {
         alert("Evaluation submitted!");
-        // console.log("Evaluation:", evaluation);
     };
-    //evaluation end
 
-
-    //editor configs
     const editorDidMount = (editor, monaco) => {
         monaco.languages.registerCompletionItemProvider('javascript', {
             provideCompletionItems: () => ({
@@ -178,7 +129,6 @@ function CandidateRoom() {
         });
     };
 
-    //toggle panel
     const togglePanel = (panel) => {
         setPanels(prev => ({ ...prev, [panel]: !prev[panel] }));
     };
@@ -187,15 +137,21 @@ function CandidateRoom() {
         <SessionSecurityWrapper socket={socket} roomId={roomId}>
             <div className="bg-night flex flex-col h-screen bg-gray-900 p-2">
                 {/* Header */}
-                <header className="bg-gray-900 rounded-lg shadow px-4 py-3 mb-4">
+                <header className="bg-gray-800 rounded-lg shadow px-6 py-4 mb-4 border border-gray-700">
                     <div className="flex flex-wrap justify-between items-center gap-y-2">
-                        <h1 className="text-2xl font-bold text-white">Interview Room: {roomId}</h1>
+                        <div className="flex items-center space-x-4">
+                            <h1 className="text-2xl font-bold text-white">Interview Session</h1>
+                            <div className="bg-gray-700 px-3 py-1 rounded-full text-sm text-gray-300">
+                                Room ID: {roomId}
+                            </div>
+                        </div>
 
-                        <div className="border-4 flex flex-wrap items-center gap-3 border-gray-200 rounded-lg px-3 py-2">
-                            <span className="h-3 w-3 rounded-full bg-green-500"></span>
-                            <span className="text-white text-sm">Connected as ID: {id}</span>
-
-                            <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
+                        <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-2 bg-gray-700 px-3 py-1 rounded-full">
+                                <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></span>
+                                <span className="text-white text-sm">Connected</span>
+                            </div>
+                            <button onClick={()=>{navigate('/')}} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all shadow-md hover:shadow-red-500/20">
                                 End Interview
                             </button>
                         </div>
@@ -204,85 +160,78 @@ function CandidateRoom() {
 
                 {/* Main Content */}
                 <div className="flex flex-1 gap-4 overflow-hidden">
-                    {/* Left Column */}
-                    <div className=" flex-1 flex flex-col gap-3 min-w-0">
-                        {/* Code Editor Panel */}
-                        <div className="bg-night rounded-lg shadow overflow-hidden">
-                            {/* <div
-                            className="flex items-center justify-between p-1 bg-gray-100 cursor-pointer"
-                            onClick={() => togglePanel('codeEditor')}
-                        >
-                            <div className="flex items-center space-x-2">
-                                <FiCode className="text-gray-600" />
-                                <h2 className="font-semibold text-gray-800">Code Editor</h2>
-                            </div>
-                            {panels.codeEditor ? <FiChevronUp /> : <FiChevronDown />}
-                        </div> */}
-                            {panels.codeEditor && (
-                                <div className="p-2">
-                                    <div className="p-2 mb-3 flex justify-between">
-                                        <select
-                                            className="border border-gray-700 bg-[#1e2130] text-white rounded px-3 py-1 text-sm"
-                                            onChange={handleLanguageChange}
-                                            value={language}
-                                        >
-                                            <option value="javascript">JavaScript</option>
-                                            <option value="typescript">TypeScript</option>
-                                            <option value="python">Python</option>
-                                            <option value="java">Java</option>
-                                            <option value="cpp">C++</option>
-                                            <option value="html">HTML</option>
-                                            <option value="css">CSS</option>
-                                        </select>
-                                        <button
-                                            onClick={handleRunCode}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex items-center"
-                                        >
-                                            <FiPlay className="mr-1" /> Run Code
-                                        </button>
-                                    </div>
-                                    <div className="border rounded-lg overflow-hidden">
-                                        <Editor
-                                            height="55vh"
-                                            width={editorWidth}
-                                            language={language}
-                                            theme="vs-dark"
-                                            value={content}
-                                            onChange={handleEditorChange}
-                                            onMount={editorDidMount}
-                                            options={{
-                                                fontSize: 20, // ← adjust this to your preferred size
-                                            }}
-                                        />
-                                    </div>
-                                    <br />
-                                    <div className="mt-">
-                                        <button className="mt-3 px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-[#2a2d3e] text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-[#3b3f54] ">
-                                            Output
-                                        </button>
-
-                                        <pre
-                                            className="bg-gray-100 dark:bg-[#1e2130] text-black dark:text-gray-100 border dark:border-gray-700 p-3 rounded-lg text-sm font-mono whitespace-pre-wrap h-32 overflow-y-auto"
-                                            style={{
-                                                scrollbarWidth: 'thin', // Firefox
-                                                scrollbarColor: '#9ca3af transparent', // Firefox
-                                            }}
-                                        >
-                                            {output || 'No output yet. Run code to see results.'}
-                                        </pre>
-
-                                    </div>
-
+                    {/* Left Column - Code Editor */}
+                    <div className="flex-1 flex flex-col gap-4 min-w-0">
+                        <div className="bg-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 flex flex-col h-full">
+                            <div className="flex items-center justify-between p-3 bg-gray-700 border-b border-gray-600">
+                                <div className="flex items-center space-x-3">
+                                    <FiCode className="text-blue-400 text-lg" />
+                                    <h2 className="font-semibold text-white">Code Editor</h2>
+                                    <select
+                                        className="border border-gray-600 bg-gray-800 text-white rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onChange={handleLanguageChange}
+                                        value={language}
+                                    >
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="typescript">TypeScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="java">Java</option>
+                                        <option value="cpp">C++</option>
+                                        <option value="html">HTML</option>
+                                        <option value="css">CSS</option>
+                                    </select>
                                 </div>
-                            )}
+                                <button
+                                    onClick={handleRunCode}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center space-x-1 transition-colors"
+                                >
+                                    <FiPlay className="mr-1" /> Run Code
+                                </button>
+                            </div>
+                            
+                            <div className="flex-1 overflow-hidden">
+                                <Editor
+                                    height="100%"
+                                    width={editorWidth}
+                                    language={language}
+                                    theme="vs-dark"
+                                    value={content}
+                                    onChange={handleEditorChange}
+                                    onMount={editorDidMount}
+                                    options={{
+                                        fontSize: 14,
+                                        minimap: { enabled: false },
+                                        scrollBeyondLastLine: false,
+                                        automaticLayout: true,
+                                    }}
+                                />
+                            </div>
+                            
+                            <div className="border-t border-gray-700">
+                                <div className="p-3 bg-gray-700 flex items-center justify-between">
+                                    <h3 className="text-sm font-medium text-gray-300">Output</h3>
+                                    <div className="text-xs text-gray-400">
+                                        {new Date().toLocaleTimeString()}
+                                    </div>
+                                </div>
+                                <pre
+                                    className="bg-gray-900 text-gray-100 p-3 text-sm font-mono whitespace-pre-wrap overflow-y-auto max-h-32"
+                                    style={{
+                                        scrollbarWidth: 'thin',
+                                        scrollbarColor: '#4B5563 transparent',
+                                    }}
+                                >
+                                    {output || <span className="text-gray-500">No output yet. Run code to see results.</span>}
+                                </pre>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right Column */}
-                    <div className="w-180 flex flex-col gap-4">
-                        Video Call Panel
+                    {/* Right Column - Video & Chat */}
+                   <div className="w-180 flex flex-col gap-4">
+                       
                         <div
-                            className={`bg-night rounded-lg shadow overflow-hidden ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 rounded-none' : ''
+                            className={`border border-gray-400 bg-night rounded-lg shadow overflow-hidden ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 rounded-none' : ''
                                 }`}
                         >
                             <div
@@ -292,7 +241,7 @@ function CandidateRoom() {
                                 <div className="flex items-center space-x-2 ">
                                     <FiVideo className="text-white" />
                                     <h2 className="font-semibold text-white"> &nbsp;
-                                        Video Call</h2>
+                                        Video Call  (click to hide/show panel)</h2>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <button
@@ -390,6 +339,3 @@ function CandidateRoom() {
 }
 
 export default CandidateRoom;
-
-
-
