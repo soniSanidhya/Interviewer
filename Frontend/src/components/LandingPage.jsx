@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import Feature from "./Feature";
 import Footer from "./Footer";
 import { CheckCircle, ArrowRight, Zap, ChevronRight, Calendar, Video, ClipboardCheck } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 export function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +17,7 @@ export function LandingPage() {
       <div className="fixed inset-0 z-0 pointer-events-none">
   {/* Main Gradient Background */}
   <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-white"></div>
-
+     <Analytics />
   {/* Glow Circles */}
   <div className="absolute w-[1200px] h-[1200px] bg-blue-500 rounded-full opacity-10 blur-3xl -top-1/4 -left-1/4 animate-glow-slow"></div>
   <div className="absolute w-[800px] h-[800px] bg-indigo-400 rounded-full opacity-10 blur-3xl bottom-1/4 -right-1/4 animate-glow-slower"></div>
