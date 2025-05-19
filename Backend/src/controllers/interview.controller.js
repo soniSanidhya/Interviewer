@@ -3,9 +3,10 @@ import { Candidate } from "../models/candidate.model.js";
 import { Interview } from "../models/interview.model.js";
 import { Interviewer } from "../models/interviewer.model.js";
 import mongoose from "mongoose";
-import uniqid from 'uniqid';
+import uniqid from "uniqid";
 import mailKaro from "../utils/nodemailer.js";
 import { EvaluationForm } from "../models/evaluationForm.model.js";
+import { Result } from "../models/result.model.js";
 
 export const scheduleInterview = async (req, res) => {
   const {
@@ -19,8 +20,8 @@ export const scheduleInterview = async (req, res) => {
     evaluationFormId,
   } = req.body;
 
-  const eId = await EvaluationForm.findOne({formName : evaluationFormId})
-  console.log("abc ", eId._id)
+  const eId = await EvaluationForm.findOne({ formName: evaluationFormId });
+  console.log("abc ", eId._id);
 
   if (
     !interviewerUserName ||
@@ -37,13 +38,11 @@ export const scheduleInterview = async (req, res) => {
     // console.log("not missing");
   }
 
-
-
   //generate user credentials
   //call candidate signup /candidate-signup with  const { userName, fullName, email, password } data
-  const tempUser = uniqid('tempUser-')
-  const tempFullName = uniqid('FullName-')
-  const tempPassword = uniqid('Pass-')
+  const tempUser = uniqid("tempUser-");
+  const tempFullName = uniqid("FullName-");
+  const tempPassword = uniqid("Pass-");
 
   const tempUserData = {
     userName: tempUser,
@@ -52,11 +51,18 @@ export const scheduleInterview = async (req, res) => {
     password: tempPassword,
   };
 
-  if (!tempUserData.userName || !tempUserData.fullName || !tempUserData.email || !tempUserData.password) {
+  if (
+    !tempUserData.userName ||
+    !tempUserData.fullName ||
+    !tempUserData.email ||
+    !tempUserData.password
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const userExisted = await Candidate.findOne({ userName:tempUserData.userName });
+  const userExisted = await Candidate.findOne({
+    userName: tempUserData.userName,
+  });
 
   if (userExisted) {
     return res.status(400).json({ message: "User already exists" });
@@ -65,9 +71,9 @@ export const scheduleInterview = async (req, res) => {
   const passwordHash = await hashPassword(tempUserData.password);
 
   const newUser = {
-    userName:tempUserData.userName,
-    fullName:tempUserData.fullName,
-    email:tempUserData.email,
+    userName: tempUserData.userName,
+    fullName: tempUserData.fullName,
+    email: tempUserData.email,
     passwordHash,
   };
 
@@ -88,12 +94,12 @@ export const scheduleInterview = async (req, res) => {
       password: tempUserData.password,
     }
   );
-  
-  
-  if(sendMail=="Not send"){
-    return res.status(400).json({ message: `Error sending mail to ${newUser.email} `});
+
+  if (sendMail == "Not send") {
+    return res
+      .status(400)
+      .json({ message: `Error sending mail to ${newUser.email} ` });
   }
-  
 
   const interviewer = await Interviewer.findOne({
     userName: interviewerUserName,
@@ -101,7 +107,7 @@ export const scheduleInterview = async (req, res) => {
 
   const candidate = await Candidate.findOne({ userName: createdUser.userName });
   // console.log(candidate+"  "+interviewer);
-  
+
   if (!interviewer || !candidate) {
     return res
       .status(400)
@@ -122,7 +128,7 @@ export const scheduleInterview = async (req, res) => {
     durationMinutes,
     timeZone,
     interviewType,
-    evaluationFormId:eId,
+    evaluationFormId: eId,
   };
 
   const createdInterview = await Interview.create(newInterview);
@@ -292,7 +298,7 @@ export const getInterviews = async (req, res) => {
   try {
     const interviews = await Interview.find({
       $or: [{ interviewerId: id }],
-    }).populate('candidateId');
+    }).populate("candidateId");
 
     if (!interviews || interviews.length === 0) {
       return res.status(404).json({ message: "No interviews found" });
@@ -354,6 +360,54 @@ export const getInterviewByID = async (req, res) => {
       .json({ message: "Interview retrieved successfully", interview });
   } catch (error) {
     console.error("Error fetching interview by ID:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const markAsCompleted = async (req, res) => {
+  try {
+    const { interviewId } = req.params;
+    if (!interviewId) {
+      return res.status(400).json({ message: "Interview ID not provided" });
+    }
+
+    const interview = await Interview.findById(interviewId);
+    if (!interview) {
+      return res.status(404).json({ message: "Interview not found" });
+    }
+
+    interview.status = "completed";
+    console.log("Before save");
+    const ress = await interview.save();
+    console.log("After save", ress);
+
+    return res
+      .status(200)
+      .json({ message: "Interview marked as completed", interview });
+  } catch (error) {
+    console.error("Error marking interview as completed:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const getResultByInterviewId = async (req, res) => {
+  const { interviewId } = req.params;
+
+  if (!interviewId) {
+    return res.status(400).json({ message: "Interview ID not provided" });
+  }
+
+  try {
+    const result = await Result.findOne({ interviewId });
+
+    if (!result) {
+      return res.status(404).json({ message: "Result not found for this interview" });
+    }
+
+    return res.status(200).json({ message: "Result retrieved successfully", result });
+  } catch (error) {
+    console.error("Error fetching result by interview ID:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };

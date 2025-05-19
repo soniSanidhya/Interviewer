@@ -83,18 +83,18 @@ function InterviewerDashBoard({ interviewerId }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-       <div className="">
-                <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    className="flex items-center  text-blue-600 hover:text-blue-800 font-medium mb-2"
-                >
-                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Back
-                </button>
-            </div>
+      <div className="">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="flex items-center  text-blue-600 hover:text-blue-800 font-medium mb-2"
+        >
+          <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Back
+        </button>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 md:mb-0">
@@ -102,15 +102,15 @@ function InterviewerDashBoard({ interviewerId }) {
             <h1 className="text-2xl font-bold text-gray-900">Interviewer Dashboard</h1>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <button 
-              onClick={() => navigate("/evalForm")} 
+            <button
+              onClick={() => navigate("/evalForm")}
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
               <FiPlus className="mr-2" />
               Manage Evaluation Forms
             </button>
-            <button 
-              onClick={scheduleNewInterview} 
+            <button
+              onClick={scheduleNewInterview}
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
               <FiPlus className="mr-2" />
@@ -142,7 +142,7 @@ function InterviewerDashBoard({ interviewerId }) {
           {interviews.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <div className="text-lg text-gray-500 mb-4">No interviews scheduled yet</div>
-              <button 
+              <button
                 onClick={scheduleNewInterview}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               >
@@ -175,9 +175,9 @@ function InterviewerDashBoard({ interviewerId }) {
                       {interview.meetingLink && (
                         <div className="flex items-center">
                           <FiLink className="mr-1 text-gray-400" />
-                          <a 
-                            href={interview.meetingLink} 
-                            target="_blank" 
+                          <a
+                            href={interview.meetingLink}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-800 transition-colors"
                           >
@@ -188,13 +188,14 @@ function InterviewerDashBoard({ interviewerId }) {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    <button 
+                    <button
                       onClick={() => joinInterview(interview._id)}
                       className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                     >
                       <FiVideo className="mr-2" />
-                      {interview.status === 'Completed' ? 'View Details' : 'Join Interview'}
+                      {interview.status === 'completed' ? 'View Details' : 'Join Interview'}
                     </button>
+
                   </div>
                 </div>
               ))}

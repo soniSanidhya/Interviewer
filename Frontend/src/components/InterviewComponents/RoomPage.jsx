@@ -395,6 +395,18 @@ function RoomPage() {
                             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center"
                             onClick={() => {
                                 window.location.href = window.location.origin + '/';
+                                fetch(`${BASE_URL}/markascomplete/${roomId}`, {
+                                    method: 'POST',
+                                    credentials: 'include',
+                                    headers: { 'Content-Type': 'application/json' },
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        console.log('Interview marked as complete:', data);
+                                    })
+                                    .catch(err => {
+                                        console.error('Failed to mark interview as complete:', err);
+                                    });
                             }}
                         >
                             <span className="mr-1.5">•</span> End Interview
