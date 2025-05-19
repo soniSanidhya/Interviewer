@@ -60,7 +60,7 @@ function InterviewerDashBoard({ interviewerId }) {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'Completed':
+      case 'completed':
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
             <FiCheckCircle className="mr-1" /> Completed
@@ -130,7 +130,7 @@ function InterviewerDashBoard({ interviewerId }) {
           </div>
           <div className="bg-white overflow-hidden shadow-sm rounded-2xl p-6">
             <h3 className="text-lg font-medium text-gray-600">Completed</h3>
-            <p className="mt-2 text-3xl font-bold text-green-600">{interviews.filter(i => i.status === 'Completed').length}</p>
+            <p className="mt-2 text-3xl font-bold text-green-600">{interviews.filter(i => i.status === 'completed').length}</p>
           </div>
         </div>
 
