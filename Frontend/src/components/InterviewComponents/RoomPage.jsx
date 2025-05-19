@@ -284,68 +284,97 @@ function RoomPage() {
         localStorage.removeItem(`security_${roomId}`);
     };
 
-    // Add this useEffect for auto-saving notes with debounce
-    useEffect(() => {
-        const debounceTimer = setTimeout(() => {
+    // Improved auto-save logic with status indication
+const [saveStatus, setSaveStatus] = useState('idle'); // 'idle', 'saving', 'saved', 'error'
+
+useEffect(() => {
+    setSaveStatus('saving');
+    const debounceTimer = setTimeout(() => {
+        try {
             localStorage.setItem(`notes_${roomId}`, notes);
-        }, 1000); // Save after 1 second of inactivity
-        
-        return () => clearTimeout(debounceTimer);
-    }, [notes, roomId]);
+            setSaveStatus('saved');
+            
+            // Reset status after 3 seconds
+            const resetTimer = setTimeout(() => {
+                setSaveStatus('idle');
+            }, 3000);
+            
+            return () => clearTimeout(resetTimer);
+        } catch (error) {
+            console.error("Failed to save notes:", error);
+            setSaveStatus('error');
+        }
+    }, 1000); // Save after 1 second of inactivity
+    
+    return () => clearTimeout(debounceTimer);
+}, [notes, roomId]);
 
     return (
-        <div className="bg-night flex flex-col h-screen bg-gray-900 p-2">
-            {/* Header */}
-            <header className="bg-gray-900 rounded-lg shadow px-4 py-3 mb-4">
-                <div className="flex flex-wrap justify-between items-center gap-y-2">
-                    <h1 className="text-2xl font-bold text-white">Interview Room: {roomId}</h1>
-
-                    <div className="flex flex-wrap items-center gap-3 border-gray-200 rounded-lg px-3 py-2">
-                        <span className="h-3 w-3 rounded-full bg-green-500"></span>
-                        <span className="text-white text-sm">Connected as ID: {id}</span>
-
-                        <button
-                            onClick={() => {
-                                setShowSecurityAlerts(!showSecurityAlerts);
-                                if (!showSecurityAlerts) setActivePanel('security');
-                            }}
-                            className={`px-4 py-2 rounded-lg text-sm flex items-center transition-all ${showSecurityAlerts ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            <FiAlertTriangle className="mr-1" /> Security Alerts
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                setShowEvaluationForm(!showEvaluationForm);
-                                if (!showEvaluationForm) setActivePanel('evaluation');
-                            }}
-                            className={`px-4 py-2 rounded-lg text-sm flex items-center transition-all ${showEvaluationForm ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            <FiEdit2 className="mr-1" /> Evaluation Form
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                setShowNotesPanel(!showNotesPanel);
-                                if (!showNotesPanel) setActivePanel('notes');
-                            }}
-                            className={`px-4 py-2 rounded-lg text-sm flex items-center transition-all ${showNotesPanel ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            <FiFileText className="mr-1" /> Notes
-                        </button>
-
-                        <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
-                            End Interview
-                        </button>
+        <div className="flex flex-col h-screen bg-gray-950 p-3">
+            {/* Header Bar - Streamlined */}
+            <header className="bg-gray-900 rounded-lg shadow-lg px-5 py-4 mb-4 border border-gray-800">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                        <h1 className="text-2xl font-bold text-white">Interview: {roomId}</h1>
+                        <div className="flex items-center bg-gray-800 px-3 py-1 rounded-full">
+                            <span className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></span>
+                            <span className="text-gray-300 text-xs">Live Session</span>
+                        </div>
                     </div>
-                </div>
-            </header>
-
-
-            {/* Floating Evaluation Form */}
+                    
+                    <div className="flex items-center space-x-3">
+                        <div className="flex bg-gray-800 rounded-lg overflow-hidden">
+                            <button
+                                onClick={() => {
+                                    setShowSecurityAlerts(!showSecurityAlerts);
+                                    if (!showSecurityAlerts) setActivePanel('security');
+                                }}
+                                className={`px-3 py-2 text-sm flex items-center transition-all ${
+                                    showSecurityAlerts ? 'bg-red-500 text-white' : 'text-gray-300 hover:bg-gray-700'
+                            }`}
+                            >
+                                <FiAlertTriangle className={`mr-1.5 ${cheatLogs.length > 0 ? 'text-red-400' : ''}`} /> 
+                                <span>{cheatLogs.length > 0 ? `Alerts (${cheatLogs.length})` : 'Security'}</span>
+                            </button>
+                            
+                            <button
+                                onClick={() => {
+                                    setShowEvaluationForm(!showEvaluationForm);
+                                    if (!showEvaluationForm) setActivePanel('evaluation');
+                                }}
+                                className={`px-3 py-2 text-sm flex items-center transition-all ${
+                                    showEvaluationForm ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                            }`}
+                            >
+                                <FiEdit2 className="mr-1.5" /> Evaluate
+                            </button>
+                            
+                            <button
+                                onClick={() => {
+                                    setShowNotesPanel(!showNotesPanel);
+                                     setActivePanel('notes');
+                                                                    }}
+                                                                    className={`px-3 py-2 text-sm flex items-center transition-all ${
+                                                                        showNotesPanel ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                                                                }`}
+                                                                >
+                                                                    <FiFileText className="mr-1.5" /> Notes
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <button
+                                                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center"
+                                                                onClick={() => {
+                                                                    window.location.href = window.location.origin + '/';
+                                                                }}
+                                                            >
+                                                                <span className="mr-1.5">•</span> End Interview
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </header>
+                                                
+                                                {/* Floating Evaluation Form */}
 
 
             {showEvaluationForm && (
@@ -354,7 +383,7 @@ function RoomPage() {
                         x: window.innerWidth - 850,
                         y: 100,
                         width: 700,
-                        height: 750,
+                        height: 550,
                     }}
                     minWidth={550}
                     minHeight={600}
@@ -690,95 +719,92 @@ function RoomPage() {
             <div className="flex flex-1 gap-4 overflow-hidden">
                 {/* Left Column */}
                 <div className=" flex-1 flex flex-col gap-3 min-w-0">
-                    {/* Code Editor Panel */}
-                    <div className="bg-night rounded-lg shadow overflow-hidden">
-                        {/* <div
-                            className="flex items-center justify-between p-1 bg-gray-100 cursor-pointer"
-                            onClick={() => togglePanel('codeEditor')}
-                        >
-                            <div className="flex items-center space-x-2">
-                                <FiCode className="text-gray-600" />
-                                <h2 className="font-semibold text-gray-800">Code Editor</h2>
+                    {/* Code Editor Panel - Improved */}
+                    <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
+                        <div className="px-4 py-3 bg-gray-800 flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                                <FiCode className="text-blue-400" />
+                                <h2 className="font-medium text-white">Code Editor</h2>
+                                <select
+                                    className="ml-2 bg-gray-700 text-gray-200 rounded px-2 py-1 text-sm border border-gray-600"
+                                    onChange={handleLanguageChange}
+                                    value={language}
+                                >
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                    {/* Other language options */}
+                                </select>
                             </div>
-                            {panels.codeEditor ? <FiChevronUp /> : <FiChevronDown />}
-                        </div> */}
-                        {panels.codeEditor && (
-                            <div className="p-2">
-                                <div className="p-2 mb-3 flex justify-between">
-                                    <select
-                                        className="border border-gray-700 bg-[#1e2130] text-white rounded px-3 py-1 text-sm"
-                                        onChange={handleLanguageChange}
-                                        value={language}
+                            <button
+                                onClick={handleRunCode}
+                                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md text-sm flex items-center transform transition-transform hover:scale-105"
+                            >
+                                <FiPlay className="mr-1.5" /> Run Code
+                            </button>
+                        </div>
+                        
+                        <div className="border-gray-700 overflow-hidden">
+                            <Editor
+                                height="58vh"
+                                width="100%"
+                                language={language}
+                                theme="vs-dark"
+                                value={content}
+                                onChange={handleEditorChange}
+                                onMount={editorDidMount}
+                                options={{
+                                    fontSize: 14,
+                                    scrollBeyondLastLine: false,
+                                    minimap: { enabled: true },
+                                    scrollbar: { vertical: 'visible', horizontal: 'visible' },
+                                    lineNumbers: 'on',
+                                    renderLineHighlight: 'all',
+                                }}
+                            />
+                        </div>
+                        
+                        <div className="p-3 bg-gray-800 border-t border-gray-700">
+                            <div className="flex items-center mb-2">
+                                <span className="bg-gray-700 px-3 py-1 text-sm font-medium rounded-md text-gray-200">
+                                    Output
+                                </span>
+                                {output && (
+                                    <button 
+                                        onClick={() => setOutput("")} 
+                                        className="ml-2 text-xs text-gray-400 hover:text-gray-200"
                                     >
-                                        <option value="javascript">JavaScript</option>
-                                        <option value="python">Python</option>
-                                        <option value="java">Java</option>
-                                        <option value="cpp">C++</option>
-                                        <option value="c">C</option>
-                                        <option value="ruby">Ruby</option>
-                                        <option value="go">Go</option>
-                                        <option value="php">PHP</option>
-                                        <option value="swift">Swift</option>
-                                        <option value="kotlin">Kotlin</option>
-                                    </select>
-                                    <button
-                                        onClick={handleRunCode}
-                                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex items-center"
-                                    >
-                                        <FiPlay className="mr-1" /> Run Code
+                                        Clear
                                     </button>
-                                </div>
-                                <div className="border rounded-lg overflow-hidden">
-                                    <Editor
-                                        height="55vh"
-                                        width={editorWidth}
-                                        language={language}
-                                        theme="vs-dark"
-                                        value={content}
-                                        onChange={handleEditorChange}
-                                        onMount={editorDidMount}
-                                        options={{
-                                            fontSize: 20, // ← adjust this to your preferred size
-                                        }}
-                                    />
-                                </div>
-                                <br />
-                                <div className="mt-">
-                                    <button className="mt-3 px-4 py-2 text-sm font-medium rounded-md bg-gray-200 dark:bg-[#2a2d3e] text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-[#3b3f54] ">
-                                        Output
-                                    </button>
-
-                                    <pre
-                                        className="bg-gray-100 dark:bg-[#1e2130] text-black dark:text-gray-100 border dark:border-gray-700 p-3 rounded-lg text-sm font-mono whitespace-pre-wrap h-32 overflow-y-auto"
-                                        style={{
-                                            scrollbarWidth: 'thin', // Firefox
-                                            scrollbarColor: '#9ca3af transparent', // Firefox
-                                        }}
-                                    >
-                                        {output || 'No output yet. Run code to see results.'}
-                                    </pre>
-
-                                </div>
-
+                                )}
                             </div>
-                        )}
+                            <pre
+                                className="bg-gray-900 text-gray-200 border border-gray-700 p-3 rounded-md text-sm font-mono whitespace-pre-wrap max-h-32 overflow-y-auto"
+                                style={{
+                                    scrollbarWidth: 'thin',
+                                    scrollbarColor: '#4B5563 #1F2937',
+                                }}
+                            >
+                                {output || 'No output yet. Run code to see results.'}
+                            </pre>
+                        </div>
                     </div>
                 </div>
 
                 {/* Right Column */}
-                <div className="w-180 flex flex-col gap-4">
+                <div className="w-170 flex flex-col gap-4">
                     <div
-                        className={`bg-night rounded-lg shadow overflow-hidden ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 rounded-none' : ''
+                        className={`border-gray-600 border bg-night rounded-lg shadow overflow-hidden ${isFullscreen ? 'fixed top-0 left-0 w-screen h-screen z-50 rounded-none' : ''
                             }`}
                     >
                         <div
-                            className="flex items-center  justify-between p-6 bg-gray-900 cursor-pointer"
+                            className="flex items-center  justify-between p-6 bg-gray-900  cursor-pointer"
                             onClick={() => togglePanel('videoCall')}
                         >
                             <div className="flex items-center space-x-2 ">
                                 <FiVideo className="text-white" />
                                 <h2 className="font-semibold text-white"> &nbsp;
-                                    Video Call</h2>
+                                    Video Call</h2>&nbsp;&nbsp; <p className="font-semibold text-gray-300">(click to hide/unhide)</p>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <button
@@ -805,51 +831,53 @@ function RoomPage() {
                         </div>
                     </div>
 
-                    {/* Messaging Panel */}
-                    <div className="bg-white dark:bg-[#1e2130] rounded-lg shadow overflow-hidden flex-1 flex flex-col">
-                        <div
-                            className="flex items-center justify-between p-3 bg-gray-100 dark:bg-[#2a2d3e] cursor-pointer"
-                            onClick={() => togglePanel('messaging')}
-                        >
+                    {/* Messaging Panel - Improved */}
+                    <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800 flex flex-col flex-1">
+                        <div className="flex items-center justify-between px-4 py-3 bg-gray-800">
                             <div className="flex items-center space-x-2">
-                                <FiMessageSquare className="text-gray-600 dark:text-gray-300" />
-                                <h2 className="font-semibold text-gray-800 dark:text-gray-100">&nbsp;Messages</h2>
+                                <FiMessageSquare className="text-blue-400" />
+                                <h2 className="font-medium text-white">Chat</h2>
+                                <span className="text-xs bg-gray-700 px-2 py-0.5 rounded-full text-gray-300">
+                                    {messages.length - 1} messages
+                                </span>
                             </div>
-                            {panels.messaging ? (
-                                <FiChevronUp className="text-gray-600 dark:text-gray-300" />
-                            ) : (
-                                <FiChevronDown className="text-gray-600 dark:text-gray-300" />
-                            )}
+                            <button
+                                onClick={() => togglePanel('messaging')}
+                                className="text-gray-300 hover:text-white p-1.5 rounded-md hover:bg-gray-700"
+                            >
+                                {panels.messaging ? <FiChevronUp /> : <FiChevronDown />}
+                            </button>
                         </div>
 
                         {panels.messaging && (
                             <>
-                                <div className="flex-1 p-3 overflow-y-auto max-h-64 bg-white dark:bg-[#1e2130]">
-                                    {messages.map((msg, i) => (
-                                        <div key={i} className={`mb-3 ${msg.sender === 'Interviewer' ? 'text-right' : ''}`}>
-                                            <div
-                                                className={`inline-block px-3 py-2 rounded-lg ${msg.sender != 'Interviewer'
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-200 dark:bg-gray-700 text-black dark:text-gray-100'
-                                                    }`}
+                                <div className="flex-1 p-3 overflow-y-auto max-h-64 bg-gray-900 space-y-3">
+                                    {messages.slice(1).map((msg, i) => (
+                                        <div key={i} className={`flex ${msg.sender === 'Interviewer' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[75%] px-3 py-2 rounded-lg 
+                                                ${msg.sender !== 'Interviewer' 
+                                                    ? 'bg-gray-800 text-gray-200' 
+                                                    : 'bg-blue-600 text-white'}`}
                                             >
-                                                <p >{msg.text}</p>
-                                                <p
-                                                    className={`text-xs ${msg.sender != 'Interviewer' ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
-                                                        }`}
-                                                >
+                                                <p className="break-words">{msg.text}</p>
+                                                <p className="text-xs opacity-75 mt-1">
                                                     {msg.time} • {msg.sender}
                                                 </p>
                                             </div>
                                         </div>
                                     ))}
+                                    {messages.length <= 1 && (
+                                        <div className="flex items-center justify-center h-32">
+                                            <p className="text-gray-500 text-sm">No messages yet. Start the conversation.</p>
+                                        </div>
+                                    )}
                                 </div>
 
-                                <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e2130]">
+                                <div className="p-3 border-t border-gray-700 bg-gray-800">
                                     <div className="flex">
                                         <input
                                             type="text"
-                                            className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#2a2d3e] text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-l-lg px-3 py-2 text-sm"
+                                            className="flex-1 bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400 rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
                                             placeholder="Type a message..."
@@ -857,7 +885,8 @@ function RoomPage() {
                                         />
                                         <button
                                             onClick={handleSendMessage}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-lg text-sm"
+                                            disabled={!newMessage.trim()}
+                                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             Send
                                         </button>
