@@ -1,23 +1,29 @@
 import { Router } from "express";
-import { getInterviews, scheduleInterview, getInterview, getInterviewByID , AccessInterview, markAsCompleted, getResultByInterviewId} from "../controllers/interview.controller.js";
-import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js.js";
+import {
+  getInterviews,
+  scheduleInterview,
+  getInterview,
+  getInterviewByID,
+  AccessInterview,
+  markAsCompleted,
+  getResultByInterviewId,
+} from "../controllers/interview.controller.js";
+import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js";
 const app = Router();
 
-app.use(verifyJWT)
+app.post("/schedule-interview", verifyJWT, scheduleInterview);
 
-app.post("/schedule-interview", scheduleInterview);
+app.get("/view-interviews-for-interviewer/:id", verifyJWT, getInterviews);
 
-app.get("/view-interviews-for-interviewer/:id", getInterviews)
-
-app.get("/view-interview-for-candidate/:id", getInterview)
+app.get("/view-interview-for-candidate/:id", verifyJWT, getInterview);
 // app.post("/access-interview/:token", accessInterview)
 
-app.post("/getInterview",getInterviewByID)
+app.post("/getInterview", verifyJWT, getInterviewByID);
 
-app.post("/access-interview/:interviewId", AccessInterview);
+app.post("/access-interview/:interviewId", verifyJWT, AccessInterview);
 
-app.post("/markascomplete/:interviewId", markAsCompleted);
+app.get("/markascomplete/:interviewId", verifyJWT, markAsCompleted);
 
-app.post("/getresult/:interviewId",getResultByInterviewId);
+app.post("/getresult/:interviewId", verifyJWT, getResultByInterviewId);
 
 export default app;

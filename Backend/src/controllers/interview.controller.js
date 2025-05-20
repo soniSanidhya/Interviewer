@@ -365,30 +365,37 @@ export const getInterviewByID = async (req, res) => {
 };
 
 export const markAsCompleted = async (req, res) => {
+  // ✅ Extract interviewId from route params
+  const { interviewId } = req.params;
+
   try {
-    const { interviewId } = req.params;
+    // ✅ Validate presence of interviewId
     if (!interviewId) {
       return res.status(400).json({ message: "Interview ID not provided" });
     }
 
+    // ✅ Fetch the interview by ID
     const interview = await Interview.findById(interviewId);
     if (!interview) {
       return res.status(404).json({ message: "Interview not found" });
     }
 
+    // ✅ Update status to 'completed' and save
     interview.status = "completed";
-    console.log("Before save");
-    const ress = await interview.save();
-    console.log("After save", ress);
 
-    return res
-      .status(200)
-      .json({ message: "Interview marked as completed", interview });
+    const updatedInterview = await interview.save();
+
+    // ✅ Respond with success message and updated interview
+    return res.status(200).json({
+      message: "Interview marked as completed",
+      interview: updatedInterview,
+    });
   } catch (error) {
-    console.error("Error marking interview as completed:", error);
+    console.error("❌ Error marking interview as completed:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 export const getResultByInterviewId = async (req, res) => {

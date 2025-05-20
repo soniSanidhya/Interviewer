@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import VideoCallWindow from './VideoCallWindow';
 import { FiMaximize2, FiMinimize2, FiChevronDown, FiChevronUp, FiCode, FiMessageSquare, FiVideo, FiAlertTriangle, FiEdit2, FiCheckCircle, FiPlay, FiFileText } from 'react-icons/fi';
@@ -12,6 +12,7 @@ import { FaStar, FaRegStar } from 'react-icons/fa';
 import { BASE_URL } from '@/utils/constants';
 
 function RoomPage() {
+    const navigate = useNavigate()
     const { roomId } = useParams();
     const [id, setId] = useState("no");
     const [content, setContent] = useState("// Write your code here\nfunction hello() {\n  return \"Hello World!\";\n}");
@@ -397,18 +398,20 @@ function RoomPage() {
                         <button
                             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center"
                             onClick={() => {
-                                window.location.href = window.location.origin + '/';
+                                
                                 fetch(`${BASE_URL}/markascomplete/${roomId}`, {
-                                    method: 'POST',
+                                    method: 'GET',
                                     credentials: 'include',
                                     headers: { 'Content-Type': 'application/json' },
                                 })
                                     .then(res => res.json())
                                     .then(data => {
                                         console.log('Interview marked as complete:', data);
+                                        navigate('/')
                                     })
                                     .catch(err => {
                                         console.error('Failed to mark interview as complete:', err);
+                                        navigate('/')
                                     });
                             }}
                         >

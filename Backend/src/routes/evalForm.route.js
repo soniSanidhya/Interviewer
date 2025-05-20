@@ -8,7 +8,7 @@ import {
   saveNotes,
   saveSecurityLogs,
 } from "../controllers/evalForm.controller.js";
-import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js.js";
+import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js";
 
 const app = Router();
 

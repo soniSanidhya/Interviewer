@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check , logoutUser} from "../controllers/healthcheck.controller.js";
-import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js.js";
+import { verifyJWT } from "../middlewares/Backend/src/middlewares/auth.middleware.js";
 import { getCurrentUser } from "../controllers/interviewer.controller.js";
 
 const app = Router();
