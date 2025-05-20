@@ -62,25 +62,31 @@ export function LandingPage() {
                 onClick={() => setIsModalOpen(true)}
                 className="border border-neutral-400 text-neutral-700 hover:border-blue-600 hover:text-blue-700 font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
               >
-                Try Demo
+                Watch Demo Video
               </button>
             </div>
 
             {/* Modal */}
             {isModalOpen && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-all">
-                <div className="bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl max-w-3xl w-full relative">
+              <div 
+                className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-slate-900/40 transition-all"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <div 
+                  className="rounded-xl overflow-hidden shadow-2xl max-w-3xl w-full relative animate-fadeIn"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="absolute top-4 right-4 text-white hover:text-red-400 transition"
+                    className="absolute top-3 right-3 text-white/90 hover:text-white transition z-10 bg-black/30 hover:bg-black/50 p-2 rounded-full"
+                    aria-label="Close video"
                   >
-                    <X size={28} />
+                    <X size={30} />
                   </button>
-                  <div className="w-full aspect-video">
+                  <div className="w-full aspect-video rounded-xl overflow-hidden">
                     <iframe
                       className="w-full h-full"
-                      src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                      title="Demo Video"
+                      src="https://www.youtube.com/embed/tuy4_69A7dw?autoplay=1&modestbranding=1&rel=0"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -289,6 +295,10 @@ export function LandingPage() {
           0%, 100% { opacity: 0.06; }
           50% { opacity: 0.1; }
         }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
         .animate-meteor {
           animation-name: meteor;
           animation-timing-function: linear;
@@ -299,6 +309,9 @@ export function LandingPage() {
         }
         .animate-glow-slower {
           animation: glow-slower 12s ease-in-out infinite;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
         }
       `}</style>
 
