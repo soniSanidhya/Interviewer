@@ -126,7 +126,7 @@ function InterviewerDashBoard({ interviewerId }) {
           </div>
           <div className="bg-white overflow-hidden shadow-sm rounded-2xl p-6">
             <h3 className="text-lg font-medium text-gray-600">Upcoming</h3>
-            <p className="mt-2 text-3xl font-bold text-blue-600">{interviews.filter(i => i.status === 'Scheduled').length}</p>
+            <p className="mt-2 text-3xl font-bold text-blue-600">{interviews.filter(i => i.status === 'scheduled').length}</p>
           </div>
           <div className="bg-white overflow-hidden shadow-sm rounded-2xl p-6">
             <h3 className="text-lg font-medium text-gray-600">Completed</h3>
