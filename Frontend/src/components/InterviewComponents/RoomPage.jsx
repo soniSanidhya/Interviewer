@@ -138,7 +138,7 @@ function RoomPage() {
     //new work end
 
     //socket work start
-    // const socket = useMemo(() => io("http://localhost:4000"), []);
+    // const socket = useMemo(() => io("http://localhost:5500"), []);
     const socket = useMemo(() => io("https://socketnodejs-a2g8c8f7g7avaudc.southindia-01.azurewebsites.net"), []);
 
     useEffect(() => {
@@ -167,6 +167,11 @@ function RoomPage() {
             setShowSecurityAlerts(true);
             setActivePanel('security');
         });
+
+         socket.on("outputRecieved",(output)=>{
+            console.log("outputRecieved ",output);
+            setOutput(output)
+        })
 
         return () => {
             socket.disconnect();
@@ -217,6 +222,7 @@ function RoomPage() {
         const data = await response.json()
         const mockOutput = `Running ${language} code...\n\n> ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}\n\n"Hello World!"\n\nCode executed successfully at ${new Date().toLocaleTimeString()}`;
         setOutput(data.output);
+        socket.emit("sendOutput", { roomId, output: data.output });
         // console.log("op: ",data);
 
     };
@@ -816,14 +822,7 @@ function RoomPage() {
                                 <span className="bg-gray-700 px-3 py-1 text-sm font-medium rounded-md text-gray-200">
                                     Output
                                 </span>
-                                {output && (
-                                    <button
-                                        onClick={() => setOutput("")}
-                                        className="ml-2 text-xs text-gray-400 hover:text-gray-200"
-                                    >
-                                        Clear
-                                    </button>
-                                )}
+                                
                             </div>
                             <pre
                                 className="bg-gray-900 text-gray-200 border border-gray-700 p-3 rounded-md text-sm font-mono whitespace-pre-wrap max-h-32 overflow-y-auto"

@@ -46,7 +46,8 @@ function CandidateRoom() {
     const editorWidth = "100%";
 
     const socket = useMemo(() => io("https://socketnodejs-a2g8c8f7g7avaudc.southindia-01.azurewebsites.net"), []);
-    
+    // const socket = useMemo(() => io("http://localhost:5500"), []);
+
     useEffect(() => {
         socket.emit('join-room', roomId);
 
@@ -64,6 +65,11 @@ function CandidateRoom() {
             setShowSecurityAlerts(true);
             setActivePanel('security');
         });
+
+        socket.on("outputRecieved",(output)=>{
+            console.log("outputRecieved ",output);
+            setOutput(output)
+        })
 
         return () => {
             socket.disconnect();
@@ -107,6 +113,7 @@ function CandidateRoom() {
             const data = await response.json()
             const mockOutput = `Running ${language} code...\n\n> ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}\n\n"Hello World!"\n\nCode executed successfully at ${new Date().toLocaleTimeString()}`;
             setOutput(data.output);
+            socket.emit("sendOutput", { roomId, output: data.output });
             // console.log("op: ",data);
     
         };
