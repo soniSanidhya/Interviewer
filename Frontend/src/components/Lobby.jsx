@@ -104,7 +104,7 @@ function Lobby() {
 
     try {
       const groq = new Groq({
-        apiKey: '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', dangerouslyAllowBrowser: true
+        apiKey: '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', dangerouslyAllowBrowser: true
       });
 
       // Prepare the message with evaluation data
