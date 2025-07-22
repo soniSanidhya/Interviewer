@@ -66,28 +66,33 @@ const CandidateLogin = () => {
     const renderInput = (name, placeholder, type = "text") => (
         <div className="w-full mb-4">
             <label className="flex flex-col w-full">
-                {/* <span className="text-sm text-slate-600 mb-1">{placeholder}</span> */}
                 <input
                     type={type}
                     name={name}
                     placeholder={placeholder}
                     value={formData[name]}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-200 bg-white text-slate-800"
+                    className={`input-field ${formErrors[name] ? 'error' : ''}`}
                 />
             </label>
             {formErrors[name] && (
-                <p className="text-red-500 text-sm mt-1 px-1">{formErrors[name]}</p>
+                <p className="text-sm mt-1 px-1" style={{ color: 'var(--color-error)' }}>
+                    {formErrors[name]}
+                </p>
             )}
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center px-4">
-            <div className="bg-white border border-[#E5E7EB] w-full max-w-md rounded-2xl shadow-lg p-8 transition-all duration-300">
+        <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: 'var(--color-gray-50)' }}>
+            <div className="card w-full max-w-md p-8">
                 <div className="flex flex-col items-center text-center space-y-6">
-                    <h2 className="text-3xl font-bold text-[#111827]">Candidate Login</h2>
-                    <p className="text-[#6B7280] text-sm">Access your interview dashboard</p>
+                    <h2 className="text-3xl font-bold" style={{ color: 'var(--color-gray-900)' }}>
+                        Candidate Login
+                    </h2>
+                    <p className="text-sm" style={{ color: 'var(--color-gray-500)' }}>
+                        Access your interview dashboard
+                    </p>
                 
                     <div className="w-full space-y-4 pt-4">
                         {renderInput("userName", "User Name")}
@@ -95,13 +100,13 @@ const CandidateLogin = () => {
                     </div>
             
                     {error && (
-                        <p className="text-[#EF4444] text-sm w-full text-left">
+                        <p className="text-sm w-full text-left" style={{ color: 'var(--color-error)' }}>
                             {typeof error === "string" ? error : JSON.stringify(error)}
                         </p>
                     )}
             
                     <button
-                        className="w-full py-3 px-4 bg-[#2563EB] hover:bg-[#1E40AF] active:scale-98 transition-all duration-200 rounded-lg font-medium text-white tracking-wide shadow-sm"
+                        className="btn-primary w-full"
                         onClick={handleSubmit}
                     >
                         Login

@@ -55,12 +55,15 @@ export function LandingPage() {
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
 
             <div className="flex gap-4 p-4">
-              <button onClick={() => { window.location.href = "/interviewer-signup" }} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105">
+              <button 
+                onClick={() => { window.location.href = "/interviewer-signup" }} 
+                className="btn-primary transform hover:scale-105"
+              >
                 Enter as Interviewer
               </button>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="border border-neutral-400 text-neutral-700 hover:border-blue-600 hover:text-blue-700 font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
+                className="btn-secondary transform hover:scale-105"
               >
                 Watch Demo Video
               </button>
@@ -69,7 +72,8 @@ export function LandingPage() {
             {/* Modal */}
             {isModalOpen && (
               <div 
-                className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-slate-900/40 transition-all"
+                className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md transition-all"
+                style={{ backgroundColor: 'rgba(15, 23, 42, 0.4)' }}
                 onClick={() => setIsModalOpen(false)}
               >
                 <div 

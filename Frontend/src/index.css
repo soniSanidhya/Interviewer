@@ -1,6 +1,129 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Consistent Color Theme Variables */
+:root {
+  /* Primary Blue Theme */
+  --color-primary: #2563eb;        /* blue-600 */
+  --color-primary-hover: #1d4ed8;  /* blue-700 */
+  --color-primary-light: #3b82f6;  /* blue-500 */
+  --color-primary-dark: #1e40af;   /* blue-800 */
+  
+  /* Secondary Colors */
+  --color-secondary: #6366f1;      /* indigo-500 */
+  --color-secondary-hover: #4f46e5; /* indigo-600 */
+  
+  /* Neutral Colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Status Colors */
+  --color-success: #10b981;        /* emerald-500 */
+  --color-success-hover: #059669;  /* emerald-600 */
+  --color-error: #ef4444;          /* red-500 */
+  --color-error-hover: #dc2626;    /* red-600 */
+  --color-warning: #f59e0b;        /* amber-500 */
+  
+  /* Common Styling */
+  --border-radius-sm: 0.5rem;      /* 8px */
+  --border-radius-md: 0.75rem;     /* 12px */
+  --border-radius-lg: 1rem;        /* 16px */
+  --border-radius-xl: 1.5rem;      /* 24px */
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Common Button Styles */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid var(--color-primary);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Common Input Styles */
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-gray-200);
+  background-color: white;
+  color: var(--color-gray-800);
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+}
+
+.input-field.error {
+  border-color: var(--color-error);
+}
+
+.input-field.error:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+}
+
+/* Common Card Styles */
+.card {
+  background-color: white;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
 
 #ZegoRoomLeaveButton {
   display: none !important;        /* Completely hides the button */
