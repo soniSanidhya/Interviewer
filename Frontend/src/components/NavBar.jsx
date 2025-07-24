@@ -45,8 +45,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Zap className="h-6 w-6 text-blue-600" />
-            <span className="text-gray-800 font-bold text-xl tracking-wide">CodeInterview.Tech</span>
+            <Zap className="h-6 w-6" style={{ color: 'var(--color-primary)' }} />
+            <span className="font-bold text-xl tracking-wide" style={{ color: 'var(--color-gray-800)' }}>
+              CodeInterview.Tech
+            </span>
           </Link>
 
           {/* Auth Buttons */}
@@ -54,7 +56,7 @@ export default function Navbar() {
             {isCandidate && (
               <Link
                 to="/interview-dashboard"
-                className="text-white bg-blue-600 px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm"
+                className="btn-primary"
               >
                 Candidate Dashboard
               </Link>
@@ -63,7 +65,7 @@ export default function Navbar() {
             {isInterviewer && (
               <Link
                 to="/interview-dashboard"
-                className="text-white bg-blue-600 px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm"
+                className="btn-primary"
               >
                 Interviewer Dashboard
               </Link>
@@ -72,23 +74,41 @@ export default function Navbar() {
             {(isCandidate || isInterviewer) ? (
               <button
                 onClick={handleLogout}
-                className="text-white bg-red-500 px-5 py-2 rounded-md font-medium hover:bg-red-600 transition shadow-sm"
+                className="px-5 py-2 rounded-md font-medium transition shadow-sm text-white"
+                style={{ 
+                  backgroundColor: 'var(--color-error)',
+                  '&:hover': { backgroundColor: 'var(--color-error-hover)' }
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-error-hover)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--color-error)'}
               >
                 Logout
               </button>
             ) : (
               <div className="relative group">
-                <button className="bg-blue-600 text-white px-5 py-2 rounded-md font-medium hover:bg-blue-700 transition shadow-sm">
+                <button className="btn-primary">
                   Get Started
                 </button>
-                <ul className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out border border-gray-200 overflow-hidden">
+                <ul className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out overflow-hidden" style={{ border: `1px solid var(--color-gray-200)` }}>
                   <li>
-                    <Link to="/candidate-signup" className="block px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium">
+                    <Link 
+                      to="/candidate-signup" 
+                      className="block px-4 py-3 font-medium hover:underline transition-colors"
+                      style={{ color: 'var(--color-gray-700)' }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-gray-100)'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
                       As Candidate
                     </Link>
                   </li>
                   <li>
-                    <Link to="/interviewer-signup" className="block px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium">
+                    <Link 
+                      to="/interviewer-signup" 
+                      className="block px-4 py-3 font-medium hover:underline transition-colors"
+                      style={{ color: 'var(--color-gray-700)' }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--color-gray-100)'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
                       As Interviewer
                     </Link>
                   </li>

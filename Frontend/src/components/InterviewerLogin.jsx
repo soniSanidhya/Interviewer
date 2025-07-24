@@ -8,9 +8,9 @@ import { BASE_URL } from '../utils/constants';
 const InterviewerLogin = () => {
   const [formData, setFormData] = useState({
     fullName: "",
-    userName: "akshat",
+    userName: "",
     email: "",
-    password: "akshat123",
+    password: "",
     company: "",
     position: "",
     role: ""
@@ -99,22 +99,22 @@ const InterviewerLogin = () => {
           placeholder={placeholder}
           value={formData[name]}
           onChange={handleChange}
-          className={`w-full px-4 py-3 rounded-xl border ${
-            formErrors[name] ? 'border-red-500' : 'border-gray-200'
-          } bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+          className={`input-field ${formErrors[name] ? 'error' : ''}`}
         />
       </label>
       {formErrors[name] && (
-        <p className="mt-1 text-sm text-red-500">{formErrors[name]}</p>
+        <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>
+          {formErrors[name]}
+        </p>
       )}
     </div>
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: 'var(--color-gray-50)' }}>
       <div className="max-w-md w-full space-y-8">
-        <div className="bg-white p-8 rounded-2xl shadow-md">
-          <h2 className="text-center text-3xl font-bold text-gray-900 mb-6">
+        <div className="card p-8">
+          <h2 className="text-center text-3xl font-bold mb-6" style={{ color: 'var(--color-gray-900)' }}>
             {isLoginForm ? "Login" : "Sign Up"} to Interview Platform
           </h2>
 
@@ -132,15 +132,19 @@ const InterviewerLogin = () => {
           {renderInput("password", "Password", "password")}
 
           {error && (
-            <p className="text-center p-3 rounded-lg bg-red-50 text-red-500 mb-4">
+            <div className="text-center p-3 rounded-lg mb-4" style={{ 
+              backgroundColor: 'var(--color-gray-50)', 
+              color: 'var(--color-error)',
+              border: `1px solid var(--color-error)`
+            }}>
               {typeof error === "string" ? error : JSON.stringify(error)}
-            </p>
+            </div>
           )}
 
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-70 mb-4"
+            className="btn-primary w-full mb-4 disabled:opacity-70"
           >
             {isSubmitting
               ? (isLoginForm ? "Logging in..." : "Signing up...")
@@ -154,7 +158,8 @@ const InterviewerLogin = () => {
                 setError("");
                 setFormErrors({});
               }}
-              className="text-blue-600 hover:text-blue-800 cursor-pointer font-medium"
+              className="cursor-pointer font-medium hover:underline transition-colors"
+              style={{ color: 'var(--color-primary)' }}
             >
               {isLoginForm ? "New User? Sign up here" : "Existing User? Login here"}
             </span>
