@@ -8,9 +8,9 @@ import { BASE_URL } from '../utils/constants';
 const InterviewerLogin = () => {
   const [formData, setFormData] = useState({
     fullName: "",
-    userName: "akshat",
+    userName: "",
     email: "",
-    password: "akshat123",
+    password: "",
     company: "",
     position: "",
     role: ""

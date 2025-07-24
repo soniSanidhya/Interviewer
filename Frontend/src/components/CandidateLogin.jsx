@@ -7,8 +7,8 @@ import { BASE_URL } from '../utils/constants';
 
 const CandidateLogin = () => {
     const [formData, setFormData] = useState({
-        userName: "rishi",
-        password: "rishi123"
+        userName: "",
+        password: ""
     });
         
     const [formErrors, setFormErrors] = useState({});
